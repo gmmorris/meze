@@ -14,10 +14,5 @@ test('bar', async t => {
     new PromiseTree({})
   ])
 
-  t.deepEqual(await tree.resolve(), [
-    [ 1, 2, 'asd' ],
-    2,
-    'asdad',
-    []
-  ])
+  t.deepEqual(await tree.resolve(), [[ 1, 2, 'asd' ], 2, 'asdad', []])
 })

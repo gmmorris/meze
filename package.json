@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "ava ./test/**/*.js --verbose --require babel-register",
+    "build": "babel src -d dist --source-maps",
     "start": "babel-node ./src/index.js"
   },
   "repository": {
@@ -26,6 +27,7 @@
     "babel-preset-es2015": "^6.9.0"
   },
   "dependencies": {
+    "babel-plugin-transform-regenerator": "^6.11.4",
     "most": "^1.0.0"
   }
 }

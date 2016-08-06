@@ -1,6 +1,6 @@
 
 function mapChildToPromise (child) {
-  if (child instanceof Component) {
+  if (child instanceof PromiseTree) {
     child = child.resolve()
   } else if (typeof child === 'function') {
     child = mapChildToPromise(child())
@@ -10,7 +10,7 @@ function mapChildToPromise (child) {
   return child
 }
 
-function Component (props = {}, children = []) {
+function PromiseTree (props = {}, children = []) {
   this.resolve = () => new Promise((resolve, reject) => {
     Promise
       .all(children.map(mapChildToPromise))
@@ -18,4 +18,4 @@ function Component (props = {}, children = []) {
   })
 }
 
-export default Component
+export default PromiseTree

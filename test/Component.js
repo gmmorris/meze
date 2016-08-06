@@ -28,3 +28,36 @@ test('paints the Component with a Symbol so it can be identified', t => {
   const comp = Component(function () {})
   t.true(isComponent(comp))
 })
+
+test('can be composed with other components', t => {
+
+  const Complex = Component(function (props, children) {
+    const { left, right } = props
+    const val = left < right
+      ? 'smaller'
+      : (left > right
+        ? 'larger'
+        : 'equal')
+    return val
+  })
+
+  const rand = () => parseInt(Math.random() * 100)
+
+  const Root = Component(function (props, children) {
+    const { left = rand(), right = rand() } = props
+    return {
+      left,
+      right,
+      comparison: createComponent(Complex, {left, right})
+    }
+  })
+
+  const left = 49
+  const right = 50
+  const comparison = 'smaller'
+
+  t.deepEqual(
+    createComponent(Root, { right, left }),
+    { right, left, comparison }
+  )
+})

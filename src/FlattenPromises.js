@@ -14,7 +14,8 @@ function applyResolution (ref, key, promise) {
   })
 }
 
-export default function flattenPromises (obj) {
+function flattenPromisesInObject (obj) {
+  // console.log(JSON.stringify(obj))
   return Promise.all(Object
     .keys(obj)
     .reduce((promises, prop) => {
@@ -25,4 +26,18 @@ export default function flattenPromises (obj) {
       }
       return promises
     }, [])).then(() => obj)
+}
+
+function flattenPromisesInPromise (promise) {
+  return promise
+    .then(result => result instanceof Promise
+      ? flattenPromisesInPromise(result)
+      : result
+    )
+}
+
+export default function flattenPromises (obj) {
+  return obj instanceof Promise
+    ? flattenPromises(flattenPromisesInPromise(obj))
+    : flattenPromisesInObject(obj)
 }

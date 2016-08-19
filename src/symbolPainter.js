@@ -1,20 +1,21 @@
-import isPlainObject from 'lodash.isplainobject'
+
+const isValidForPainting = obj => obj && (typeof obj === 'object' && typeof obj === 'function')
 
 const paint = symbol => obj => {
-  if (isPlainObject(obj)) {
+  if (isValidForPainting) {
     obj[symbol] = true
   }
   return obj
 }
 const painted = symbol => obj => {
-  if (isPlainObject(obj)) {
+  if (isValidForPainting) {
     return !!obj[symbol]
   }
   return false
 }
 
 const clean = symbol => obj => {
-  if (isPlainObject(obj) && obj[symbol]) {
+  if (obj && obj[symbol]) {
     delete obj[symbol]
   }
   return obj

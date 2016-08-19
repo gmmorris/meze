@@ -30,7 +30,6 @@ test('paints the Component with a Symbol so it can be identified', t => {
 })
 
 test('can be composed with other components', t => {
-
   const Complex = Component(function (props, children) {
     const { left, right } = props
     const val = left < right

@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "babel-plugin-transform-regenerator": "^6.11.4",
+    "lodash.isplainobject": "^4.0.5",
     "most": "^1.0.0"
   }
 }

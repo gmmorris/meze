@@ -17,11 +17,12 @@ export const isComponent =
 export const supportsComponentisation =
   component => isFunction(component)
 
-function componentise (constructor) {
-  if (supportsComponentisation(constructor)) {
-    return new Component(constructor)
+const componentisationCache = {}
+export function componentise (constructor) {
+  if (!supportsComponentisation(constructor)) {
+    throw new Error(`Invalid Component: Attempted to use object of type: ${typeof constructor}`)
   }
-  throw new Error(`Invalid Component: Attempted to use object of type: ${typeof constructor}`)
+  return (componentisationCache[constructor] = componentisationCache[constructor] || new Component(constructor))
 }
 
 function ensureIsComponent (candidate) {

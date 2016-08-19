@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import Component, { isComponent, createComponent } from '../src/Component'
+import Component, { isComponent, createComponent, componentise } from '../src/Component'
 
 test('takes a function and wraps it with an instanciator', t => {
   t.plan(3)
@@ -60,3 +60,28 @@ test('can be composed with other components', t => {
     { right, left, comparison }
   )
 })
+
+test('createComponent will convert a regular function to a Component', async t => {
+  const Complex = function (props) {
+    const { children, ...rest } = props
+    return { ...rest, kids: children.length }
+  }
+
+  t.deepEqual(
+    await createComponent(Complex, { left: 40, right: 50 }),
+    { left: 40, right: 50, kids: 0 }
+  )
+})
+
+test('createComponent should cache converted constructors', async t => {
+  const Complex = function (props) {
+    const { children, ...rest } = props
+    return { ...rest, kids: children.length }
+  }
+
+  t.deepEqual(
+    componentise(Complex),
+    componentise(Complex)
+  )
+})
+

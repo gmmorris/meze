@@ -1,8 +1,10 @@
 
-import Component from './Component'
-import { createComponent, composeTree } from './ComponentTree'
+import Component, { createComponent } from './Component'
+import { composeTree } from './ComponentTree'
 
-const Complex = Component(function (props, children) {
+const Complex = function (props) {
+  const { children } = props
+  console.log(children.length)
   const { left, right } = props
   const val = left < right
     ? 'smaller'
@@ -10,9 +12,9 @@ const Complex = Component(function (props, children) {
       ? 'larger'
       : 'equal')
   return val
-})
+}
 
-const Root = Component(function (props, children) {
+const Root = Component(function (props) {
   const { left, right } = props
   return {
     left,

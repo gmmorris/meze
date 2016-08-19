@@ -28,29 +28,3 @@ test('flattenss a tree of components to get passed their internal promises', asy
     { left: 40, right: 50, comparison: 'smaller' }
   )
 })
-
-test('createComponent will convert a regular function to a Component', async t => {
-  const Complex = function (props) {
-    const { children, left, right } = props
-    const val = left < right
-      ? 'smaller'
-      : (left > right
-        ? 'larger'
-        : 'equal')
-    return children.length ? [val] : val
-  }
-
-  const Root = Component(function (props) {
-    const { left, right } = props
-    return {
-      left,
-      right,
-      comparison: createComponent(Complex, {left, right})
-    }
-  })
-
-  t.deepEqual(
-    await composeTree(createComponent(Root, { left: 40, right: 50 })),
-    { left: 40, right: 50, comparison: 'smaller' }
-  )
-})

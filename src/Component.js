@@ -3,7 +3,7 @@ import symbolPainer from './symbolPainter'
 
 const { paint, painted } = symbolPainer('Component')
 
-export default function Component (constructor) {
+export function Component (constructor) {
   function instanciate (props = {}) {
     return constructor({...props})
   }
@@ -33,3 +33,11 @@ function ensureIsComponent (candidate) {
 
 export const createComponent =
   (component, props = {}, children = []) => ensureIsComponent(component)({ ...props, children })
+
+export default {
+  Component,
+  createComponent,
+  isComponent,
+  supportsComponentisation,
+  componentise
+}

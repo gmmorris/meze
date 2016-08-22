@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import Component, { isComponent, createComponent, componentise } from '../src/Component'
+import { Component, isComponent, createComponent, componentise } from '../src/Component'
 
 test('takes a function and wraps it with an instanciator', t => {
   t.plan(3)

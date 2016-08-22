@@ -1,5 +1,5 @@
 
-import Component, { createComponent } from './Component'
+import { Component, createComponent } from './Component'
 import { composeTree } from './ComponentTree'
 
 const Complex = function (props) {

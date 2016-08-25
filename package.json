@@ -2,7 +2,7 @@
   "name": "composable-json",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "ava ./test/**/*.js --verbose --require babel-register",
     "build": "babel src -d dist --source-maps",
@@ -29,8 +29,8 @@
   },
   "dependencies": {
     "babel-plugin-transform-regenerator": "^6.11.4",
+    "lodash.isfunction": "^3.0.8",
     "lodash.isplainobject": "^4.0.5",
-    "lodash.isfunction": "^4.0.5",
     "most": "^1.0.0"
   }
 }

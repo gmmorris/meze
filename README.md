@@ -1,6 +1,6 @@
 # mezze
 
-A Component Composition library for building Component based Declerative JSON APIs
+A Component Composition library for building Component based Declarative JSON APIs
 
 This is still VERY MUCH a Work In Progress
 

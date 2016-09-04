@@ -4,6 +4,9 @@
     "standard",
     "standard-react"
   ],
+  "plugins": [
+      "flowtype"
+  ],
   "env"     : {
     "browser" : true
   },
@@ -24,7 +27,7 @@
       "sourceType": "module",
       "ecmaFeatures": {
           "experimentalObjectRestSpread": true,
-          "generator-star-spacing": [2, {"before": true, "after": false}]
+          "generator-star-spacing": ["error", "after"]
       }
   }
 }

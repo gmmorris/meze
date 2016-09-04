@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-mezze-jsx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Turn JSX into Mezze function calls",
   "author": "Gidi Meir Morris <gidi@gidi.io>",
   "homepage": "gidi.io",
@@ -8,9 +8,9 @@
   "license": "MIT",
   "main": "lib/transform.js",
   "dependencies": {
-    "babel-helper-builder-mezze-jsx": "1.0.0",
-    "babel-plugin-syntax-mezze-jsx": "1.0.0",
-    "babel-type-mezze-jsx": "1.0.0",
+    "babel-helper-builder-mezze-jsx": "^1.0.1",
+    "babel-plugin-syntax-mezze-jsx": "^1.0.1",
+    "babel-type-mezze-jsx": "^1.0.1",
     "babel-runtime": "^6.0.0"
   },
   "devDependencies": {

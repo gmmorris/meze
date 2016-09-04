@@ -1,6 +1,6 @@
 {
   "name": "babel-helper-builder-mezze-jsx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "author": "Gidi Meir Morris <gidi@gidi.io>",
   "homepage": "gidi.io",
@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
-    "babel-type-mezze-jsx": "1.0.0",
+    "babel-type-mezze-jsx": "^1.0.1",
     "babel-plugin-syntax-trailing-function-commas": "^6.13.0",
     "babel-plugin-transform-flow-strip-types": "^6.8.0",
     "babel-preset-es2015": "^6.13.2",

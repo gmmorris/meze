@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import { Component, compose, createComponent } from '../src/Component'
+import { Component, compose, createComponent } from '../modules/Component'
 
 // compose
 test('flattenss a tree of components to get passed their internal promises', async t => {

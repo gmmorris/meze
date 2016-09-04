@@ -1,4 +1,8 @@
 .vscode
 node_modules
 dist
-.DS_Store
+**/.DS_Store
+**/npm-debug.log*
+/packages/*/lib
+*.log
+*.cache

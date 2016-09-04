@@ -1,5 +1,5 @@
 import test from 'ava'
-import flattenPromises from '../src/flattenPromises'
+import flattenPromises from '../modules/flattenPromises'
 
 test('takes an object and flattens the promises inside it', async t => {
   const result = {

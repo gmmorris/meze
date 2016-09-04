@@ -1,10 +1,10 @@
 {
-  "name": "mezze-core",
+  "name": "mezze",
   "version": "1.0.0",
   "description": "",
   "author": "Gidi Meir Morris <gidi@gidi.io>",
   "homepage": "https://github.com/gmmorris/mezze#readme",
-  "repository": "https://github.com/gmmorris/mezze/tree/master/packages/mezze-core",
+  "repository": "https://github.com/gmmorris/mezze/tree/master/packages/mezze",
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {

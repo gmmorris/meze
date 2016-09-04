@@ -1,12 +1,12 @@
 {
-  "name": "mezze",
+  "name": "mezze-core",
   "version": "1.0.0",
   "description": "",
   "author": "Gidi Meir Morris <gidi@gidi.io>",
   "homepage": "https://github.com/gmmorris/mezze#readme",
-  "repository": "https://github.com/gmmorris/mezze/tree/master/packages/mezze",
+  "repository": "https://github.com/gmmorris/mezze/tree/master/packages/mezze-core",
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "ava ./test/**/*.js --verbose --require babel-register",
     "build": "babel modules -d lib",
@@ -25,7 +25,6 @@
     "babel-preset-es2015": "^6.9.0"
   },
   "dependencies": {
-    "babel-plugin-transform-regenerator": "^6.11.4",
     "lodash.isfunction": "^3.0.8",
     "lodash.isplainobject": "^4.0.5"
   }

@@ -1,5 +1,6 @@
 
-import { Component, createComponent, compose } from './Component'
+import { Component, createComponent } from './Component'
+import compose from './compose'
 
 const Mezze = {
   Component,

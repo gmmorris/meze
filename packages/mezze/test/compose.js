@@ -1,10 +1,11 @@
 import test from 'ava'
 
-import { Component, compose, createComponent } from '../modules/Component'
+import { Component, createComponent } from '../modules/Component'
+import compose from '../modules/compose'
 
 // compose
 test('flattenss a tree of components to get passed their internal promises', async t => {
-  const Complex = Component(function (props, children) {
+  const Complex = Component(function (props) {
     const { left, right } = props
     const val = left < right
       ? 'smaller'
@@ -14,7 +15,7 @@ test('flattenss a tree of components to get passed their internal promises', asy
     return val
   })
 
-  const Root = Component(function (props, children) {
+  const Root = Component(function (props) {
     const { left, right } = props
     return {
       left,

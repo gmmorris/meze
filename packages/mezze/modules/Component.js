@@ -1,12 +1,7 @@
 import isFunction from 'lodash.isfunction'
 import symbolPainer from './symbolPainter'
-import flattenPromises from './FlattenPromises'
 
 const { paint, painted } = symbolPainer('Component')
-
-export function compose (component) {
-  return flattenPromises(component)
-}
 
 export function Component (constructor) {
   function instanciate (props = {}) {
@@ -43,6 +38,5 @@ export default {
   Component,
   createComponent,
   isComponent,
-  supportsComponentisation,
   componentise
 }

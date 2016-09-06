@@ -8,9 +8,9 @@
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
-    "test": "ava ./test/**/*.js --verbose --require babel-register",
-    "build": "babel modules -d lib",
-    "devBuild": "babel modules -d lib --source-maps"
+    "test": "ava ./modules/**/*.test.js --verbose --require babel-register",
+    "build": "babel modules -d lib --ignore .test.js",
+    "devBuild": "babel modules -d lib --source-maps --ignore .test.js"
   },
   "bugs": {
     "url": "https://github.com/gmmorris/mezze/issues"

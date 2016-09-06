@@ -1,6 +1,7 @@
 import test from 'ava'
 
-import { Component, createComponent } from './Component'
+import { Component } from './Component'
+import createComponent from './createComponent'
 import compose from './compose'
 import Children from './children'
 

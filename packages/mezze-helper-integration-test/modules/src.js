@@ -12,5 +12,5 @@ module.exports = function (Mezze) {
   const Comp = Mezze.Component(functionToExecute)
   const singleChild = true
 
-  return <Comp {...propsToPass}>{singleChild}</Comp>
+  return Mezze.compose(<Comp {...propsToPass}>{singleChild}</Comp>)
 }

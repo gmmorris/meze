@@ -32,9 +32,11 @@ test('Simple component composition transpilation and execution', t => {
       // require temporary file
       const transpiledFunction = require(generatedFileName)
       // call default export and valdiate result
-      const returnVal = transpiledFunction(Mezze)
-      t.deepEqual(returnVal, { 'prop': true })
+      transpiledFunction(Mezze)
+        .then(returnVal => {
+          t.deepEqual(returnVal, { 'prop': true })
+          t.end()
+        })
     })
-    t.end()
   })
 })

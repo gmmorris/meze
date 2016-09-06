@@ -8,7 +8,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "scripts": {
-    "test": "ava ./modules/**/*.test.js --verbose --require babel-register",
+    "test": "ava ./modules/*.test.js ./modules/**/*.test.js --verbose --require babel-register",
     "build": "babel modules -d lib --ignore .test.js",
     "devBuild": "babel modules -d lib --source-maps --ignore .test.js"
   },

@@ -1,8 +1,8 @@
 import test from 'ava'
 
-import { Component, createComponent } from '../modules/Component'
-import compose from '../modules/compose'
-import Children from '../modules/children'
+import { Component, createComponent } from './Component'
+import compose from './compose'
+import Children from './children'
 
 import range from 'lodash.range'
 

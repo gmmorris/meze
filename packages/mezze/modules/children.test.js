@@ -1,8 +1,8 @@
 import test from 'ava'
 
-import { Component, createComponent, isComponent } from '../modules/Component'
-import compose from '../modules/compose'
-import { Assign, assign } from '../modules/children'
+import { Component, createComponent, isComponent } from './Component'
+import compose from './compose'
+import { Assign, assign } from './children'
 
 // Assign
 test('Assign is a Component', t => {

@@ -1,5 +1,5 @@
 import isFunction from 'lodash.isfunction'
-import symbolPainer from './symbolPainter'
+import symbolPainer from './internals/symbolPainter'
 
 const { paint, painted } = symbolPainer('Component')
 

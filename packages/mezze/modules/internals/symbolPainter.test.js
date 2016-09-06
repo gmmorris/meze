@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import symbolPainter from '../modules/symbolPainter'
+import symbolPainter from './symbolPainter'
 
 test('should expose a function', t => {
   t.is(typeof symbolPainter, 'function')

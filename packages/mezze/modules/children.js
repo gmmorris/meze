@@ -9,7 +9,6 @@ export const assign = children =>
     ),
   {})
 
-
 export const Assign = Component(({ children }) => assign(children))
 
 export default {

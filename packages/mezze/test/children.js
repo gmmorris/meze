@@ -2,7 +2,7 @@ import test from 'ava'
 
 import { Component, createComponent, isComponent } from '../modules/Component'
 import compose from '../modules/compose'
-import { Assign } from '../modules/children'
+import { Assign, assign } from '../modules/children'
 
 // Assign
 test('Assign is a Component', t => {
@@ -61,6 +61,30 @@ test('Assign composes objects into the result', async t => {
       1: 'Some component at index 1',
       key2: 'Some component at index 2',
       key3: 'Some component at index 3'
+    }
+  )
+})
+
+test('assign is a function', t => {
+  t.true(typeof assign === 'function')
+})
+
+test('assign merges objects with their key structure and other object by their index', t => {
+  const six = 6
+  t.deepEqual(
+    assign([
+      'first',
+      'second',
+      { third: 33 },
+      4,
+      { [`fifth${six}`]: undefined }
+    ]),
+    {
+      0: 'first',
+      1: 'second',
+      third: 33,
+      3: 4,
+      fifth6: undefined
     }
   )
 })

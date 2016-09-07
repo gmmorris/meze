@@ -14,7 +14,7 @@ function composeObject (obj) {
 
 function compose (component) {
   return isComponentInstance(component)
-    ? compose(component.construct())
+    ? compose(component())
     : (
       isArray(component)
       ? component.map(innerComponent => compose(innerComponent))

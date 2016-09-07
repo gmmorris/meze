@@ -12,7 +12,7 @@ export default function ComponentInstance (constructor, props) {
   function construct () {
     return constructor(props)
   }
-  function clone (cloneProps = {}, ...cloneChildren) {
+  construct.clone = function (cloneProps = {}, ...cloneChildren) {
     const { children, ...originalProps } = props
     return createComponent(
       constructor,
@@ -21,8 +21,5 @@ export default function ComponentInstance (constructor, props) {
     )
   }
   construct.props = Object.freeze(props)
-  return paint({
-    construct,
-    clone
-  })
+  return paint(construct)
 }

@@ -1,0 +1,1 @@
+Meze.createComponent(Namespace.DeepNamespace.Component, null);

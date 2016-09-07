@@ -1,4 +1,4 @@
-# mezze
+# meze
 
 A Component Composition library for building Component based Declarative JSON APIs
 

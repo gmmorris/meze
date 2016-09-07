@@ -1,1 +1,0 @@
-Mezze.createComponent(Namespace.DeepNamespace.Component, null);

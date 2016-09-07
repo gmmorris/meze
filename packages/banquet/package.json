@@ -1,0 +1,14 @@
+{
+  "name": "banquet",
+  "version": "1.0.0",
+  "description": "A meze based library for JSON HTTP endpoints",
+  "main": "index.js",
+  "scripts": {
+  },
+  "author": "Gidi Meir Morris <gidi@gidi.io> (http://www.gidi.io)",
+  "license": "MIT",
+  "dependencies": {
+    "meze": "^1.0.1",
+    "restify": "^4.1.1"
+  }
+}

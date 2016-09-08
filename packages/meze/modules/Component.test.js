@@ -3,7 +3,8 @@ import test from 'ava'
 import { Component, isComponent } from './Component'
 import createComponent, { componentise } from './createComponent'
 import compose from './compose'
-import Children, { Assign } from './children'
+import Children from './children'
+import { Assign } from './utilities/assign'
 
 // Component tests
 test('takes a function and wraps it with an instanciator', async t => {

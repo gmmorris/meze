@@ -3,8 +3,7 @@ import test from 'ava'
 import { Component } from './Component'
 import createComponent from './createComponent'
 import compose from './compose'
-import Children from './children'
-
+import { Assign } from './utilities/assign'
 import range from 'lodash.range'
 
 // compose
@@ -48,7 +47,7 @@ test('flattens child components into properties', async t => {
     const { left, right } = props
     const rangeOfNumbers = range(left, right + 1)
     return {
-      sum: createComponent(Children.Assign, {},
+      sum: createComponent(Assign, {},
         ...rangeOfNumbers.map(index => createComponent(PostponedSum, { left, right: index }))
       ),
       count: rangeOfNumbers.length

@@ -2,6 +2,7 @@
 import { Component } from './Component'
 import createComponent from './createComponent'
 import Children from './children'
+import { Assign } from './utilities/assign'
 import compose from './compose'
 
 // let index = 0
@@ -18,10 +19,15 @@ import compose from './compose'
 //     )
 //   ).then(res => console.log(res))
 
+const utilities = {
+  Assign
+}
+
 const Meze = {
   Component,
   createComponent,
   Children,
+  utilities,
   compose
 }
 

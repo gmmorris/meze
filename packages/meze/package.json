@@ -9,7 +9,8 @@
   "main": "lib/index.js",
   "scripts": {
     "typecheck": "flow check modules",
-    "test": "ava ./modules/*.test.js ./modules/**/*.test.js --verbose --require babel-register",
+    "unitTest": "ava ./modules/*.test.js ./modules/**/*.test.js --verbose --require babel-register",
+    "test": "npm run unitTest && npm run typecheck",
     "build": "babel modules -d lib --ignore .test.js",
     "devBuild": "babel modules -d lib --source-maps --ignore .test.js"
   },

@@ -4,6 +4,7 @@ import compose from './compose'
 import createComponent from './createComponent'
 
 const { paint, painted } = symbolPainter('ComponentInstance')
+const { paint: paintConstruct, painted: paintedConstruct } = symbolPainter('ComponentInstance$constructed')
 const { paint: paintWithMiddleware, painted: paintedWithMiddleware } = symbolPainter('ComponentInstanceMiddleware')
 
 export const isComponentInstance =
@@ -12,12 +13,11 @@ export const isComponentInstance =
 export default function ComponentInstance (constructor, props) {
   // console.log(`$$ComponentInstance`)
   // console.log(arguments)
-  let once = false
   const construct = () => {
-    if (once) {
-      throw Error('second')
+    if (paintedConstruct(this)) {
+      throw Error('Components cannot be instanciated twice')
     }
-    once = true
+    paintConstruct(this)
     return Promise.resolve(compose(constructor(props)))
       .then(res => paintedWithMiddleware(this)
       ? this.applyMiddleware(res)

@@ -1,12 +1,14 @@
-import { isComponentInstance } from './ComponentInstance'
 import isPlainObject from 'lodash.isplainobject'
 import isArray from 'lodash.isArray'
 import isEmpty from 'lodash.isempty'
 import isObjectLike from 'lodash.isobjectlike'
 import isFunction from 'lodash.isfunction'
 import findIndex from 'lodash.findindex'
+
+import { isComponentInstance } from './ComponentInstance'
 import flattenPromises from './internals/flattenPromises'
 import symbolPainer from './internals/symbolPainter'
+
 const { paint, painted } = symbolPainer('composed')
 
 const isComplex = obj => isObjectLike(obj) || isFunction(obj)

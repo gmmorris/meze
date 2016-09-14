@@ -1,12 +1,13 @@
+/* @flow */
 
-const addToMiddleware = (middleware, fn) => {
+const addToMiddleware = (middleware : Function[], fn : Function) => {
   middleware.push(fn)
 }
 
-export default function extendWithMiddleware (objectToExtend) {
-  const middleware = []
+export default function extendWithMiddleware (objectToExtend : Object) : Function {
+  const middleware : Function[] = []
 
-  objectToExtend.then = (fn) => {
+  objectToExtend.then = (fn : Function) => {
     addToMiddleware(middleware, fn)
     return objectToExtend
   }

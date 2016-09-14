@@ -1,7 +1,11 @@
+/* @flow */
 
-const isValidForPainting = obj => obj && (typeof obj === 'object' || typeof obj === 'function')
+type Paintable = Object | Function
 
-const paint = symbol => (obj, val = true) => {
+const isValidForPainting = (obj : Paintable) : boolean =>
+  obj && (typeof obj === 'object' || typeof obj === 'function')
+
+const paint = symbol => (obj : Paintable, val : any = true) : Paintable => {
   // console.log(`paint:`)
   // console.log(symbol)
   if (isValidForPainting(obj)) {
@@ -10,7 +14,7 @@ const paint = symbol => (obj, val = true) => {
   return obj
 }
 
-const painted = symbol => obj => {
+const painted = symbol => (obj : Paintable) : boolean => {
   // console.log(`painted:`)
   // console.log(symbol)
   if (isValidForPainting(obj)) {
@@ -19,7 +23,7 @@ const painted = symbol => obj => {
   return false
 }
 
-const paintedBy = symbol => obj => {
+const paintedBy = symbol => (obj : Paintable) : any => {
   // console.log(`paintedBy:`)
   // console.log(symbol)
   if (isValidForPainting(obj)) {
@@ -27,14 +31,21 @@ const paintedBy = symbol => obj => {
   }
 }
 
-const clean = symbol => obj => {
+const clean = symbol => (obj : Paintable) : Paintable => {
   if (obj && obj[symbol]) {
     delete obj[symbol]
   }
   return obj
 }
 
-export default function (symbolName) {
+type SymbolPainter = {
+  paint : (obj : Paintable) => Paintable,
+  painted : (obj : Paintable) => boolean,
+  paintedBy : (obj : Paintable) => any,
+  clean : (obj : Paintable) => Paintable
+}
+
+export default function (symbolName : string) : SymbolPainter {
   const paintSymbol = Symbol(symbolName)
   // console.log(paintSymbol)
   return {

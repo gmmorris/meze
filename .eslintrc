@@ -6,7 +6,8 @@
   ],
   "plugins": [
       "flowtype",
-      "flow-vars"
+      "flow-vars",
+      "import"
   ],
   "env"     : {
     "browser" : true
@@ -23,7 +24,9 @@
     "semi" : [2, "never"],
     "max-len": [2, 120, 2],
     "quotes": [2, "single", { "allowTemplateLiterals": true }],
-    "react/react-in-jsx-scope": [0]
+    "react/react-in-jsx-scope": [0],
+    "no-duplicate-imports" : [0],
+    "import/no-duplicates" : [2]
   },
   "parserOptions": {
       "ecmaVersion": 6,

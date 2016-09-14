@@ -1,5 +1,6 @@
 import isPlainObject from 'lodash.isplainobject'
 import symbolPainer from './symbolPainter'
+import isObjectLike from 'lodash.isobjectlike'
 
 function isPromsie (obj) {
   return obj && !isPlainObject(obj) && (
@@ -10,6 +11,8 @@ function isPromsie (obj) {
 }
 
 const { paint, painted, clean } = symbolPainer('safe')
+
+const safePaint = res => res && isObjectLike(res) ? paint(res) : res
 
 function applyResolution (ref, key, promise) {
   return promise.then(resolution => {
@@ -52,10 +55,10 @@ export default function flattenPromises (obj) {
     const result = processResolution(obj)
     if (isPromsie(result)) {
       result.then(resolution => {
-        resolve(resolution)
+        resolve(safePaint(resolution))
       })
     } else {
-      resolve(result)
+      resolve(safePaint(result))
     }
   })
 }

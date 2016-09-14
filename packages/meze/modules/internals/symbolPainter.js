@@ -1,17 +1,30 @@
 
-const isValidForPainting = obj => obj && (typeof obj === 'object' && typeof obj === 'function')
+const isValidForPainting = obj => obj && (typeof obj === 'object' || typeof obj === 'function')
 
-const paint = symbol => obj => {
-  if (isValidForPainting) {
-    obj[symbol] = true
+const paint = symbol => (obj, val = true) => {
+  // console.log(`paint:`)
+  // console.log(symbol)
+  if (isValidForPainting(obj)) {
+    obj[symbol] = val
   }
   return obj
 }
+
 const painted = symbol => obj => {
-  if (isValidForPainting) {
-    return !!obj[symbol]
+  // console.log(`painted:`)
+  // console.log(symbol)
+  if (isValidForPainting(obj)) {
+    return obj[symbol] !== undefined
   }
   return false
+}
+
+const paintedBy = symbol => obj => {
+  // console.log(`paintedBy:`)
+  // console.log(symbol)
+  if (isValidForPainting(obj)) {
+    return obj[symbol]
+  }
 }
 
 const clean = symbol => obj => {
@@ -23,9 +36,11 @@ const clean = symbol => obj => {
 
 export default function (symbolName) {
   const paintSymbol = Symbol(symbolName)
+  // console.log(paintSymbol)
   return {
     paint: paint(paintSymbol),
     painted: painted(paintSymbol),
+    paintedBy: paintedBy(paintSymbol),
     clean: clean(paintSymbol)
   }
 }

@@ -28,3 +28,10 @@ test('clean removes the symbol marker from the object it receives as an arg', t 
   paintedObj = customPainter.clean(paintedObj)
   t.false(customPainter.painted(paintedObj))
 })
+
+test('paint sets a value under the painted symbol', t => {
+  const customPainter = symbolPainter('customPaint')
+  const obj = {}
+  let paintedObj = customPainter.paint(obj, 'jumbo')
+  t.is(customPainter.paintedBy(paintedObj), 'jumbo')
+})

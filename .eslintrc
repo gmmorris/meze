@@ -5,7 +5,8 @@
     "standard-react"
   ],
   "plugins": [
-      "flowtype"
+      "flowtype",
+      "flow-vars"
   ],
   "env"     : {
     "browser" : true

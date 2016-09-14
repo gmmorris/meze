@@ -4,9 +4,9 @@ import symbolPainter from './internals/symbolPainter'
 import ComponentInstance from './ComponentInstance'
 import isPlainObject from 'lodash.isplainobject'
 
-type ComponentPropType = Object
-type ComponentConstructorType = (props: ComponentPropType) => any
-type ComponentInstanciatorType =
+export type ComponentPropType = { children?: any[] }
+export type ComponentConstructorType = (props: ?ComponentPropType) => any
+export type ComponentType =
   (props: ComponentPropType) => any &
   {
     constructor: ComponentConstructorType
@@ -24,7 +24,7 @@ const valdiateProps = (props : ComponentPropType) : ComponentPropType => {
   return props
 }
 
-export function Component (constructor : ComponentConstructorType) : ComponentInstanciatorType {
+export function Component (constructor : ComponentConstructorType) : ComponentType {
   function instanciate (props : ComponentPropType = {}) {
     // console.log(`instanciate`)
     // console.log(props)

@@ -7,7 +7,7 @@ import isPlainObject from 'lodash.isplainobject'
 export type ComponentPropType = { children?: any[] }
 export type ComponentConstructorType = (props: ?ComponentPropType) => any
 export type ComponentType =
-  (props: ComponentPropType) => any &
+  () => any &
   {
     constructor: ComponentConstructorType
   }
@@ -30,7 +30,8 @@ export function Component (constructor : ComponentConstructorType) : ComponentTy
     // console.log(props)
     return new ComponentInstance(constructor, valdiateProps(props))
   }
-  return paint(Object.assign(instanciate, { constructor }))
+  instanciate.constructor = constructor
+  return paint(instanciate)
 }
 
 export default {

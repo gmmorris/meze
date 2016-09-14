@@ -1,3 +1,5 @@
+/* @flow */
+
 import isPlainObject from 'lodash.isplainobject'
 import isArray from 'lodash.isArray'
 import isEmpty from 'lodash.isempty'
@@ -9,16 +11,19 @@ import { isComponentInstance } from './ComponentInstance'
 import flattenPromises from './internals/flattenPromises'
 import symbolPainer from './internals/symbolPainter'
 
+type ComposedComponent = Promise<*>
+type ComposableType = any
+
 const { paint, painted } = symbolPainer('composed')
 
-const isComplex = obj => isObjectLike(obj) || isFunction(obj)
-function hasComplexProperties (obj) {
+const isComplex = (obj : Object | Function) : boolean => isObjectLike(obj) || isFunction(obj)
+function hasComplexProperties (obj : Object) : boolean {
   return findIndex(Object.keys(obj), key => {
     return isComplex(obj[key])
   }) >= 0
 }
 
-function composeObject (obj) {
+function composeObject (obj : Object) : Object {
   Object
     .keys(obj)
     .forEach(key => {
@@ -27,20 +32,30 @@ function composeObject (obj) {
   return obj
 }
 
-function compose (component) {
-  return painted(component) ? component : isComponentInstance(component)
-    ? component().then(compose)
-    : (
-      isArray(component)
-      ? component.map(innerComponent => compose(innerComponent))
-      : (
-        (isPlainObject(component) && !isEmpty(component) && hasComplexProperties(component))
-        ? flattenPromises(composeObject(component))
-        : component
-      )
-    )
+const hasAlreadyBeenComposed = (component : any) : boolean => painted(component)
+
+const composeComponentArray =
+  (component : Array<ComposableType>) : Array<ComposableType> =>
+    component.map(innerComponent => compose(innerComponent))
+
+const composePlainObject = (component : Object) : ComposableType => {
+  return isEmpty(component) || !hasComplexProperties(component)
+    ? component
+    : flattenPromises(composeObject(component))
 }
 
-export default function (component) {
-  return flattenPromises(compose(component)).then(paint)
+function compose (component : any) : ComposableType | Array<ComposableType> {
+  if (hasAlreadyBeenComposed(component)) {
+    return component
+  } else if (isPlainObject(component)) {
+    return composePlainObject(component)
+  } else if (isArray(component)) {
+    return composeComponentArray(component)
+  }
+  return isComponentInstance(component) ? component().then(compose) : component
+}
+
+export default function (component : any) : ComposedComponent {
+  return flattenPromises(compose(component))
+    .then(res => Promise.resolve(paint(res)))
 }

@@ -20,12 +20,12 @@ test('componentises functions automatically', async t => {
     return {
       left,
       right,
-      comparison: <Complex {...{left, right}} />
+      comparison: <Complex left={left} right={right} />
     }
   }
 
   t.deepEqual(
-    await compose(<Summarize {...{ left: 40, right: 50 }} />),
+    await compose(<Summarize left={40} right={50} />),
     { left: 40, right: 50, comparison: 'smaller' }
   )
 })

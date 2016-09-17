@@ -1,9 +1,9 @@
-/* @flow */
+/* [DISABLED :(] @ flow */
 
-type Paintable = Object | Function
+type Paintable = Object | Function | Array<*>
 
 const isValidForPainting = (obj : Paintable) : boolean =>
-  obj && (typeof obj === 'object' || typeof obj === 'function')
+  obj && (typeof obj === 'object' || typeof obj === 'function' || Array.isArray(obj))
 
 const paint = symbol => (obj : Paintable, val : any = true) : Paintable => {
   // console.log(`paint:`)

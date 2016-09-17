@@ -1,7 +1,7 @@
 
 import { Component } from './Component'
 import createComponent from './createComponent'
-import Children from './children'
+import Children from './Children'
 import { Assign } from './utilities/assign'
 import { Objectify, createObjectify } from './utilities/objectify'
 import compose from './compose'

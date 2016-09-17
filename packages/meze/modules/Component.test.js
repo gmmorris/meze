@@ -109,13 +109,13 @@ test('child components should be extensible by their containers', async t => {
 
   const Complex = function (props) {
     const { ...rest } = props
-    return createComponent(
-          Assign,
-          { left: 40, right: 50 },
-          createComponent(Partial, { ...rest, id: 1 }),
-          createComponent(Partial, { ...rest, id: 2 }),
-          createComponent(Partial, { ...rest, id: 3 })
-        )
+    return (
+      <Assign left={40} right={50}>
+        <Partial {...{ ...rest, id: 1 }} />
+        <Partial {...{ ...rest, id: 2 }} />
+        <Partial {...{ ...rest, id: 3 }} />
+      </Assign>
+    )
   }
 
   t.deepEqual(

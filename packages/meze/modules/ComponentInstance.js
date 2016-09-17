@@ -2,6 +2,7 @@
 
 import symbolPainter from './internals/symbolPainter'
 import extendWithMiddleware from './internals/middlewareExtender'
+import { isNonEmptyArray } from './utilities/validations'
 import compose from './compose'
 import createComponent from './createComponent'
 
@@ -23,9 +24,6 @@ export type ComponentInstanceType =
 
 export const isComponentInstance =
   (instance : any) : boolean => instance && painted(instance)
-
-const originalChildrenOrFreshChildren : (original : any[], fresh : any[]) => any[] =
-  (original, fresh) => (fresh.length ? fresh : (original && original.length ? original : []))
 
 export default function (constructor: ComponentConstructorType, props: ComponentPropType) : ComponentInstanceType {
   // console.log(`$$ComponentInstance`)
@@ -50,11 +48,11 @@ export default function (constructor: ComponentConstructorType, props: Component
   }
 
   construct.clone = function (cloneProps : ComponentPropType = {}, ...cloneChildren : any[]) : componentCreatorType {
-    const { children = [], ...originalProps } = props
+    const { children, ...originalProps } = props
     return createComponent(
       constructor,
       { ...originalProps, ...cloneProps },
-      ...originalChildrenOrFreshChildren(children, cloneChildren)
+      ...(isNonEmptyArray(cloneChildren) ? cloneChildren : (children || []))
     )
   }
 

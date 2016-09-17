@@ -3,6 +3,7 @@
   "license": "MIT",
   "author": "Gidi Meir Morris <gidi@gidi.io>",
   "devDependencies": {
+    "babel-eslint": "^6.1.2",
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "babel-plugin-transform-regenerator": "^6.14.0",

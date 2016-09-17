@@ -2,7 +2,7 @@ import test from 'ava'
 
 import Meze from './index'
 import compose from './compose'
-import { componentise } from './createComponent'
+import { componentise } from './utilities/componentise'
 
 // compose
 test('componentises functions automatically', async t => {

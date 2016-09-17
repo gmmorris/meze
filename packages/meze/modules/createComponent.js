@@ -1,33 +1,17 @@
 /* @flow */
 
-import type { ComponentConstructorType, ComponentType } from './Component'
+import type { ComponentType } from './Component'
 
-import isFunction from 'lodash.isfunction'
 import isPlainObject from 'lodash.isplainobject'
-import { isComponent, Component } from './Component'
+import { isComponent } from './Component'
 import { spreadChildren } from './Children'
 import { isNonEmptyArray, isNullOrUndefined } from './utilities/validations'
+import { componentise } from './utilities/componentise'
 
 type componentisableType = Function
 export type componentCreatorType = (component: componentisableType, props: Object, ...children: Array<any>) => any
 
-export const supportsComponentisation =
-  (component : ComponentConstructorType) : boolean => isFunction(component)
-
-const componentisationCache : { [key: Function]: ComponentType } = {}
-export function componentise (constructor : ComponentConstructorType) : ComponentType {
-  if (!supportsComponentisation(constructor)) {
-    throw new Error(`Invalid Component: Attempted to use object of type: ${typeof constructor}`)
-  }
-  return (componentisationCache[constructor] = componentisationCache[constructor] || new Component(constructor))
-}
-
-function ensureIsComponent (candidate : componentisableType) : ComponentType {
-  return isComponent(candidate)
-    ? candidate
-    : componentise(candidate)
-}
-
+//isString(candidate) ? createObjectify(candidate) : candidate
 const spreadProps = props =>
   isPlainObject(props)
     ? { ...props }
@@ -47,4 +31,25 @@ const createComponent : componentCreatorType =
   (component, props, ...children) : any =>
     ensureIsComponent(component)(processPropsChildren(ensureProps(props), children))
 
-export default createComponent
+const middleware = []
+function ensureIsComponent (candidate : componentisableType) : ComponentType {
+  let composedCandidate = candidate
+  if (!isComponent(composedCandidate)) {
+    if (middleware.findIndex(delegate => {
+      composedCandidate = delegate(candidate)
+      return isComponent(composedCandidate)
+    }) >= 0) {
+      return composedCandidate
+    } else {
+      throw new Error(`Invalid Component: Attempted to use object of type: ${typeof constructor}`)
+    }
+  }
+  return candidate
+}
+
+createComponent.addComponentisationMiddleware = delegate => {
+  middleware.push(delegate)
+  return createComponent
+}
+
+export default createComponent.addComponentisationMiddleware(componentise)

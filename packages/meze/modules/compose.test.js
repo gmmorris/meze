@@ -25,7 +25,7 @@ test('flattens a tree of components to get passed their internal promises', asyn
     return {
       left,
       right,
-      comparison: createComponent(Complex, {left, right})
+      comparison: <Complex {...{left, right}} />
     }
   })
 
@@ -49,8 +49,10 @@ test('flattens child components into properties', async t => {
     const { left, right } = props
     const rangeOfNumbers = range(left, right + 1)
     return {
-      sum: createComponent(Assign, {},
-        ...rangeOfNumbers.map(index => createComponent(PostponedSum, { left, right: index }))
+      sum: (
+        <Assign>
+          {Meze.Children.map(rangeOfNumbers, index => <PostponedSum left={left} right={index} />)}
+        </Assign>
       ),
       count: rangeOfNumbers.length
     }

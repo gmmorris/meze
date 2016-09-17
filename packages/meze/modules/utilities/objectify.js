@@ -25,7 +25,7 @@ function namePlainObjectComponents (obj) {
 
 export const objectify = (name) => (props) => {
   // console.log(JSON.stringify(props))
-  const {children, ...rest} = props
+  const { children = [], ...rest } = props
   return createComponent(Assign, {}, rest, ...children)
     .enableMiddleware()
     .then(res => paint(namePlainObjectComponents(res), name))

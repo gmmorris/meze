@@ -3,8 +3,10 @@
 import type { ComponentConstructorType, ComponentType } from './Component'
 
 import isFunction from 'lodash.isfunction'
+import isPlainObject from 'lodash.isplainobject'
 import { isComponent, Component } from './Component'
 import { spreadChildren } from './Children'
+import { isNonEmptyArray, isNullOrUndefined } from './utilities/validations'
 
 type componentisableType = Function
 export type componentCreatorType = (component: componentisableType, props: Object, ...children: Array<any>) => any
@@ -26,11 +28,23 @@ function ensureIsComponent (candidate : componentisableType) : ComponentType {
     : componentise(candidate)
 }
 
+const spreadProps = props =>
+  isPlainObject(props)
+    ? { ...props }
+    : props
+
+const ensureProps = props =>
+  isNullOrUndefined(props)
+  ? {}
+  : spreadProps(props)
+
+const processPropsChildren = (props, children) =>
+  isNonEmptyArray(children)
+    ? Object.assign(props, { children: spreadChildren(children) })
+    : props
+
 const createComponent : componentCreatorType =
-  (component, props = {}, ...children) : any =>
-    ensureIsComponent(component)({
-      ...props,
-      children: spreadChildren(children)
-    })
+  (component, props, ...children) : any =>
+    ensureIsComponent(component)(processPropsChildren(ensureProps(props), children))
 
 export default createComponent

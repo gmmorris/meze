@@ -27,7 +27,10 @@ test('takes a function and wraps it with an instanciator', async t => {
 
   const Comp = Component(functionToExecute)
 
-  t.deepEqual(await compose(<Comp {...propsToPass}>{Children.spread(childrenToPass)}</Comp>), { 'prop': true })
+  t.deepEqual(
+    await compose(<Comp {...propsToPass}>{Children.spread(childrenToPass)}</Comp>),
+    { 'prop': true }
+  )
 })
 
 test('can be composed with other components', async t => {
@@ -66,39 +69,6 @@ test('can be composed with other components', async t => {
 test('paints the Component with a Symbol so it can be identified', t => {
   const comp = Component(function () {})
   t.true(isComponent(comp))
-})
-
-// createComponent
-test('createComponent will convert a regular function to a Component', async t => {
-  const Complex = function (props) {
-    const { children, ...rest } = props
-    return { ...rest, kids: children.length }
-  }
-
-  t.deepEqual(
-    await compose(<Complex {...{ left: 40, right: 50 }} />),
-    { left: 40, right: 50, kids: 0 }
-  )
-})
-
-test('createComponent will throw an error for a non Component or non Componentisable arg', t => {
-  [{}, false, true, '', 0, { props: {} }].forEach(comp => {
-    t.throws(() => {
-      createComponent(comp, { })
-    }, /Invalid Component/)
-  })
-})
-
-test('createComponent should cache converted constructors', async t => {
-  const Complex = function (props) {
-    const { children, ...rest } = props
-    return { ...rest, kids: children.length }
-  }
-
-  t.deepEqual(
-    componentise(Complex),
-    componentise(Complex)
-  )
 })
 
 test('child components should be extensible by their containers', async t => {

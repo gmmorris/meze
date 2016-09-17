@@ -6,7 +6,7 @@ import isFunction from 'lodash.isfunction'
 import { isComponent, Component } from './Component'
 
 type componentisableType = Function
-type componentCreatorType = (component: componentisableType, props: Object, ...children: Array<any>) => any
+export type componentCreatorType = (component: componentisableType, props: Object, ...children: Array<any>) => any
 
 export const supportsComponentisation =
   (component : ComponentConstructorType) : boolean => isFunction(component)

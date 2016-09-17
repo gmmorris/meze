@@ -1,16 +1,33 @@
+/* @flow */
+
 import symbolPainter from './internals/symbolPainter'
 import extendWithMiddleware from './internals/middlewareExtender'
 import compose from './compose'
 import createComponent from './createComponent'
 
+import type { ComponentConstructorType, ComponentPropType } from './Component'
+import type { componentCreatorType } from './createComponent'
+
 const { paint, painted } = symbolPainter('ComponentInstance')
 const { paint: paintConstruct, painted: paintedConstruct } = symbolPainter('ComponentInstance$constructed')
 const { paint: paintWithMiddleware, painted: paintedWithMiddleware } = symbolPainter('ComponentInstanceMiddleware')
 
-export const isComponentInstance =
-  instance => instance && painted(instance)
+type InstanceConstructionType = () => Promise<*>
+export type ComponentInstanceType =
+  InstanceConstructionType &
+  {
+    props: ComponentPropType,
+    clone: (cloneProps : ComponentPropType, ...cloneChildren : any[]) => componentCreatorType,
+    enableMiddleware: () => InstanceConstructionType
+  }
 
-export default function ComponentInstance (constructor, props) {
+export const isComponentInstance =
+  (instance : any) : boolean => instance && painted(instance)
+
+const originalChildrenOrFreshChildren =
+  (original : any[], fresh : any[]) : any[] => (fresh.length ? fresh : (original && original.length ? original : []))
+
+export default function (constructor: ComponentConstructorType, props: ComponentPropType) : ComponentInstanceType {
   // console.log(`$$ComponentInstance`)
   // console.log(arguments)
   const construct = () => {
@@ -32,12 +49,12 @@ export default function ComponentInstance (constructor, props) {
     return construct
   }
 
-  construct.clone = function (cloneProps = {}, ...cloneChildren) {
-    const { children, ...originalProps } = props
+  construct.clone = function (cloneProps : ComponentPropType = {}, ...cloneChildren : any[]) : componentCreatorType {
+    const { children = [], ...originalProps } = props
     return createComponent(
       constructor,
       { ...originalProps, ...cloneProps },
-      ...(cloneChildren.length ? cloneChildren : children)
+      ...originalChildrenOrFreshChildren(children, cloneChildren)
     )
   }
 

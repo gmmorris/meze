@@ -14,6 +14,18 @@
     "build": "babel modules -d lib --ignore .test.js",
     "devBuild": "babel modules -d lib --source-maps --ignore .test.js"
   },
+  "ava": {
+    "babel": {
+      "plugins": [
+        "transform-meze-jsx",
+        "transform-object-rest-spread",
+        "transform-flow-strip-types",
+        "syntax-async-functions",
+        "transform-regenerator"
+      ],
+      "presets": ["es2015"]
+    }
+  },
   "bugs": {
     "url": "https://github.com/gmmorris/meze/issues"
   },
@@ -21,6 +33,7 @@
     "ava": "^0.15.2",
     "babel": "^6.5.2",
     "babel-cli": "^6.11.4",
+    "babel-plugin-transform-meze-jsx": "^1.0.2",
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",

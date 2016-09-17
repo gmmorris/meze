@@ -1,5 +1,7 @@
 import test from 'ava'
 
+import Meze from './index'
+
 import { Component } from './Component'
 import createComponent from './createComponent'
 import compose from './compose'
@@ -55,7 +57,7 @@ test('flattens child components into properties', async t => {
   })
 
   t.deepEqual(
-    await compose(createComponent(Summarize, { left: 40, right: 42 })),
+    await compose(<Summarize left={40} right={42} />),
     {
       sum: {
         0: 80,

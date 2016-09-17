@@ -3,6 +3,7 @@ import isObjectLike from 'lodash.isobjectlike'
 import createComponent from '../createComponent'
 import { Assign } from './assign'
 import symbolPainter from '../internals/symbolPainter'
+import { isString } from './validations'
 
 const { paint, painted, paintedBy } = symbolPainter('objectify$key')
 
@@ -24,7 +25,6 @@ function namePlainObjectComponents (obj) {
 }
 
 export const objectify = (name) => (props) => {
-  // console.log(JSON.stringify(props))
   const { children = [], ...rest } = props
   return createComponent(Assign, {}, rest, ...children)
     .enableMiddleware()
@@ -32,5 +32,7 @@ export const objectify = (name) => (props) => {
 }
 
 export const createObjectify = name => Component(objectify(name))
+
 export const Objectify = createObjectify(null)
+export const objectifyMiddleware = candidate => isString(candidate) ? createObjectify(candidate) : null
 

@@ -27,22 +27,22 @@ test('isPlainObjectComponent should differenciate between plainObjectComponents 
   )
 })
 
-// test.only('Objectify is used to create a generic component when an unknow Component is composed', async t => {
-//   t.deepEqual(
-//     await compose(
-//       <TopObject>
-//         <Person name="Jack" age={25} occupation="Dancer" />
-//       </TopObject>
-//     ),
-//     {
-//       Person: {
-//         name: 'Jack',
-//         age: 25,
-//         occupation: 'Dancer'
-//       }
-//     }
-//   )
-// })
+test('Objectify is used to create a generic component when an unknow Component is composed', async t => {
+  t.deepEqual(
+    await compose(
+      <topObject>
+        <person name="Jack" age={25} occupation="Dancer" />
+      </topObject>
+    ),
+    {
+      person: {
+        name: 'Jack',
+        age: 25,
+        occupation: 'Dancer'
+      }
+    }
+  )
+})
 
 test('objectify creates an object with its props under a component name', async t => {
   const SomePerson = createObjectify('SomePerson')

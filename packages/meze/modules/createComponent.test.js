@@ -59,14 +59,6 @@ test('createComponent will convert a regular function to a Component', async t =
   )
 })
 
-test('createComponent will throw an error for a non Component or non Componentisable arg', t => {
-  [{}, false, true, '', 0, { props: {} }].forEach(comp => {
-    t.throws(() => {
-      <comp />
-    }, /Invalid Component/)
-  })
-})
-
 test('createComponent should cache converted constructors', async t => {
   const Complex = function (props) {
     const { children, ...rest } = props

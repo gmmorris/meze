@@ -5,46 +5,43 @@ import type { ComponentType } from './Component'
 import isPlainObject from 'lodash.isplainobject'
 import { isComponent } from './Component'
 import { spreadChildren } from './Children'
-import { isNonEmptyArray, isNullOrUndefined } from './utilities/validations'
-import { componentise } from './utilities/componentise'
+import { isNonEmptyArray } from './utilities/validations'
+import { findTransformationWhere } from './utilities/helpers'
 
 type componentisableType = Function
 export type componentCreatorType = (component: componentisableType, props: Object, ...children: Array<any>) => any
 
-//isString(candidate) ? createObjectify(candidate) : candidate
-const spreadProps = props =>
+const spreadProps = (props : Object) : Object =>
   isPlainObject(props)
     ? { ...props }
     : props
 
-const ensureProps = props =>
-  isNullOrUndefined(props)
+const ensureProps = (props : ?Object) : Object =>
+  (props === null || props === undefined) // inlined instead of isNullOrUndefined until Flow supports this
   ? {}
   : spreadProps(props)
 
-const processPropsChildren = (props, children) =>
+const processPropsChildren = (props : Object, children : any[]) =>
   isNonEmptyArray(children)
     ? Object.assign(props, { children: spreadChildren(children) })
     : props
 
-const createComponent : componentCreatorType =
-  (component, props, ...children) : any =>
-    ensureIsComponent(component)(processPropsChildren(ensureProps(props), children))
-
 const middleware = []
+
 function ensureIsComponent (candidate : componentisableType) : ComponentType {
-  let composedCandidate = candidate
-  if (!isComponent(composedCandidate)) {
-    if (middleware.findIndex(delegate => {
-      composedCandidate = delegate(candidate)
-      return isComponent(composedCandidate)
-    }) >= 0) {
-      return composedCandidate
+  if (!isComponent(candidate)) {
+    candidate = findTransformationWhere(middleware, candidate, isComponent)
+    if (candidate) {
+      return candidate
     } else {
-      throw new Error(`Invalid Component: Attempted to use object of type: ${typeof constructor}`)
+      throw new Error(`Invalid Component: Attempted to use object of type: ${typeof candidate}`)
     }
   }
   return candidate
+}
+
+function createComponent (component : any, props : ?Object, ...children : any[]) : any {
+  return ensureIsComponent(component)(processPropsChildren(ensureProps(props), children))
 }
 
 createComponent.addComponentisationMiddleware = delegate => {
@@ -52,4 +49,4 @@ createComponent.addComponentisationMiddleware = delegate => {
   return createComponent
 }
 
-export default createComponent.addComponentisationMiddleware(componentise)
+export default createComponent

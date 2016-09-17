@@ -23,7 +23,9 @@
         "syntax-async-functions",
         "transform-regenerator"
       ],
-      "presets": ["es2015"]
+      "presets": [
+        "es2015"
+      ]
     }
   },
   "bugs": {

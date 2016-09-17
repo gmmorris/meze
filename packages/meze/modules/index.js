@@ -3,13 +3,17 @@ import { Component } from './Component'
 import createComponent from './createComponent'
 import Children from './Children'
 import { Assign } from './utilities/assign'
-import { Objectify, createObjectify } from './utilities/objectify'
+import { componentise } from './utilities/componentise'
+import { Objectify, objectifyMiddleware } from './utilities/objectify'
 import compose from './compose'
+
+createComponent
+  .addComponentisationMiddleware(componentise)
+  .addComponentisationMiddleware(objectifyMiddleware)
 
 const utilities = {
   Assign,
-  Objectify,
-  createObjectify
+  Objectify
 }
 
 const Meze = {

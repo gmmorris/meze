@@ -24,8 +24,8 @@ export type ComponentInstanceType =
 export const isComponentInstance =
   (instance : any) : boolean => instance && painted(instance)
 
-const originalChildrenOrFreshChildren =
-  (original : any[], fresh : any[]) : any[] => (fresh.length ? fresh : (original && original.length ? original : []))
+const originalChildrenOrFreshChildren : (original : any[], fresh : any[]) => any[] =
+  (original, fresh) => (fresh.length ? fresh : (original && original.length ? original : []))
 
 export default function (constructor: ComponentConstructorType, props: ComponentPropType) : ComponentInstanceType {
   // console.log(`$$ComponentInstance`)

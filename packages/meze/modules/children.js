@@ -5,6 +5,21 @@ import { identity } from './utilities/helpers'
 
 const { paint, painted } = symbolPainter('ChildrenArray')
 
+// api
+
+export const map =
+  (children : any, mapper : (item: any, index: number) => any = identity) : any =>
+    paint(children.map(mapper))
+
+export const spread =
+  (children : any) : any => map(children)
+
+export const cloneWithProps =
+  (children : any, props : Object) : any =>
+    map(children, child => child.clone(props))
+
+// internal
+
 export const isChildrenArray =
   (comps : any) : boolean => comps && painted(comps)
 
@@ -22,10 +37,6 @@ function flattenNestedChldArrays (children : any[]) : any[] {
   return children
 }
 
-export const map =
-  (children : any, mapper : (item: any, index: number) => any = identity) : any =>
-    paint(children.map(mapper))
-
 export function spreadChildren (children : any) : any {
   if (children && children.length) {
     return flattenNestedChldArrays(children)
@@ -34,5 +45,7 @@ export function spreadChildren (children : any) : any {
 }
 
 export default {
-  map
+  map,
+  spread,
+  cloneWithProps
 }

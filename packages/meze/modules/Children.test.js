@@ -2,7 +2,6 @@ import test from 'ava'
 
 import Meze from './index'
 import { Component } from './Component'
-import createComponent from './createComponent'
 import compose from './compose'
 import Children, { isChildrenArray } from './Children'
 

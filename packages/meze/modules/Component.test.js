@@ -1,5 +1,7 @@
 import test from 'ava'
 
+import Meze from './index'
+
 import { Component, isComponent } from './Component'
 import createComponent, { componentise } from './createComponent'
 import compose from './compose'
@@ -25,7 +27,7 @@ test('takes a function and wraps it with an instanciator', async t => {
 
   const Comp = Component(functionToExecute)
 
-  t.deepEqual(await compose(createComponent(Comp, propsToPass, ...childrenToPass)), { 'prop': true })
+  t.deepEqual(await compose(<Comp {...propsToPass}>{Children.spread(childrenToPass)}</Comp>), { 'prop': true })
 })
 
 test('can be composed with other components', async t => {
@@ -46,7 +48,7 @@ test('can be composed with other components', async t => {
     return {
       left,
       right,
-      comparison: createComponent(Complex, {left, right})
+      comparison: <Complex {...{left, right}} />
     }
   })
 
@@ -55,7 +57,7 @@ test('can be composed with other components', async t => {
   const comparison = 'smaller'
 
   t.deepEqual(
-    await compose(createComponent(Root, { right, left })),
+    await compose(<Root {...{left, right}} />),
     { right, left, comparison }
   )
 })
@@ -74,7 +76,7 @@ test('createComponent will convert a regular function to a Component', async t =
   }
 
   t.deepEqual(
-    await compose(createComponent(Complex, { left: 40, right: 50 })),
+    await compose(<Complex {...{ left: 40, right: 50 }} />),
     { left: 40, right: 50, kids: 0 }
   )
 })
@@ -117,7 +119,7 @@ test('child components should be extensible by their containers', async t => {
   }
 
   t.deepEqual(
-    await compose(createComponent(Complex, { left: 40, right: 50 })),
+    await compose(<Complex {...{ left: 40, right: 50 }} />),
     {
       0: { left: 40, right: 50, id: 1 },
       1: { left: 40, right: 50, id: 2 },
@@ -134,23 +136,23 @@ test('anonymous child components should be extensible by their containers', asyn
 
   const Complex = function (props) {
     const { children, ...rest } = props
-    return createComponent(
-          Assign,
-          { left: 40, right: 50 },
-          ...Children.map(children, child => child.clone({ ...rest }))
-        )
+    return (
+      <Assign {...{ left: 40, right: 50 }}>
+      {
+        Children.cloneWithProps(children, rest)
+      }
+      </Assign>
+    )
   }
 
   t.deepEqual(
     await compose(
-      createComponent(
-        Complex,
-        { left: 40, right: 50 },
-        createComponent(Partial, { id: 1 }),
-        createComponent(Partial, { id: 2 }),
-        createComponent(Partial, { id: 3 })
-        )
-      ),
+      <Complex left={40} right={50}>
+        <Partial id={1} />
+        <Partial id={2} />
+        <Partial id={3} />
+      </Complex>
+    ),
     {
       0: { left: 40, right: 50, id: 1 },
       1: { left: 40, right: 50, id: 2 },
@@ -171,9 +173,7 @@ test('a createComponent instance result should be extansible by middleware', asy
   }
 
   t.deepEqual(
-    await compose(
-      applyMiddleware(createComponent(Complex, { val: 1 })
-    )),
+    await compose(applyMiddleware(<Complex val={1} />)),
     2
   )
 })

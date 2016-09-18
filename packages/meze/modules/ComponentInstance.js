@@ -28,7 +28,7 @@ export const isComponentInstance =
 export default function (constructor: ComponentConstructorType, props: ComponentPropType) : ComponentInstanceType {
   // console.log(`$$ComponentInstance`)
   // console.log(arguments)
-  const construct = () => {
+  const mount = () => {
     if (paintedConstruct(this)) {
       throw Error('Components cannot be instanciated twice')
     }
@@ -39,15 +39,15 @@ export default function (constructor: ComponentConstructorType, props: Component
       : res)
   }
 
-  construct.enableMiddleware = () => {
+  mount.enableMiddleware = () => {
     if (!paintedWithMiddleware(this)) {
       paintWithMiddleware(this)
-      this.applyMiddleware = extendWithMiddleware(construct)
+      this.applyMiddleware = extendWithMiddleware(mount)
     }
-    return construct
+    return mount
   }
 
-  construct.clone = function (cloneProps : ComponentPropType = {}, ...cloneChildren : any[]) : componentCreatorType {
+  mount.clone = function (cloneProps : ComponentPropType = {}, ...cloneChildren : any[]) : componentCreatorType {
     const { children, ...originalProps } = props
     return createComponent(
       constructor,
@@ -56,7 +56,7 @@ export default function (constructor: ComponentConstructorType, props: Component
     )
   }
 
-  construct.props = Object.freeze(props)
+  mount.props = Object.freeze(props)
 
-  return paint(construct)
+  return paint(mount)
 }

@@ -30,7 +30,7 @@ export default function (constructor: ComponentConstructorType, props: Component
   // console.log(arguments)
   const mount = () => {
     if (paintedConstruct(this)) {
-      throw Error('Components cannot be instanciated twice')
+      throw Error('a Component Instance cannot be mounted twice')
     }
     paintConstruct(this)
     return Promise.resolve(compose(constructor(props)))

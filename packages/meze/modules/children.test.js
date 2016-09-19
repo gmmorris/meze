@@ -7,14 +7,14 @@ import children, { isChildrenArray } from './children'
 
 // Children tests
 test('map applies a function to an array and marks the array as a ChildArray', t => {
-  const maped = Children.map([
+  const maped = children.map([
     1, 2, 3
   ], i => i)
   t.true(isChildrenArray(maped))
 })
 
 test('map applies the identity when no mapper function is provided', t => {
-  const maped = Children.map([
+  const maped = children.map([
     1, 2, 3
   ], i => i)
   t.true(isChildrenArray(maped))
@@ -32,7 +32,7 @@ test('ChildArrays are flattened when passed to a component', async t => {
     await compose(
       <Summarize>
         {
-          Children.map([
+          children.map([
             1, 2, 3
           ])
         }

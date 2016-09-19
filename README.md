@@ -1,4 +1,5 @@
-# meze
+# meze ![alt TravisCI Build](https://travis-ci.org/gmmorris/meze.svg?branch=master)
+=======
 
 A Component Composition library for building Component based Declarative JSON APIs
 

@@ -6,7 +6,8 @@ sudo: false
 
 install:
  - npm install
+ - lerna exec -- npm install
+ - lerna bootstrap
 
 script:
- - ./node_modules/.bin/lerna bootstrap
- - ./node_modules/.bin/lerna exec -- npm install
+ - npm test

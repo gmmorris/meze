@@ -2,7 +2,7 @@
   "name": "meze-helper-integration-test",
   "version": "1.0.2",
   "description": "",
-  "main": "integration.test.js",
+  "main": "modules/integration.test.js",
   "scripts": {
     "test": "tape ./modules/integration.test.js | tap-summary"
   },

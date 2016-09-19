@@ -6,4 +6,6 @@ install:
  - npm install
  - npm run installall
 
-script: npm run test
+script:
+ - lerna bootstrap
+ - lerna exec -- npm install

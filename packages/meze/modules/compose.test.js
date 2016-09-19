@@ -51,7 +51,7 @@ test('flattens child components into properties', async t => {
     return {
       sum: (
         <Assign>
-          {Meze.Children.map(rangeOfNumbers, index => <PostponedSum left={left} right={index} />)}
+          {Meze.children.map(rangeOfNumbers, index => <PostponedSum left={left} right={index} />)}
         </Assign>
       ),
       count: rangeOfNumbers.length

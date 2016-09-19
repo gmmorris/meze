@@ -3,7 +3,7 @@ import test from 'ava'
 import Meze from './index'
 import { Component } from './Component'
 import compose from './compose'
-import Children, { isChildrenArray } from './Children'
+import children, { isChildrenArray } from './children'
 
 // Children tests
 test('map applies a function to an array and marks the array as a ChildArray', t => {

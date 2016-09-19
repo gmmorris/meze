@@ -1,7 +1,7 @@
 /* @flow */
 
 import isPlainObject from 'lodash.isplainobject'
-import isArray from 'lodash.isArray'
+import isArray from 'lodash.isarray'
 import isEmpty from 'lodash.isempty'
 import isObjectLike from 'lodash.isobjectlike'
 import isFunction from 'lodash.isfunction'

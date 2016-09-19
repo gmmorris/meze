@@ -22,6 +22,7 @@
     "lerna": "2.0.0-beta.26"
   },
   "scripts": {
+    "installall": "lerna exec -- npm install",
     "test": "lerna run build && lerna run test"
   }
 }

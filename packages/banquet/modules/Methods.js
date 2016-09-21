@@ -1,10 +1,12 @@
+/* @flow */
+
 import Meze, { children } from 'meze'
 
-const createMethodComponent = method => Meze.Component(({ server, path, handler, name : handlerName }) => {
-  if (handlerName) {
-    handler.handlerName = handlerName
-  }
-  return server[method](path, handler)
+type handlerType = (req : Object, res : Object, next : (target: ?string) => {}) => {}
+
+const createMethodComponent = method => Meze.Component(({ server, path, handler }) => {
+  const handlers = Array.isArray(handler) ? handler : [ handler ]  
+  server[method](path, ...handlers)
 }) 
 
 export const Get = createMethodComponent('get')

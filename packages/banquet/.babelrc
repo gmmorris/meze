@@ -3,6 +3,7 @@
   "plugins": [
     "transform-meze-jsx",
     "transform-object-rest-spread",
+    "transform-flow-strip-types",
     "syntax-async-functions",
     "transform-regenerator"
   ]

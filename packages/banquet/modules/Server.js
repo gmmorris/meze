@@ -15,8 +15,19 @@ type ServerProptypes = {
 
 const Server = Meze.Component((props : ServerProptypes) => {
   const server = restify.createServer(props)
-  // TODO OMG
-  return server
+
+  return Meze.children.reduceComposed(
+    Meze.children.cloneWithProps(props.children, { server }),
+    // compose children but simply return the server from this Component
+    // as we're wrapping the restify API here, it isn't a natural candidate for 
+    // composition
+    ( result ) => result,
+    server
+  )    
+})
+
+export const Use = Meze.Component(({ server, handler }) => {  
+  server.use(handler)    
 })
 
 export default Server

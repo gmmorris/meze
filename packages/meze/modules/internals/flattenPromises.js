@@ -2,6 +2,7 @@
 import isPlainObject from 'lodash.isplainobject'
 import symbolPainer from './symbolPainter'
 import isObjectLike from 'lodash.isobjectlike'
+import isArray from 'lodash.isarray'
 
 function isPromsieLike (obj) : boolean {
   return obj &&
@@ -42,6 +43,11 @@ function flattenPromisesInObject (obj) {
     .then(() => paint(obj))
 }
 
+function flattenPromisesInArray (arr) {
+  return Promise.all(arr.map(processResolution))
+    .then(paint)
+}
+
 function flattenPromisesInPromise (promise : Promise<*>) : Promise<*> {
   return promise
     .then(result => flattenPromises(result))
@@ -53,7 +59,11 @@ function processResolution (obj) {
       : (
         isPlainObject(obj) && !painted(obj)
         ? flattenPromisesInObject(obj)
-        : clean(obj)
+        : (
+          isArray(obj) && !painted(obj)
+          ? flattenPromisesInArray(obj)
+          : clean(obj)
+        )
       )
 }
 

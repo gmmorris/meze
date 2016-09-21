@@ -3,6 +3,8 @@
 import symbolPainter from './internals/symbolPainter'
 import { identity } from './utilities/helpers'
 
+import compose from './compose'
+
 const { paint, painted } = symbolPainter('ChildrenArray')
 
 // api
@@ -11,12 +13,21 @@ export const map =
   (children : any, mapper : (item: any, index: number) => any = identity) : any =>
     paint(children.map(mapper))
 
+export const reduce =
+  (children : any, reducer : (result: ?mixed, item: any, index: number) => any) : any =>
+    paint(children.reduce(reducer))
+
 export const spread =
   (children : any) : any => map(children)
 
 export const cloneWithProps =
   (children : any, props : Object) : any =>
     map(children, child => child.clone(props))
+
+export const reduceComposed =
+  (children : any = [], reducer : (result: ?mixed, item: any, index: number) => any, initialValue : ?any) : any =>
+    compose(children)
+      .then(composedChildren => composedChildren.reduce(reducer, initialValue))
 
 // internal
 
@@ -44,8 +55,11 @@ export function spreadChildren (children : any) : any {
   return children
 }
 
+// public API
 export default {
   map,
+  reduce,
   spread,
+  reduceComposed,
   cloneWithProps
 }

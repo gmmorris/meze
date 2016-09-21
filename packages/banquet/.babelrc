@@ -1,6 +1,7 @@
 {
   "presets": ["es2015"],
   "plugins": [
+    "transform-meze-jsx",
     "transform-object-rest-spread",
     "syntax-async-functions",
     "transform-regenerator"

@@ -61,3 +61,29 @@ test('takes an array and flattens the promises inside it', async t => {
   )
 })
 
+test('flattens promises in deep arrays', async t => {
+  const result = await flattenPromises({
+    first: [
+      new Promise(resolve => {
+        setTimeout(() => resolve(1), 100)
+      }),
+      new Promise(resolve => {
+        setTimeout(() => resolve(2), 100)
+      })
+    ],
+    second: [
+      new Promise(resolve => {
+        setTimeout(() => resolve(3), 100)
+      }),
+      new Promise(resolve => {
+        setTimeout(() => resolve(4), 100)
+      })
+    ]
+  })
+
+  t.deepEqual(
+    result,
+    { first: [1, 2], second: [3, 4] }
+  )
+})
+

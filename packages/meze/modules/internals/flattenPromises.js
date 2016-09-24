@@ -37,6 +37,8 @@ function flattenPromisesInObject (obj) {
         promises.push(applyResolution(obj, prop, obj[prop]))
       } else if (isPlainObject(obj[prop])) {
         promises.push(applyResolution(obj, prop, flattenPromisesInObject(obj[prop])))
+      } else if (isArray(obj[prop])) {
+        promises.push(applyResolution(obj, prop, flattenPromisesInArray(obj[prop])))
       }
       return promises
     }, []))
@@ -45,7 +47,10 @@ function flattenPromisesInObject (obj) {
 
 function flattenPromisesInArray (arr) {
   return Promise.all(arr.map(processResolution))
-    .then(paint)
+    .then(results => {
+      arr.splice(0, arr.length, ...results)
+      return arr
+    })
 }
 
 function flattenPromisesInPromise (promise : Promise<*>) : Promise<*> {

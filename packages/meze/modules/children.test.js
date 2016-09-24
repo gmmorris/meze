@@ -3,21 +3,87 @@ import test from 'ava'
 import Meze from './index'
 import { Component } from './Component'
 import compose from './compose'
-import children, { isChildrenArray, reduceComposed } from './children'
+import { isChildrenArray, reduceComposed, cloneWithProps } from './children'
 
 // Children tests
 test('map applies a function to an array and marks the array as a ChildArray', t => {
-  const maped = children.map([
+  const maped = Meze.children.map([
     1, 2, 3
   ], i => i)
   t.true(isChildrenArray(maped))
 })
 
 test('map applies the identity when no mapper function is provided', t => {
-  const maped = children.map([
+  const maped = Meze.children.map([
     1, 2, 3
   ], i => i)
   t.true(isChildrenArray(maped))
+})
+
+test('cloneWithProps clones a component instance and applies the additional props to it', async t => {
+  const Echo = Component(function (props) {
+    return Object.assign({}, props)
+  })
+
+  const Summarize = Component(function (props) {
+    return {
+      contents: Meze.children.map(props.children),
+      extendedContents: Meze.children.cloneWithProps(props.children, { hey: 'ho' })
+    }
+  })
+
+  t.deepEqual(
+    await compose(
+      <Summarize>
+        <Echo name="John" />
+        <Echo name="Doe" />
+      </Summarize>
+    ),
+    {
+      contents: [
+        { name: "John" },
+        { name: "Doe" }
+      ],
+      extendedContents: [
+        { name: "John", hey: "ho" },
+        { name: "Doe", hey: "ho" }
+      ]
+    }
+  )
+})
+
+test('cloneWithProps can take a function which it uses to compute props for the clones', async t => {
+  const Echo = Component(function (props) {
+    return Object.assign({}, props)
+  })
+
+  const Summarize = Component(function (props) {
+    return {
+      contents: Meze.children.map(props.children),
+      extendedContents: Meze.children.cloneWithProps(props.children, (childProps) => (
+        { 'NAME' : childProps.name.toUpperCase() }
+      ))
+    }
+  })
+
+  t.deepEqual(
+    await compose(
+      <Summarize>
+        <Echo name="John" />
+        <Echo name="Doe" />
+      </Summarize>
+    ),
+    {
+      contents: [
+        { name: "John" },
+        { name: "Doe" }
+      ],
+      extendedContents: [
+        { name: "John", NAME: "JOHN" },
+        { name: "Doe", NAME: "DOE" }
+      ]
+    }
+  )
 })
 
 test('ChildArrays are flattened when passed to a component', async t => {
@@ -32,7 +98,7 @@ test('ChildArrays are flattened when passed to a component', async t => {
     await compose(
       <Summarize>
         {
-          children.map([
+          Meze.children.map([
             1, 2, 3
           ])
         }
@@ -42,7 +108,7 @@ test('ChildArrays are flattened when passed to a component', async t => {
   )
 })
 
-test.only('reduceComposed composes childen of a component and applied a reducer to their results', async t => {
+test('reduceComposed composes childen of a component and applied a reducer to their results', async t => {
 
   const PosponedComp = Component(props => {
     return new Promise(resolve => {

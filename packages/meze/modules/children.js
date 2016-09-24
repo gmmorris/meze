@@ -1,5 +1,4 @@
 /* @flow */
-
 import symbolPainter from './internals/symbolPainter'
 import { identity } from './utilities/helpers'
 
@@ -11,18 +10,19 @@ const { paint, painted } = symbolPainter('ChildrenArray')
 
 export const map =
   (children : any, mapper : (item: any, index: number) => any = identity) : any =>
-    paint(children.map(mapper))
+    children ? paint(children.map(mapper)) : undefined
 
 export const reduce =
   (children : any, reducer : (result: ?mixed, item: any, index: number) => any) : any =>
-    paint(children.reduce(reducer))
+    children ? paint(children.reduce(reducer)) : undefined
 
 export const spread =
   (children : any) : any => map(children)
 
 export const cloneWithProps =
-  (children : any, props : Object) : any =>
-    map(children, child => child.clone(props))
+  (children : any, props : Object | () => Object) : any =>
+    map(children, child =>
+      child.clone(typeof props === 'function' ? props(child.props) : props))
 
 export const reduceComposed =
   (children : any = [], reducer : (result: ?mixed, item: any, index: number) => any, initialValue : ?any) : any =>

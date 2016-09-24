@@ -86,6 +86,31 @@ test('cloneWithProps can take a function which it uses to compute props for the 
   )
 })
 
+test('cloneWithProps skips non Components', async t => {
+  const Echo = Component(function (props) {
+    return Object.assign({}, props)
+  })
+
+  const Summarize = Component(function (props) {
+    return Meze.children.cloneWithProps(props.children, (childProps) => (
+      { 'NAME' : childProps.name.toUpperCase() }
+    ))
+  })
+
+  t.deepEqual(
+    await compose(
+      <Summarize>
+        <Echo name="John" />
+        {{ name: "Doe" }}
+      </Summarize>
+    ),
+    [
+      { name: "John", NAME: "JOHN" },
+      { name: "Doe" }
+    ]
+  )
+})
+
 test('ChildArrays are flattened when passed to a component', async t => {
   const Summarize = Component(function (props) {
     const { children } = props

@@ -3,6 +3,7 @@ import symbolPainter from './internals/symbolPainter'
 import { identity } from './utilities/helpers'
 
 import compose from './compose'
+import { isComponentInstance } from './ComponentInstance'
 
 const { paint, painted } = symbolPainter('ChildrenArray')
 
@@ -22,12 +23,12 @@ export const spread =
 export const cloneWithProps =
   (children : any, props : Object | () => Object) : any =>
     map(children, child =>
-      child.clone(typeof props === 'function' ? props(child.props) : props))
+      isComponentInstance(child) ? child.clone(typeof props === 'function' ? props(child.props) : props) : child)
 
 export const reduceComposed =
   (children : any = [], reducer : (result: ?mixed, item: any, index: number) => any, initialValue : ?any) : any =>
     compose(children)
-      .then(composedChildren => composedChildren.reduce(reducer, initialValue))
+      .then(composedChildren => reducer ? composedChildren.reduce(reducer, initialValue) : composedChildren)
 
 // internal
 

@@ -3,7 +3,7 @@ import test from 'ava'
 import Meze from './index'
 import { Component } from './Component'
 import compose from './compose'
-import { isChildrenArray, reduceComposed, cloneWithProps } from './children'
+import { isChildrenArray, reduceComposed, cloneWithProps, only, onlyComposed } from './children'
 
 // Children tests
 test('map applies a function to an array and marks the array as a ChildArray', t => {
@@ -51,6 +51,145 @@ test('cloneWithProps clones a component instance and applies the additional prop
     }
   )
 })
+
+test('only returns the only child in the children property', async t => {
+  const Dumb = Component(function (props) {
+    return { areYouADumbComponent: true }
+  })
+
+  const TheOnlyChild = Component(function (props) {
+    return {
+      only: only(props.children)
+    }
+  })
+
+  t.deepEqual(
+    await compose(
+      <TheOnlyChild>
+        <Dumb />
+      </TheOnlyChild>
+    ),
+    {
+      only: { areYouADumbComponent: true }
+    }
+  )
+})
+
+test('only throws if there is something other than a single child', async t => {
+  const Dumb = Component(function (props) {
+    return { [props.key]: true }
+  })
+
+  const TheOnlyChild = Component(function (props) {
+    return {
+      only: only(props.children)
+    }
+  })
+
+  t.throws(() => {
+    compose(
+      <TheOnlyChild />
+    ).then(res => console.log(res))
+  })
+
+  t.throws(() => {
+    compose(
+      <TheOnlyChild>
+        <Dumb />
+        <Dumb />
+      </TheOnlyChild>
+    ).then(res => console.log(res))
+  })
+})
+
+test('onlyComposed returns the only child in the children property which returns a value after composition', async t => {
+  const Dumb = Component(function (props) {
+    return { areYouADumbComponent: true }
+  })
+
+  const TheOnlyChild = Component(function (props) {
+    return {
+      only: onlyComposed(props.children)
+    }
+  })
+
+  t.deepEqual(
+    await compose(
+      <TheOnlyChild>
+        <Dumb />
+      </TheOnlyChild>
+    ),
+    {
+      only: { areYouADumbComponent: true }
+    }
+  )
+})
+
+test('onlyComposed returns the ignores children after composition who have no return value', async t => {
+  const Dumb = Component(function (props) {
+    return { areYouADumbComponent: true }
+  })
+  const EmptyDumb = Component(() => {})
+
+  const TheOnlyChild = Component(function (props) {
+    return {
+      only: onlyComposed(props.children)
+    }
+  })
+
+  t.deepEqual(
+    await compose(
+      <TheOnlyChild>
+        <EmptyDumb />
+        <Dumb />
+        <EmptyDumb />
+      </TheOnlyChild>
+    ),
+    {
+      only: { areYouADumbComponent: true }
+    }
+  )
+})
+
+// test.only('onlyComposed throws if there is something other than a single child after composition', async t => {
+//   const Dumb = Component(function (props) {
+//     return { areYouADumbComponent: true }
+//   })
+//   const EmptyDumb = Component(() => {})
+
+//   const TheOnlyChild = Component(function (props) {
+//     return {
+//       only: onlyComposed(props.children)
+//     }
+//   })
+
+//   t.throws(compose(
+//     <TheOnlyChild />
+//   ), 'No Children present in Component after composition')
+
+//   // t.throws(() => {
+//   //   compose(
+//   //     <TheOnlyChild>
+//   //       <EmptyDumb />
+//   //       <EmptyDumb />
+//   //       <Dumb />
+//   //       <EmptyDumb />
+//   //       <EmptyDumb />
+//   //       <Dumb />
+//   //     </TheOnlyChild>
+//   //   ).then(res => console.log(res))
+//   // })
+
+//   // t.throws(() => {
+//   //   compose(
+//   //     <TheOnlyChild>
+//   //       <Dumb />
+//   //       <Dumb />
+//   //     </TheOnlyChild>
+//   //   ).then(res => console.log(res))
+//   // })
+// })
+
 
 test('cloneWithProps can take a function which it uses to compute props for the clones', async t => {
   const Echo = Component(function (props) {

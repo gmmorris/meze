@@ -1,6 +1,6 @@
 /* @flow */
 import symbolPainter from './internals/symbolPainter'
-import { identity } from './utilities/helpers'
+import { identity, isEmpty, hasMultiple, filterOutUndefined } from './utilities/helpers'
 
 import compose from './compose'
 import { isComponentInstance } from './ComponentInstance'
@@ -13,9 +13,13 @@ export const map =
   (children : any, mapper : (item: any, index: number) => any = identity) : any =>
     children ? paint(children.map(mapper)) : undefined
 
+export const forEach =
+  (children : any, mapper : (item: any, index: number) => any = identity) : any =>
+    children ? paint(children.forEach(mapper)) : undefined
+
 export const reduce =
-  (children : any, reducer : (result: ?mixed, item: any, index: number) => any) : any =>
-    children ? paint(children.reduce(reducer)) : undefined
+  (children : any, reducer : (result: ?mixed, item: any, index: number) => any, initialValue : any) : any =>
+    children ? paint(children.reduce(reducer, initialValue)) : undefined
 
 export const spread =
   (children : any) : any => map(children)
@@ -30,6 +34,29 @@ export const reduceComposed =
     compose(children)
       .then(composedChildren => reducer ? composedChildren.reduce(reducer, initialValue) : composedChildren)
 
+export const only =
+  (children : any = []) : any => {
+    if(isEmpty(children)) {
+      throw new Error('No Children present in Component')
+    } else if(hasMultiple(children)) {
+      throw new Error('Multiple Children present in Component')
+    }
+    return children.shift()
+  }
+
+export const onlyComposed =
+  (children : any = []) : any =>
+    compose(children)
+      .then(composedChildren => {
+        composedChildren = filterOutUndefined(composedChildren)
+        if(isEmpty(composedChildren)) {
+          return Promise.reject(new Error('No Children present in Component after composition'))
+        } else if(hasMultiple(composedChildren)) {
+          return Promise.reject(new Error('Multiple Children present in Component after composition'))
+        }
+        return composedChildren.shift()
+      })
+      
 // internal
 
 export const isChildrenArray =
@@ -59,8 +86,11 @@ export function spreadChildren (children : any) : any {
 // public API
 export default {
   map,
+  forEach,
   reduce,
   spread,
+  only,
+  onlyComposed,
   reduceComposed,
   cloneWithProps
 }

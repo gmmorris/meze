@@ -33,10 +33,14 @@ export default function (constructor: ComponentConstructorType, props: Component
       throw Error('a Component Instance cannot be mounted twice')
     }
     paintConstruct(this)
-    return Promise.resolve(compose(constructor(props)))
-      .then(res => paintedWithMiddleware(this)
-      ? this.applyMiddleware(res)
-      : res)
+    return compose(constructor(props))
+      .then(res => 
+        Promise.resolve(
+          paintedWithMiddleware(this)
+          ? this.applyMiddleware(res)
+          : res
+        )
+      )
   }
 
   mount.enableMiddleware = () => {

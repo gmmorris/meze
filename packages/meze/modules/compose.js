@@ -27,7 +27,7 @@ function composeObject (obj : Object) : Object {
   Object
     .keys(obj)
     .forEach(key => {
-      obj[key] = isComplex(obj[key]) ? Promise.resolve(compose(obj[key])) : obj[key]
+      obj[key] = isComplex(obj[key]) ? compose(obj[key]) : obj[key]
     })
   return obj
 }

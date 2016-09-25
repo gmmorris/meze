@@ -30,8 +30,28 @@ test('flattens a tree of components to get passed their internal promises', asyn
   })
 
   t.deepEqual(
-    await compose(createComponent(Summarize, { left: 40, right: 50 })),
+    await compose(<Summarize left={40} right={50} />),
     { left: 40, right: 50, comparison: 'smaller' }
+  )
+})
+
+test('a composition should reject if an internal promises rejects unhandled', async t => {
+  const RejectIn = Component(function (props) {
+    return new Promise((resolve, reject) => setTimeout(() => reject(new Error('Holy Molly')), props.time))
+  })
+
+  const Summarize = Component(function (props) {
+    const { left, right } = props
+    return {
+      left,
+      right,
+      comparison: <RejectIn time={10} />
+    }
+  })
+
+  t.throws(
+    compose(<Summarize left={40} right={50} />),
+    /Holy Molly/
   )
 })
 

@@ -73,12 +73,14 @@ function processResolution (obj) {
 }
 
 export default function flattenPromises (obj : any) : Promise<*> {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const result = processResolution(obj)
     if (isPromsie(result)) {
-      result.then(resolution => {
-        resolve(safePaint(resolution))
-      })
+      result
+        .then(resolution => {
+          resolve(safePaint(resolution))
+        })
+        .catch(ex => reject(ex))
     } else {
       resolve(safePaint(result))
     }

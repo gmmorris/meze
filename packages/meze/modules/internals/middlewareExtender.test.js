@@ -16,7 +16,7 @@ test('apply takes a result and returns the result unchanged when no middleware i
   t.is(apply(1), 1)
 })
 
-test('apply takes a result and returns the result after applying all middleware to it', t => {
+test('apply takes a result and returns the result after applying its single middleware to it', t => {
   const obj = {}
   const apply = middlewareExtender(obj)
   obj.then(val => val * 2)

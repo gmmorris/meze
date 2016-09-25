@@ -87,3 +87,38 @@ test('flattens promises in deep arrays', async t => {
   )
 })
 
+test('rejects if any of the promises inside the flattened object have rejected', async t => {
+  const result = {
+    a: 1,
+    b: Promise.reject(new Error('Invalid Result')),
+    c: {
+      d: Promise.resolve(3),
+      e: new Promise(resolve => {
+        setTimeout(() => resolve(4), 100)
+      })
+    }
+  }
+
+  t.throws(
+    flattenPromises(result),
+    /Invalid Result/
+  )
+})
+
+test('rejects if any of the promises inside the flattened object have rejected asynchronously', async t => {
+  const result = {
+    a: 1,
+    b: Promise.resolve(2),
+    c: {
+      d: Promise.resolve(3),
+      e: new Promise((resolve, reject) => {
+        setTimeout(() => reject(new Error('Invalid Result')), 100)
+      })
+    }
+  }
+
+  t.throws(
+    flattenPromises(result),
+    /Invalid Result/
+  )
+})

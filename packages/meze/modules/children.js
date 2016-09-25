@@ -13,6 +13,11 @@ export const map =
   (children : any, mapper : (item: any, index: number) => any = identity) : any =>
     children ? paint(children.map(mapper)) : undefined
 
+// mapToArray is same as map as long as children is implemented as an array anyway
+// but we'll still have an excplicit API in preperation for changing the children 
+// to a complex DataStructure, which is quite likely to happen
+export const mapToArray = map
+
 export const forEach =
   (children : any, mapper : (item: any, index: number) => any = identity) : any =>
     children ? paint(children.forEach(mapper)) : undefined
@@ -86,6 +91,7 @@ export function spreadChildren (children : any) : any {
 // public API
 export default {
   map,
+  mapToArray,
   forEach,
   reduce,
   spread,

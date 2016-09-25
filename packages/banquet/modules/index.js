@@ -1,26 +1,25 @@
 import Meze from 'meze'
 
 import Server from './Server'
-import { Get, Head } from './Methods'
+import { Get, Head, Handler } from './Methods'
+import { Send } from './Response'
 
-function respond(req, res, next) {
-  res.send('HI ' + req.params.name)
-  next()
+const GetPersonalisedMessage = ({ name }) => {
+  return `hello ${name}, we're speaking via composition`
 }
 
-const Response = ({ req, res, next }) => {
-  return 'hello ' + req.params.name + '!!!!'
-}
-
-//<Head path='/hello/:name' handler={respond} />
 Meze.compose(
   <Server>
     <Get path='/hello/:name'>
-      <Response />
+      <Send>
+        <GetPersonalisedMessage />
+      </Send>
     </Get>
     <Head path='/hello/:name'>
-      <Response />
-    </Head>    
+      <Send>
+        <GetPersonalisedMessage />
+      </Send>
+    </Head>
   </Server>
 ).then((server) => {
   server.listen(8080, function () {

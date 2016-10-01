@@ -4,7 +4,7 @@ import type { ComponentType } from './Component'
 
 import isPlainObject from 'lodash.isplainobject'
 import { isComponent } from './Component'
-import { spreadChildren } from './children'
+import { spreadChildren } from './Children'
 import { isNonEmptyArray } from './utilities/validations'
 import { findTransformationWhere } from './utilities/helpers'
 

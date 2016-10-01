@@ -3,7 +3,6 @@ import test from 'ava'
 import Meze from './index'
 
 import { Component } from './Component'
-import createComponent from './createComponent'
 import compose from './compose'
 import { Assign } from './utilities/assign'
 import range from 'lodash.range'
@@ -71,7 +70,7 @@ test('flattens child components into properties', async t => {
     return {
       sum: (
         <Assign>
-          {Meze.children.map(rangeOfNumbers, index => <PostponedSum left={left} right={index} />)}
+          {Meze.Children.map(rangeOfNumbers, index => <PostponedSum left={left} right={index} />)}
         </Assign>
       ),
       count: rangeOfNumbers.length

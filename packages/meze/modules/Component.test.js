@@ -3,9 +3,8 @@ import test from 'ava'
 import Meze from './index'
 
 import { Component, isComponent } from './Component'
-import createComponent, { componentise } from './createComponent'
 import compose from './compose'
-import Children from './children'
+import Children from './Children'
 import { Assign } from './utilities/assign'
 
 // Component tests

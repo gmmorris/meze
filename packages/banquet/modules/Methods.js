@@ -1,26 +1,21 @@
 /* @flow */
-
 import Meze from 'meze'
 import pick from 'lodash.pick'
 
-type handlerType = (req : Object, res : Object, next : (target: ?string) => {}) => {}
-
-function emptyHandler(req, res, next) {
+function emptyHandler (req, res, next) {
   res.send('Invalid Handler')
   next()
 }
 
-const flattenChildren = children => children && children.length === 1 ? children[0] : children
-
 const createMethodComponent = method => Meze.Component(props => {
-  const { server, children, handlerName } = props
+  const { server, children } = props
   const methodProps = pick(props, 'path', 'version')
   const handlers = children && children.length
     // create a handler for every child component
-    ? Meze.children.mapToArray(
+    ? Meze.Children.mapToArray(
         children,
         child => {
-          function handler(req, res, next) {
+          function handler (req, res, next) {
             Meze
               .compose(child.clone({ req, res, next }))
               .then(next)
@@ -39,7 +34,7 @@ const createMethodComponent = method => Meze.Component(props => {
 
 export const Handler = Meze.Component(props => {
   const { res, req, children, next } = props
-  return Meze.children.cloneWithProps(children, { res, req, next, ...req.params })
+  return Meze.Children.cloneWithProps(children, { res, req, next, ...req.params })
 })
 
 export const Get = createMethodComponent('get')

@@ -26,13 +26,13 @@ export const ContentType = Meze.Component(props => {
   res.contentType = type
 })
 
-function send(method, props) {
+function send (method, props) {
   const { req, res, next, spreadParams = true, children } = props
   const childProps = spreadParams
     ? { req, res, next, ...req.params }
     : { req, res, next }
-  return Meze.children
-    .onlyComposed(Meze.children.cloneWithProps(children, childProps))
+  return Meze.Children
+    .onlyComposed(Meze.Children.cloneWithProps(children, childProps))
     .then(body => body ? res[method](body) : body)
 }
 
@@ -46,7 +46,7 @@ export const SendJson = Meze.Component(props => {
 
 export const Redirect = Meze.Component(props => {
   const { res, next, status, url } = props
-  if(status && url) {
+  if (status && url) {
     res.redirect(
       status,
       url,

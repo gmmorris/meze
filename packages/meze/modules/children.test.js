@@ -1,20 +1,21 @@
 import test from 'ava'
 
 import Meze from './index'
+
 import { Component } from './Component'
 import compose from './compose'
-import { isChildrenArray, reduceComposed, cloneWithProps, only, onlyComposed } from './children'
+import { isChildrenArray, reduceComposed, cloneWithProps, only, onlyComposed, map } from './Children'
 
 // Children tests
 test('map applies a function to an array and marks the array as a ChildArray', t => {
-  const maped = Meze.children.map([
+  const maped = map([
     1, 2, 3
   ], i => i)
   t.true(isChildrenArray(maped))
 })
 
 test('map applies the identity when no mapper function is provided', t => {
-  const maped = Meze.children.map([
+  const maped = map([
     1, 2, 3
   ], i => i)
   t.true(isChildrenArray(maped))
@@ -27,26 +28,26 @@ test('cloneWithProps clones a component instance and applies the additional prop
 
   const Summarize = Component(function (props) {
     return {
-      contents: Meze.children.map(props.children),
-      extendedContents: Meze.children.cloneWithProps(props.children, { hey: 'ho' })
+      contents: map(props.children),
+      extendedContents: cloneWithProps(props.children, { hey: 'ho' })
     }
   })
 
   t.deepEqual(
     await compose(
       <Summarize>
-        <Echo name="John" />
-        <Echo name="Doe" />
+        <Echo name='John' />
+        <Echo name='Doe' />
       </Summarize>
     ),
     {
       contents: [
-        { name: "John" },
-        { name: "Doe" }
+        { name: 'John' },
+        { name: 'Doe' }
       ],
       extendedContents: [
-        { name: "John", hey: "ho" },
-        { name: "Doe", hey: "ho" }
+        { name: 'John', hey: 'ho' },
+        { name: 'Doe', hey: 'ho' }
       ]
     }
   )
@@ -198,9 +199,9 @@ test('cloneWithProps can take a function which it uses to compute props for the 
 
   const Summarize = Component(function (props) {
     return {
-      contents: Meze.children.map(props.children),
-      extendedContents: Meze.children.cloneWithProps(props.children, (childProps) => (
-        { 'NAME' : childProps.name.toUpperCase() }
+      contents: map(props.children),
+      extendedContents: cloneWithProps(props.children, (childProps) => (
+        { 'NAME': childProps.name.toUpperCase() }
       ))
     }
   })
@@ -214,12 +215,12 @@ test('cloneWithProps can take a function which it uses to compute props for the 
     ),
     {
       contents: [
-        { name: "John" },
-        { name: "Doe" }
+        { name: 'John' },
+        { name: 'Doe' }
       ],
       extendedContents: [
-        { name: "John", NAME: "JOHN" },
-        { name: "Doe", NAME: "DOE" }
+        { name: 'John', NAME: 'JOHN' },
+        { name: 'Doe', NAME: 'DOE' }
       ]
     }
   )
@@ -231,21 +232,21 @@ test('cloneWithProps skips non Components', async t => {
   })
 
   const Summarize = Component(function (props) {
-    return Meze.children.cloneWithProps(props.children, (childProps) => (
-      { 'NAME' : childProps.name.toUpperCase() }
+    return cloneWithProps(props.children, (childProps) => (
+      { 'NAME': childProps.name.toUpperCase() }
     ))
   })
 
   t.deepEqual(
     await compose(
       <Summarize>
-        <Echo name="John" />
-        {{ name: "Doe" }}
+        <Echo name='John' />
+        {{ name: 'Doe' }}
       </Summarize>
     ),
     [
-      { name: "John", NAME: "JOHN" },
-      { name: "Doe" }
+      { name: 'John', NAME: 'JOHN' },
+      { name: 'Doe' }
     ]
   )
 })
@@ -262,7 +263,7 @@ test('ChildArrays are flattened when passed to a component', async t => {
     await compose(
       <Summarize>
         {
-          Meze.children.map([
+          map([
             1, 2, 3
           ])
         }

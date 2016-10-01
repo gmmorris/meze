@@ -34,7 +34,7 @@ export default function (constructor: ComponentConstructorType, props: Component
     }
     paintConstruct(this)
     return compose(constructor(props))
-      .then(res => 
+      .then(res =>
         Promise.resolve(
           paintedWithMiddleware(this)
           ? this.applyMiddleware(res)

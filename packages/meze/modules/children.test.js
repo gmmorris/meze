@@ -103,7 +103,7 @@ test('only throws if there is something other than a single child', async t => {
   })
 })
 
-test('onlyComposed returns the only child in the children property which returns a value after composition', async t => {
+test('onlyComposed composes an array of components and returns the only one with a return value', async t => {
   const Dumb = Component(function (props) {
     return { areYouADumbComponent: true }
   })
@@ -238,7 +238,7 @@ test('cloneWithProps skips non Components', async t => {
   t.deepEqual(
     await compose(
       <Summarize>
-        <Echo name='John' />
+        <Echo name="John" />
         {{ name: 'Doe' }}
       </Summarize>
     ),

@@ -7,9 +7,12 @@ import { Component } from '../Component'
 export const supportsComponentisation =
   (component : ComponentConstructorType) : boolean => isFunction(component)
 
-const componentisationCache : { [key: Function]: ComponentType } = {}
+const componentisationCache : { [key: Function]: ComponentType } = new Map()
 export function componentise (constructor : ComponentConstructorType) : ?ComponentType {
   if (supportsComponentisation(constructor)) {
-    return (componentisationCache[constructor] = componentisationCache[constructor] || new Component(constructor))
+    if (!componentisationCache.has(constructor)) {
+      componentisationCache.set(constructor, new Component(constructor))
+    }
+    return componentisationCache.get(constructor)
   }
 }

@@ -14,7 +14,7 @@ export const map =
     children ? paint(children.map(mapper)) : undefined
 
 // mapToArray is same as map as long as children is implemented as an array anyway
-// but we'll still have an excplicit API in preperation for changing the children 
+// but we'll still have an excplicit API in preperation for changing the children
 // to a complex DataStructure, which is quite likely to happen
 export const mapToArray = map
 
@@ -41,9 +41,9 @@ export const reduceComposed =
 
 export const only =
   (children : any = []) : any => {
-    if(isEmpty(children)) {
+    if (isEmpty(children)) {
       throw new Error('No Children present in Component')
-    } else if(hasMultiple(children)) {
+    } else if (hasMultiple(children)) {
       throw new Error('Multiple Children present in Component')
     }
     return children.shift()
@@ -54,20 +54,20 @@ export const onlyComposed =
     compose(children)
       .then(composedChildren => {
         composedChildren = filterOutUndefined(composedChildren)
-        if(isEmpty(composedChildren)) {
+        if (isEmpty(composedChildren)) {
           return Promise.reject(new Error('No Children present in Component after composition'))
-        } else if(hasMultiple(composedChildren)) {
+        } else if (hasMultiple(composedChildren)) {
           return Promise.reject(new Error('Multiple Children present in Component after composition'))
         }
         return composedChildren.shift()
       })
-      
+
 // internal
 
 export const isChildrenArray =
   (comps : any) : boolean => comps && painted(comps)
 
-function flattenNestedChldArrays (children : any[]) : any[] {
+function flattenNestedChildArrays (children : any[]) : any[] {
   let index = -1
   let length = children.length
 
@@ -83,7 +83,7 @@ function flattenNestedChldArrays (children : any[]) : any[] {
 
 export function spreadChildren (children : any) : any {
   if (children && children.length) {
-    return flattenNestedChldArrays(children)
+    return flattenNestedChildArrays(children)
   }
   return children
 }

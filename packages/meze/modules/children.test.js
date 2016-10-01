@@ -36,8 +36,8 @@ test('cloneWithProps clones a component instance and applies the additional prop
   t.deepEqual(
     await compose(
       <Summarize>
-        <Echo name='John' />
-        <Echo name='Doe' />
+        <Echo name="John" />
+        <Echo name="Doe" />
       </Summarize>
     ),
     {
@@ -189,7 +189,6 @@ test('onlyComposed throws if there is something other than a single child after 
   ), /Multiple Children present in Component after composition/)
 })
 
-
 test('cloneWithProps can take a function which it uses to compute props for the clones', async t => {
   const Echo = Component(function (props) {
     return Object.assign({}, props)
@@ -272,14 +271,13 @@ test('ChildArrays are flattened when passed to a component', async t => {
 })
 
 test('reduceComposed composes childen of a component and applied a reducer to their results', async t => {
-
   const PosponedComp = Component(props => {
     return new Promise(resolve => {
       setTimeout(() => {
         resolve(props.val)
-      }, parseInt(Math.random()*100))
+      }, parseInt(Math.random() * 100))
     })
-  }) 
+  })
 
   const Summarize = Component(function (props) {
     const { children } = props

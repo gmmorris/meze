@@ -65,8 +65,9 @@ test('createComponent should cache converted constructors', async t => {
     return { ...rest, kids: children.length }
   }
 
-  t.deepEqual(
-    componentise(Complex),
-    componentise(Complex)
-  )
+  t.truthy(componentise(Complex) === componentise(Complex))
+})
+
+test('createComponent shouldnt cache similar constructors', async t => {
+  t.falsy(componentise(function () {}) === componentise(function () {}))
 })

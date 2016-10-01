@@ -152,44 +152,42 @@ test('onlyComposed returns the ignores children after composition who have no re
   )
 })
 
-// test.only('onlyComposed throws if there is something other than a single child after composition', async t => {
-//   const Dumb = Component(function (props) {
-//     return { areYouADumbComponent: true }
-//   })
-//   const EmptyDumb = Component(() => {})
+test('onlyComposed throws if there is something other than a single child after composition', async t => {
+  const Dumb = Component(function (props) {
+    return { areYouADumbComponent: true }
+  })
+  const EmptyDumb = Component(() => {})
 
-//   const TheOnlyChild = Component(function (props) {
-//     return {
-//       only: onlyComposed(props.children)
-//     }
-//   })
+  const TheOnlyChild = Component(function (props) {
+    return {
+      only: onlyComposed(props.children)
+    }
+  })
 
-//   t.throws(compose(
-//     <TheOnlyChild />
-//   ), 'No Children present in Component after composition')
+  t.plan(3)
 
-//   // t.throws(() => {
-//   //   compose(
-//   //     <TheOnlyChild>
-//   //       <EmptyDumb />
-//   //       <EmptyDumb />
-//   //       <Dumb />
-//   //       <EmptyDumb />
-//   //       <EmptyDumb />
-//   //       <Dumb />
-//   //     </TheOnlyChild>
-//   //   ).then(res => console.log(res))
-//   // })
+  t.throws(compose(
+    <TheOnlyChild />
+  ), /No Children present in Component after composition/)
 
-//   // t.throws(() => {
-//   //   compose(
-//   //     <TheOnlyChild>
-//   //       <Dumb />
-//   //       <Dumb />
-//   //     </TheOnlyChild>
-//   //   ).then(res => console.log(res))
-//   // })
-// })
+  t.throws(compose(
+    <TheOnlyChild>
+      <EmptyDumb />
+      <EmptyDumb />
+      <Dumb />
+      <EmptyDumb />
+      <EmptyDumb />
+      <Dumb />
+    </TheOnlyChild>
+  ), /Multiple Children present in Component after composition/)
+
+  t.throws(compose(
+    <TheOnlyChild>
+      <Dumb />
+      <Dumb />
+    </TheOnlyChild>
+  ), /Multiple Children present in Component after composition/)
+})
 
 
 test('cloneWithProps can take a function which it uses to compute props for the clones', async t => {

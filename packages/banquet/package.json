@@ -1,22 +1,44 @@
 {
   "name": "banquet",
   "version": "1.0.2",
-  "description": "A meze based library for JSON HTTP endpoints",
+  "description": "A meze based Restify wrapper for JSON HTTP endpoints",
   "main": "index.js",
-  "scripts": {},
   "author": "Gidi Meir Morris <gidi@gidi.io> (http://www.gidi.io)",
   "license": "MIT",
+  "scripts": {
+    "typecheck": "flow check modules",
+    "unitTest": "ava ./modules/*.test.js ./modules/**/*.test.js --verbose --require babel-register",
+    "test": "npm run unitTest && npm run typecheck",
+    "build": "babel modules -d lib --ignore .test.js",
+    "devBuild": "babel modules -d lib --source-maps"
+  },
+  "ava": {
+    "babel": {
+      "plugins": [
+        "transform-meze-jsx",
+        "transform-object-rest-spread",
+        "transform-flow-strip-types",
+        "syntax-async-functions",
+        "transform-regenerator"
+      ],
+      "presets": [
+        "es2015"
+      ]
+    }
+  },
   "dependencies": {
     "lodash.pick": "^4.4.0",
     "meze": "^1.0.2",
     "restify": "^4.1.1"
   },
   "devDependencies": {
+    "ava": "^0.16.0",
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
     "babel-plugin-transform-meze-jsx": "^1.0.2",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "babel-plugin-transform-regenerator": "^6.14.0",
-    "babel-preset-es2015": "^6.14.0"
+    "babel-preset-es2015": "^6.14.0",
+    "sinon": "^1.17.6"
   }
 }

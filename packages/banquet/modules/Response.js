@@ -60,3 +60,13 @@ export const Redirect = Meze.Component(props => {
   }
 })
 
+export default {
+  Header,
+  CharSet,
+  Cache,
+  Status,
+  ContentType,
+  Send,
+  SendJson,
+  Redirect
+}

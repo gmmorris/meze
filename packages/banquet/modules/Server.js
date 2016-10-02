@@ -1,9 +1,11 @@
 /* @flow */
 import Meze from 'meze'
-import restify from 'restify'
+import restifyLibrary from 'restify'
 import pick from 'lodash.pick'
+import { capitalizeFirstLetter } from './utilities'
 
 type ServerProptypes = {
+  restify?: Object,
   certificate?: string,
   key?: string,
   formatters?: Object,
@@ -16,8 +18,13 @@ type ServerProptypes = {
   children?: any
 }
 
-const Server = Meze.Component((props : ServerProptypes) => {
-  const server = restify.createServer(props)
+const Server = Meze.Component(({ restify = restifyLibrary, ...props } : ServerProptypes) => {
+  const server = restify.createServer(
+    pick(
+      props,
+      'certificate', 'key', 'formatters', 'log', 'name', 'spdy', 'version', 'handleUpgrades', 'httpsServerOptions'
+    )
+  )
 
   return Meze.Children.reduceComposed(
     Meze.Children.cloneWithProps(props.children, { server }),
@@ -34,13 +41,9 @@ export const Use = Meze.Component(({ server, handler }) => {
 })
 
 // Components for Restify's Bundled Plugins
-const AcceptParser = Meze.Component(({ server, acceptable }) => {
+const AcceptParser = Meze.Component(({ server, acceptable, restify = restifyLibrary }) => {
   return <Use server={server} handler={restify.acceptParser(acceptable || server.acceptable)} />
 })
-
-function capitalizeFirstLetter (str : string) : string {
-  return str.charAt(0).toUpperCase() + str.slice(1)
-}
 
 const pluginsBundledInRestify = {
   throttle: ['burst', 'rate', 'ip', 'overrides'],
@@ -63,14 +66,11 @@ export const Plugins = Object
   .reduce((plugins : Object, fnName : string) : Object => {
     const propsKeys = Array.isArray(plugins[fnName]) ? plugins[fnName] : false
     plugins[capitalizeFirstLetter(fnName)] =
-      Meze.Component((props) => {
+      Meze.Component(({ restify = restifyLibrary, ...props }) => {
         const pluginProps = propsKeys ? pick(props, ...propsKeys) : undefined
         return <Use server={props.server} handler={restify[fnName](pluginProps)} />
       })
     return plugins
-  }, {
-    AcceptParser
-  })
-
+  }, { AcceptParser })
 
 export default Server

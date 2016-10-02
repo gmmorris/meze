@@ -1,5 +1,5 @@
 
-import { Component } from './Component'
+import { Component, isComponent } from './Component'
 import createComponent from './createComponent'
 import Children from './Children'
 import { Assign } from './utilities/assign'
@@ -18,6 +18,7 @@ const utilities = {
 
 const Meze = {
   Component,
+  isComponent,
   createComponent,
   Children,
   utilities,

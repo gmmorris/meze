@@ -3,6 +3,7 @@ import Meze from 'meze'
 import pick from 'lodash.pick'
 
 function emptyHandler (req, res, next) {
+  res.status(500)
   res.send('Invalid Handler')
   next()
 }
@@ -16,7 +17,7 @@ const createMethodComponent = method => Meze.Component(props => {
         children,
         child => {
           function handler (req, res, next) {
-            Meze
+            return Meze
               .compose(child.clone({ req, res, next }))
               .then(next)
           }
@@ -29,6 +30,7 @@ const createMethodComponent = method => Meze.Component(props => {
         }
       )
     : [ emptyHandler ]
+
   server[method](methodProps, ...handlers)
 })
 
@@ -42,3 +44,12 @@ export const Head = createMethodComponent('head')
 export const Put = createMethodComponent('put')
 export const Post = createMethodComponent('post')
 export const Delete = createMethodComponent('del')
+
+export default {
+  Get,
+  Head,
+  Put,
+  Post,
+  Delete,
+  Handler
+}

@@ -1,7 +1,6 @@
 /* @flow */
 
 import symbolPainter from './internals/symbolPainter'
-import extendWithMiddleware from './internals/middlewareExtender'
 import { isNonEmptyArray } from './utilities/validations'
 import compose from './compose'
 import createComponent from './createComponent'
@@ -11,15 +10,13 @@ import type { componentCreatorType } from './createComponent'
 
 const { paint, painted } = symbolPainter('ComponentInstance')
 const { paint: paintConstruct, painted: paintedConstruct } = symbolPainter('ComponentInstance$constructed')
-const { paint: paintWithMiddleware, painted: paintedWithMiddleware } = symbolPainter('ComponentInstanceMiddleware')
 
 type InstanceConstructionType = () => Promise<*>
 export type ComponentInstanceType =
   InstanceConstructionType &
   {
     props: ComponentPropType,
-    clone: (cloneProps : ComponentPropType, ...cloneChildren : any[]) => componentCreatorType,
-    enableMiddleware: () => InstanceConstructionType
+    clone: (cloneProps : ComponentPropType, ...cloneChildren : any[]) => componentCreatorType
   }
 
 export const isComponentInstance =
@@ -34,21 +31,6 @@ export default function (constructor: ComponentConstructorType, props: Component
     }
     paintConstruct(this)
     return compose(constructor(props))
-      .then(res =>
-        Promise.resolve(
-          paintedWithMiddleware(this)
-          ? this.applyMiddleware(res)
-          : res
-        )
-      )
-  }
-
-  mount.enableMiddleware = () => {
-    if (!paintedWithMiddleware(this)) {
-      paintWithMiddleware(this)
-      this.applyMiddleware = extendWithMiddleware(mount)
-    }
-    return mount
   }
 
   mount.clone = function (cloneProps : ComponentPropType = {}, ...cloneChildren : any[]) : componentCreatorType {

@@ -1,3 +1,4 @@
+import compose from '../compose'
 import { Component } from '../Component'
 import isObjectLike from 'lodash.isobjectlike'
 import createComponent from '../createComponent'
@@ -26,8 +27,7 @@ function namePlainObjectComponents (obj) {
 
 export const objectify = (name) => (props) => {
   const { children = [], ...rest } = props
-  return createComponent(Assign, {}, rest, ...children)
-    .enableMiddleware()
+  return compose(createComponent(Assign, {}, rest, ...children))
     .then(res => paint(namePlainObjectComponents(res), name))
 }
 

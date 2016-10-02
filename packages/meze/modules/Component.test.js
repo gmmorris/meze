@@ -129,20 +129,3 @@ test('anonymous child components should be extensible by their containers', asyn
     }
   )
 })
-
-test('a createComponent instance result should be extansible by middleware', async t => {
-  const Complex = function (props) {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(props.val), 10)
-    })
-  }
-
-  const applyMiddleware = instance => {
-    return instance.enableMiddleware().then(res => res * 2)
-  }
-
-  t.deepEqual(
-    await compose(applyMiddleware(<Complex val={1} />)),
-    2
-  )
-})

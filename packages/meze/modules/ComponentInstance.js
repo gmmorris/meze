@@ -28,7 +28,7 @@ export default function (constructor: ComponentConstructorType, displayName: str
   const mount = () => {
     // console.log(`mounting: ${displayName}`)
     if (paintedConstruct(this)) {
-      throw Error('a Component Instance cannot be mounted twice')
+      throw Error(`A ${displayName} Component Instance cannot be mounted twice`)
     }
     paintConstruct(this)
     return compose(constructor(props))

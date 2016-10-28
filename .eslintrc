@@ -22,7 +22,7 @@
   },
   "rules": {
     "semi" : [2, "never"],
-    "max-len": [2, 120, 2],
+    "max-len": [2, 150, 2],
     "quotes": [2, "single", { "allowTemplateLiterals": true }],
     "react/react-in-jsx-scope": [0],
     "no-duplicate-imports" : [0],

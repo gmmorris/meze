@@ -24,13 +24,22 @@ const valdiateProps = (props : ComponentPropType) : ComponentPropType => {
   return props
 }
 
+
+function getDisplayName (constructor : ComponentConstructorType) {
+  return constructor.name || '<Anonymous>'
+}
+
 export function Component (constructor : ComponentConstructorType) : ComponentType {
+  const displayName = getDisplayName(constructor)
+
   function instanciate (props : ComponentPropType = {}) {
     // console.log(`instanciate`)
     // console.log(props)
-    return new ComponentInstance(constructor, valdiateProps(props))
+    return new ComponentInstance(constructor, displayName, valdiateProps(props))
   }
+
   instanciate.constructor = constructor
+  instanciate.displayName = displayName
   return paint(instanciate)
 }
 

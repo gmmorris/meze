@@ -41,6 +41,8 @@ function ensureIsComponent (candidate : componentisableType) : ComponentType {
 }
 
 function createComponent (component : any, props : ?Object, ...children : any[]) : any {
+  // console.log(`constructor.name:${component.constructor.name}`)
+  // console.log(`component.name:${this ? (this.name || component.name) : component.name}`)
   return ensureIsComponent(component)(processPropsChildren(ensureProps(props), children))
 }
 

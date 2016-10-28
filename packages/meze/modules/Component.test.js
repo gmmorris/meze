@@ -129,3 +129,27 @@ test('anonymous child components should be extensible by their containers', asyn
     }
   )
 })
+
+test('Component should attach the name of the constructor function on the displayName Property', async t => {
+  const partialConstructor = function (props) {
+    return { ...props }
+  }
+
+  const Partial = Component(partialConstructor)
+
+  t.deepEqual(
+    Partial.displayName,
+    'partialConstructor'
+  )
+})
+
+test('Component should attach an <Anonymous> displayName for anonymous constructor functions', async t => {
+  const Partial = Component(function (props) {
+    return { ...props }
+  })
+
+  t.deepEqual(
+    Partial.displayName,
+    '<Anonymous>'
+  )
+})

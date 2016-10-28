@@ -22,10 +22,11 @@ export type ComponentInstanceType =
 export const isComponentInstance =
   (instance : any) : boolean => instance && painted(instance)
 
-export default function (constructor: ComponentConstructorType, props: ComponentPropType) : ComponentInstanceType {
+export default function (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType) : ComponentInstanceType {
   // console.log(`$$ComponentInstance`)
   // console.log(arguments)
   const mount = () => {
+    // console.log(`mounting: ${displayName}`)
     if (paintedConstruct(this)) {
       throw Error('a Component Instance cannot be mounted twice')
     }

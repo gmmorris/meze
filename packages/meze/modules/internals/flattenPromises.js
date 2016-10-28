@@ -72,7 +72,7 @@ function processResolution (obj) {
       )
 }
 
-export default function flattenPromises (obj : any) : Promise<*> {
+export default function flattenPromises (obj : any) : Promise<any> {
   return new Promise((resolve, reject) => {
     const result = processResolution(obj)
     if (isPromsie(result)) {

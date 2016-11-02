@@ -27,7 +27,7 @@ function composeObject (obj : Object) : Object {
   Object
     .keys(obj)
     .forEach(key => {
-      obj[key] = isComplex(obj[key]) ? compose(obj[key]) : obj[key]
+      obj[key] = isComplex(obj[key]) ? flattenComposition(obj[key]) : obj[key]
     })
   return obj
 }
@@ -36,7 +36,7 @@ const hasAlreadyBeenComposed = (component : any) : boolean => painted(component)
 
 const composeComponentArray =
   (component : Array<ComposableType>) : Array<ComposableType> =>
-    component.map(innerComponent => compose(innerComponent))
+    component.map(innerComponent => flattenComposition(innerComponent))
 
 const composePlainObject = (component : Object) : ComposableType => {
   return isEmpty(component) || !hasComplexProperties(component)
@@ -44,7 +44,7 @@ const composePlainObject = (component : Object) : ComposableType => {
     : flattenPromises(composeObject(component))
 }
 
-function compose (component : any) : ComposableType | Array<ComposableType> {
+function flattenComposition (component : any) : ComposableType | Array<ComposableType> {
   if (hasAlreadyBeenComposed(component)) {
     return component
   } else if (isPlainObject(component)) {
@@ -52,12 +52,12 @@ function compose (component : any) : ComposableType | Array<ComposableType> {
   } else if (isArray(component)) {
     return composeComponentArray(component)
   }
-  return isComponentInstance(component) ? component(flattenComposition).then(compose) : component
+  return isComponentInstance(component) ? component(compose).then(flattenComposition) : component
 }
 
-function flattenComposition (component : any) : ComposedComponent {
-  return flattenPromises(compose(component))
+function compose (component : any) : ComposedComponent {
+  return flattenPromises(flattenComposition(component))
     .then(res => Promise.resolve(paint(res)))
 }
 
-export default flattenComposition
+export default compose

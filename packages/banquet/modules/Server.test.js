@@ -154,8 +154,8 @@ Object.keys(pluginsBundledInRestify)
       t.truthy(Meze.isComponent(Plugins[expectedComponentName]))
     })
 
-    test(`The ${expectedComponentName} component should call the restify.${pluginName} method and tell the server to use it's handler`, t => {
-      // t.truthy(Meze.isComponent(Plugins[expectedComponentName]))
-    })
+    // test(`The ${expectedComponentName} component should call the restify.${pluginName} method and tell the server to use it's handler`, t => {
+    //   t.truthy(Meze.isComponent(Plugins[expectedComponentName]))
+    // })
   })
 

@@ -9,7 +9,7 @@ import range from 'lodash.range'
 
 // compose
 test('flattens a tree of components to get passed their internal promises', async t => {
-  const Complex = Component(function (props) {
+  const Complex = function (props) {
     const { left, right } = props
     const val = left < right
       ? 'smaller'
@@ -17,16 +17,16 @@ test('flattens a tree of components to get passed their internal promises', asyn
         ? 'larger'
         : 'equal')
     return val
-  })
+  }
 
-  const Summarize = Component(function (props) {
+  const Summarize = function (props) {
     const { left, right } = props
     return {
       left,
       right,
       comparison: <Complex {...{left, right}} />
     }
-  })
+  }
 
   t.deepEqual(
     await compose(<Summarize left={40} right={50} />),
@@ -35,18 +35,18 @@ test('flattens a tree of components to get passed their internal promises', asyn
 })
 
 test('a composition should reject if an internal promises rejects unhandled', async t => {
-  const RejectIn = Component(function (props) {
+  const RejectIn = function (props) {
     return new Promise((resolve, reject) => setTimeout(() => reject(new Error('Holy Molly')), props.time))
-  })
+  }
 
-  const Summarize = Component(function (props) {
+  const Summarize = function (props) {
     const { left, right } = props
     return {
       left,
       right,
       comparison: <RejectIn time={10} />
     }
-  })
+  }
 
   t.throws(
     compose(<Summarize left={40} right={50} />),
@@ -55,16 +55,16 @@ test('a composition should reject if an internal promises rejects unhandled', as
 })
 
 test('flattens child components into properties', async t => {
-  const PostponedSum = Component(function (props) {
+  const PostponedSum = function (props) {
     const { left, right } = props
     return new Promise(resolve => {
       setTimeout(() => {
         resolve(left + right)
       }, 10)
     })
-  })
+  }
 
-  const Summarize = Component(function (props) {
+  const Summarize = function (props) {
     const { left, right } = props
     const rangeOfNumbers = range(left, right + 1)
     return {
@@ -75,7 +75,7 @@ test('flattens child components into properties', async t => {
       ),
       count: rangeOfNumbers.length
     }
-  })
+  }
 
   t.deepEqual(
     await compose(<Summarize left={40} right={42} />),

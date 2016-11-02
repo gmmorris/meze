@@ -1,7 +1,7 @@
 import test from 'ava'
 import Meze from '../index'
 
-import { Component, isComponent } from '../Component'
+import { isComponent } from '../Component'
 import createComponent from '../createComponent'
 import compose from '../compose'
 import { Objectify, createObjectify, isPlainObjectComponent } from './objectify'
@@ -17,7 +17,7 @@ test('createObjectify is a function that returns a Component', t => {
 })
 
 test('isPlainObjectComponent should differenciate between plainObjectComponents and regular Components', async t => {
-  const SomeComponent = Component(() => {})
+  const SomeComponent = () => {}
   t.true(
     isPlainObjectComponent(await compose(createComponent(createObjectify('generic'))))
   )

@@ -1,6 +1,8 @@
 import test from 'ava'
 
-import { Component, isComponent } from '../Component'
+import Meze from '../index'
+
+import { isComponent } from '../Component'
 import createComponent from '../createComponent'
 import compose from '../compose'
 import { Assign, assign } from './assign'
@@ -13,7 +15,7 @@ test('Assign is a Component', t => {
 })
 
 test('Assign composes an array of components into an index based map', async t => {
-  const Child = Component(({ index }) => `Some component at index ${index}`)
+  const Child = ({ index }) => `Some component at index ${index}`
 
   let index = 0
 
@@ -40,7 +42,7 @@ test('Assign composes an array of components into an index based map', async t =
 })
 
 test('Assign composes objects into the result', async t => {
-  const Child = Component(({ index }) => `Some component at index ${index}`)
+  const Child = ({ index }) => `Some component at index ${index}`
 
   let index = 0
 

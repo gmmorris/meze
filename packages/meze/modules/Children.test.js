@@ -2,7 +2,6 @@ import test from 'ava'
 
 import Meze from './index'
 
-import { Component } from './Component'
 import compose from './compose'
 import { isChildrenArray, reduceComposed, cloneWithProps, only, onlyComposed, map } from './Children'
 
@@ -22,16 +21,16 @@ test('map applies the identity when no mapper function is provided', t => {
 })
 
 test('cloneWithProps clones a component instance and applies the additional props to it', async t => {
-  const Echo = Component(function (props) {
+  const Echo = function (props) {
     return Object.assign({}, props)
-  })
+  }
 
-  const Summarize = Component(function (props) {
+  const Summarize = function (props) {
     return {
       contents: map(props.children),
       extendedContents: cloneWithProps(props.children, { hey: 'ho' })
     }
-  })
+  }
 
   t.deepEqual(
     await compose(
@@ -54,15 +53,15 @@ test('cloneWithProps clones a component instance and applies the additional prop
 })
 
 test('only returns the only child in the children property', async t => {
-  const Dumb = Component(function (props) {
+  const Dumb = function (props) {
     return { areYouADumbComponent: true }
-  })
+  }
 
-  const TheOnlyChild = Component(function (props) {
+  const TheOnlyChild = function (props) {
     return {
       only: only(props.children)
     }
-  })
+  }
 
   t.deepEqual(
     await compose(
@@ -77,15 +76,15 @@ test('only returns the only child in the children property', async t => {
 })
 
 test('only throws if there is something other than a single child', async t => {
-  const Dumb = Component(function (props) {
+  const Dumb = function (props) {
     return { [props.key]: true }
-  })
+  }
 
-  const TheOnlyChild = Component(function (props) {
+  const TheOnlyChild = function (props) {
     return {
       only: only(props.children)
     }
-  })
+  }
 
   t.throws(() => {
     compose(
@@ -104,15 +103,15 @@ test('only throws if there is something other than a single child', async t => {
 })
 
 test('onlyComposed composes an array of components and returns the only one with a return value', async t => {
-  const Dumb = Component(function (props) {
+  const Dumb = function (props) {
     return { areYouADumbComponent: true }
-  })
+  }
 
-  const TheOnlyChild = Component(function (props) {
+  const TheOnlyChild = function (props) {
     return {
       only: onlyComposed(props.children)
     }
-  })
+  }
 
   t.deepEqual(
     await compose(
@@ -127,16 +126,16 @@ test('onlyComposed composes an array of components and returns the only one with
 })
 
 test('onlyComposed returns the ignores children after composition who have no return value', async t => {
-  const Dumb = Component(function (props) {
+  const Dumb = function (props) {
     return { areYouADumbComponent: true }
-  })
-  const EmptyDumb = Component(() => {})
+  }
+  const EmptyDumb = () => {}
 
-  const TheOnlyChild = Component(function (props) {
+  const TheOnlyChild = function (props) {
     return {
       only: onlyComposed(props.children)
     }
-  })
+  }
 
   t.deepEqual(
     await compose(
@@ -153,16 +152,16 @@ test('onlyComposed returns the ignores children after composition who have no re
 })
 
 test('onlyComposed throws if there is something other than a single child after composition', async t => {
-  const Dumb = Component(function (props) {
+  const Dumb = function (props) {
     return { areYouADumbComponent: true }
-  })
-  const EmptyDumb = Component(() => {})
+  }
+  const EmptyDumb = () => {}
 
-  const TheOnlyChild = Component(function (props) {
+  const TheOnlyChild = function (props) {
     return {
       only: onlyComposed(props.children)
     }
-  })
+  }
 
   t.plan(3)
 
@@ -190,18 +189,18 @@ test('onlyComposed throws if there is something other than a single child after 
 })
 
 test('cloneWithProps can take a function which it uses to compute props for the clones', async t => {
-  const Echo = Component(function (props) {
+  const Echo = function (props) {
     return Object.assign({}, props)
-  })
+  }
 
-  const Summarize = Component(function (props) {
+  const Summarize = function (props) {
     return {
       contents: map(props.children),
       extendedContents: cloneWithProps(props.children, (childProps) => (
         { 'NAME': childProps.name.toUpperCase() }
       ))
     }
-  })
+  }
 
   t.deepEqual(
     await compose(
@@ -224,15 +223,15 @@ test('cloneWithProps can take a function which it uses to compute props for the 
 })
 
 test('cloneWithProps skips non Components', async t => {
-  const Echo = Component(function (props) {
+  const Echo = function (props) {
     return Object.assign({}, props)
-  })
+  }
 
-  const Summarize = Component(function (props) {
+  const Summarize = function (props) {
     return cloneWithProps(props.children, (childProps) => (
       { 'NAME': childProps.name.toUpperCase() }
     ))
-  })
+  }
 
   t.deepEqual(
     await compose(
@@ -249,12 +248,12 @@ test('cloneWithProps skips non Components', async t => {
 })
 
 test('ChildArrays are flattened when passed to a component', async t => {
-  const Summarize = Component(function (props) {
+  const Summarize = function (props) {
     const { children } = props
     return {
       contents: children
     }
-  })
+  }
 
   t.deepEqual(
     await compose(
@@ -271,22 +270,22 @@ test('ChildArrays are flattened when passed to a component', async t => {
 })
 
 test('reduceComposed composes childen of a component and applied a reducer to their results', async t => {
-  const PosponedComp = Component(props => {
+  const PosponedComp = props => {
     return new Promise(resolve => {
       setTimeout(() => {
         resolve(props.val)
       }, parseInt(Math.random() * 100))
     })
-  })
+  }
 
-  const Summarize = Component(function (props) {
+  const Summarize = function (props) {
     const { children } = props
     return {
       sum: reduceComposed(children, (sum, val) => {
         return sum + val
       }, 0)
     }
-  })
+  }
 
   t.deepEqual(
     await compose(

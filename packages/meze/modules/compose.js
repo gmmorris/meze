@@ -60,7 +60,7 @@ function compose (component : any) : ComposedComponent {
     .then(res => Promise.resolve(paint(res)))
 }
 
-function mountComponent(component) {
+function mountComponent (component) {
   return component(compose)
 }
 

@@ -52,12 +52,16 @@ function flattenComposition (component : any) : ComposableType | Array<Composabl
   } else if (isArray(component)) {
     return composeComponentArray(component)
   }
-  return isComponentInstance(component) ? component(compose).then(flattenComposition) : component
+  return isComponentInstance(component) ? mountComponent(component).then(flattenComposition) : component
 }
 
 function compose (component : any) : ComposedComponent {
   return flattenPromises(flattenComposition(component))
     .then(res => Promise.resolve(paint(res)))
+}
+
+function mountComponent(component) {
+  return component(compose)
 }
 
 export default compose

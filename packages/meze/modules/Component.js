@@ -29,9 +29,7 @@ function getDisplayName (constructor : ComponentConstructorType) {
   return constructor.name || '<Anonymous>'
 }
 
-export function Component (constructor : ComponentConstructorType) : ComponentType {
-  const displayName = getDisplayName(constructor)
-
+export function Component (constructor : ComponentConstructorType, displayName : string = getDisplayName(constructor)) : ComponentType {
   function instanciate (props : ComponentPropType = {}) {
     // console.log(`instanciate`)
     // console.log(props)

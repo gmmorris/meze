@@ -143,6 +143,19 @@ test('Component should attach the name of the constructor function on the displa
   )
 })
 
+test(`Component can receive a displayName which overrides the default constructor function's displayName Property`, async t => {
+  const partialConstructor = function (props) {
+    return { ...props }
+  }
+
+  const Partial = Component(partialConstructor, 'overrideConstructor')
+
+  t.deepEqual(
+    Partial.displayName,
+    'overrideConstructor'
+  )
+})
+
 test('Component should attach an <Anonymous> displayName for anonymous constructor functions', async t => {
   const Partial = Component(function (props) {
     return { ...props }

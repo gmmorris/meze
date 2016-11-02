@@ -2,7 +2,6 @@
 
 import symbolPainter from './internals/symbolPainter'
 import { isNonEmptyArray } from './utilities/validations'
-import compose from './compose'
 import createComponent from './createComponent'
 
 import type { ComponentConstructorType, ComponentPropType } from './Component'
@@ -22,10 +21,11 @@ export type ComponentInstanceType =
 export const isComponentInstance =
   (instance : any) : boolean => instance && painted(instance)
 
+const identity = i => i
 export default function (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType) : ComponentInstanceType {
   // console.log(`$$ComponentInstance`)
   // console.log(arguments)
-  const mount = () => {
+  const mount = (compose = identity) => {
     // console.log(`mounting: ${displayName}`)
     if (paintedConstruct(this)) {
       throw Error(`A ${displayName} Component Instance cannot be mounted twice`)

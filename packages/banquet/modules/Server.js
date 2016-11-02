@@ -34,16 +34,16 @@ const Server = Meze.Component(({ restify = restifyLibrary, ...props } : ServerPr
     result => result,
     server
   )
-})
+}, 'Server')
 
 export const Use = Meze.Component(({ server, handler }) => {
   server.use(handler)
-})
+}, 'Use')
 
 // Components for Restify's Bundled Plugins
 const AcceptParser = Meze.Component(({ server, acceptable, restify = restifyLibrary }) => {
   return <Use server={server} handler={restify.acceptParser(acceptable || server.acceptable)} />
-})
+}, 'AcceptParser')
 
 const pluginsBundledInRestify = {
   throttle: ['burst', 'rate', 'ip', 'overrides'],
@@ -65,11 +65,12 @@ export const Plugins = Object
   .keys(pluginsBundledInRestify)
   .reduce((plugins : Object, fnName : string) : Object => {
     const propsKeys = Array.isArray(plugins[fnName]) ? plugins[fnName] : false
-    plugins[capitalizeFirstLetter(fnName)] =
+    const componentName = capitalizeFirstLetter(fnName)
+    plugins[componentName] =
       Meze.Component(({ restify = restifyLibrary, ...props }) => {
         const pluginProps = propsKeys ? pick(props, ...propsKeys) : undefined
         return <Use server={props.server} handler={restify[fnName](pluginProps)} />
-      })
+      }, componentName)
     return plugins
   }, { AcceptParser })
 

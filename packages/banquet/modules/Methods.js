@@ -32,12 +32,12 @@ const createMethodComponent = method => Meze.Component(props => {
     : [ emptyHandler ]
 
   server[method](methodProps, ...handlers)
-})
+}, method)
 
 export const Handler = Meze.Component(props => {
   const { res, req, children, next } = props
   return Meze.Children.cloneWithProps(children, { res, req, next, ...req.params })
-})
+}, 'Handler')
 
 export const Get = createMethodComponent('get')
 export const Head = createMethodComponent('head')

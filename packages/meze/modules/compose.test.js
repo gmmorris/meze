@@ -89,3 +89,27 @@ test('flattens child components into properties', async t => {
     }
   )
 })
+
+test('composition flattens deep promises', async t => {
+  const Deep = ({ val }) => {
+    return { deep: true, val }
+  }
+
+  const Shallow = ({ val }) => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(<Deep val={val} />)
+      }, 10)
+    })
+  }
+
+  const actual = await compose(<Shallow val={1} />)
+
+  t.deepEqual(
+    actual,
+    {
+      deep: true,
+      val: 1
+    }
+  )
+})

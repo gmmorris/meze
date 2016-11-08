@@ -9,6 +9,7 @@ import findIndex from 'lodash.findindex'
 
 import { isComponentInstance } from './ComponentInstance'
 import flattenPromises from './internals/flattenPromises'
+import { isPromise } from './internals/isPromise'
 import symbolPainer from './internals/symbolPainter'
 
 type ComposedComponent = Promise<*>
@@ -52,7 +53,9 @@ function flattenComposition (component : any) : ComposableType | Array<Composabl
   } else if (isArray(component)) {
     return composeComponentArray(component)
   }
-  return isComponentInstance(component) ? mountComponent(component).then(flattenComposition) : component
+  return isComponentInstance(component)
+    ? mountComponent(component).then(flattenComposition)
+    : (isPromise(component) ? component.then(flattenComposition) : component)
 }
 
 function compose (component : any) : ComposedComponent {

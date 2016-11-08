@@ -24,7 +24,7 @@ const GetPersonalisedMessage = ({ name }) => {
 const GetRandomName = ({ children }) => fetchUrl('http://namey.muffinlabs.com/name.json')
   .then(result => {
     const randomName = extractNameFromResponse(result)
-    return Meze.compose(<GetPersonalisedMessage name={randomName} />)
+    return <GetPersonalisedMessage name={randomName} />
   })
 
 Meze.compose(

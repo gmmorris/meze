@@ -22,7 +22,7 @@
     "eslint-plugin-react": "^6.2.1",
     "eslint-plugin-standard": "^2.0.0",
     "flow-bin": "^0.32.0",
-    "lerna": "2.0.0-beta.26"
+    "lerna": "2.0.0-beta.30"
   },
   "scripts": {
     "test": "lerna run build && lerna run test"

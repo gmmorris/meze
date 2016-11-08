@@ -166,3 +166,57 @@ test('Component should attach an <Anonymous> displayName for anonymous construct
     '<Anonymous>'
   )
 })
+
+test('Component should use defaultProps if none have been provided', async t => {
+  const PropSpreader = function (props) {
+    return { ...props }
+  }
+
+  PropSpreader.defaultProps = {
+    a: 1,
+    b: 2
+  }
+
+  const actual = await compose(<PropSpreader />)
+
+  t.deepEqual(
+    actual,
+    { a: 1, b: 2 }
+  )
+})
+
+test('Component should use defaultProps to extend the provided props', async t => {
+  const PropSpreader = function (props) {
+    return { ...props }
+  }
+
+  PropSpreader.defaultProps = {
+    a: 1,
+    b: 2
+  }
+
+  const actual = await compose(<PropSpreader a={3} />)
+
+  t.deepEqual(
+    actual,
+    { a: 3, b: 2 }
+  )
+})
+
+test('Component usage of defaultProps shouldnt clash with additional props', async t => {
+  const PropSpreader = function (props) {
+    return { ...props }
+  }
+
+  PropSpreader.defaultProps = {
+    a: 1,
+    b: 2
+  }
+
+  const actual = await compose(<PropSpreader a={3} c={4} />)
+
+  t.deepEqual(
+    actual,
+    { a: 3, b: 2, c: 4 }
+  )
+})

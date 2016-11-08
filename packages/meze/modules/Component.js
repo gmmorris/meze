@@ -29,11 +29,15 @@ function getDisplayName (constructor : ComponentConstructorType) {
   return constructor.name || '<Anonymous>'
 }
 
+function applyDefaultProps (defaultProps : ?Object, props : ComponentPropType) {
+  return defaultProps ? { ...defaultProps, ...props } : props
+}
+
 export function Component (constructor : ComponentConstructorType, displayName : string = getDisplayName(constructor)) : ComponentType {
   function instanciate (props : ComponentPropType = {}) {
     // console.log(`instanciate`)
     // console.log(props)
-    return new ComponentInstance(constructor, displayName, valdiateProps(props))
+    return new ComponentInstance(constructor, displayName, valdiateProps(applyDefaultProps(constructor.defaultProps, props)))
   }
 
   instanciate.constructor = constructor

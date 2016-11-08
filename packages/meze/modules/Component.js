@@ -26,7 +26,7 @@ const valdiateProps = (props : ComponentPropType) : ComponentPropType => {
 
 
 function getDisplayName (constructor : ComponentConstructorType) {
-  return constructor.name || '<Anonymous>'
+  return constructor.displayName || constructor.name || '<Anonymous>'
 }
 
 function applyDefaultProps (defaultProps : ?Object, props : ComponentPropType) {
@@ -37,7 +37,11 @@ export function Component (constructor : ComponentConstructorType, displayName :
   function instanciate (props : ComponentPropType = {}) {
     // console.log(`instanciate`)
     // console.log(props)
-    return new ComponentInstance(constructor, displayName, valdiateProps(applyDefaultProps(constructor.defaultProps, props)))
+    return new ComponentInstance(
+      constructor,
+      displayName,
+      valdiateProps(applyDefaultProps(constructor.defaultProps, props))
+    )
   }
 
   instanciate.constructor = constructor

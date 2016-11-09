@@ -37,7 +37,9 @@ export const cloneWithProps =
 export const reduceComposed =
   (children : any = [], reducer : (result: ?mixed, item: any, index: number) => any, initialValue : ?any) : any =>
     compose(children)
-      .then(composedChildren => reducer ? composedChildren.reduce(reducer, initialValue) : composedChildren)
+      .then(composedChildren => reducer && composedChildren && composedChildren.reduce
+        ? composedChildren.reduce(reducer, initialValue)
+        : composedChildren)
 
 export const only =
   (children : any = []) : any => {

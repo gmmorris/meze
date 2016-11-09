@@ -4,7 +4,12 @@ import symbolPainter from './internals/symbolPainter'
 import ComponentInstance from './ComponentInstance'
 import isPlainObject from 'lodash.isplainobject'
 
-export type ComponentPropType = { children?: any[] }
+export type ComponentPropType = {
+  children?: any[],
+  componentWillMount?: () => any,
+  componentDidMount?: () => any,
+  componentWillUnmount?: () => any
+}
 export type ComponentConstructorType = (props: ?ComponentPropType) => any
 export type ComponentType =
   () => any &
@@ -17,9 +22,9 @@ const { paint, painted } = symbolPainter('Component')
 export const isComponent =
   (component : any) : boolean => component && painted(component)
 
-const valdiateProps = (props : ComponentPropType) : ComponentPropType => {
+const valdiateProps = (props : ComponentPropType, componentName : string) : ComponentPropType => {
   if (!isPlainObject(props)) {
-    throw new Error(`Invalid props`)
+    throw new Error(`${componentName}: Invalid props have been provided for instanciation`)
   }
   return props
 }
@@ -40,7 +45,7 @@ export function Component (constructor : ComponentConstructorType, displayName :
     return new ComponentInstance(
       constructor,
       displayName,
-      valdiateProps(applyDefaultProps(constructor.defaultProps, props))
+      valdiateProps(applyDefaultProps(constructor.defaultProps, props), displayName)
     )
   }
 

@@ -12,7 +12,8 @@ import flattenPromises from './internals/flattenPromises'
 import { isPromise } from './internals/isPromise'
 import symbolPainer from './internals/symbolPainter'
 
-type ComposedComponent = Promise<*>
+export type ComposedComponent = Promise<*>
+export type Composer = () => ComposedComponent
 type ComposableType = any
 
 const { paint, painted } = symbolPainer('composed')

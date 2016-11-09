@@ -34,7 +34,8 @@
   },
   "devDependencies": {
     "ava": "^0.15.2",
-    "lodash.range": "^3.2.0"
+    "lodash.range": "^3.2.0",
+    "sinon": "^1.17.6"
   },
   "dependencies": {
     "lodash.findindex": "^4.6.0",

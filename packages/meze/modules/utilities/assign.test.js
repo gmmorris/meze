@@ -3,7 +3,6 @@ import test from 'ava'
 import Meze from '../index'
 
 import { isComponent } from '../Component'
-import createComponent from '../createComponent'
 import compose from '../compose'
 import { Assign, assign } from './assign'
 
@@ -21,15 +20,13 @@ test('Assign composes an array of components into an index based map', async t =
 
   t.deepEqual(
     await compose(
-      createComponent(
-        Assign,
-        {},
-        createComponent(Child, { index: index++ }),
-        createComponent(Child, { index: index++ }),
-        createComponent(Child, { index: index++ }),
-        createComponent(Child, { index: index++ }),
-        createComponent(Child, { index: index++ })
-      )
+      <Assign>
+        <Child index={index++} />
+        <Child index={index++} />
+        <Child index={index++} />
+        <Child index={index++} />
+        <Child index={index++} />
+      </Assign>
     ),
     {
       0: 'Some component at index 0',
@@ -48,16 +45,14 @@ test('Assign composes objects into the result', async t => {
 
   t.deepEqual(
     await compose(
-      createComponent(
-        Assign,
-        {},
-        createComponent(Child, { index: index++ }),
-        createComponent(Child, { index: index++ }),
-        {
-          [`key${index}`]: createComponent(Child, { index: index++ }),
-          [`key${index}`]: createComponent(Child, { index: index++ })
-        }
-      )
+      <Assign>
+        <Child index={index++} />
+        <Child index={index++} />
+        {{
+          [`key${index}`]: <Child index={index++} />,
+          [`key${index}`]: <Child index={index++} />
+        }}
+      </Assign>
     ),
     {
       0: 'Some component at index 0',

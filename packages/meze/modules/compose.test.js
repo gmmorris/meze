@@ -113,3 +113,120 @@ test('composition flattens deep promises', async t => {
     }
   )
 })
+
+test('compose should pass the composition method down through the context of all components it composes', async t => {
+  t.plan(2)
+
+  const InnerComposed = ({ val }) => ({
+    composed: true,
+    val
+  })
+
+  const ContextComponent = ({ val }, context) => {
+    t.deepEqual(
+      context.compose,
+      compose
+    )
+    return context.compose(<InnerComposed val={val} />)
+  }
+
+  const actual = await compose(<ContextComponent val={1} />)
+
+  t.deepEqual(
+    actual,
+    {
+      composed: true,
+      val: 1
+    }
+  )
+})
+
+test('compose should pass a new context down to all child compositions', async t => {
+  t.plan(4)
+
+  const newContext = { someVal: true }
+
+  const InnerComposed = ({ val }, context) => {
+    t.deepEqual(
+      context.compose,
+      compose
+    )
+    t.deepEqual(
+      newContext.someVal,
+      context.someVal
+    )
+    return {
+      composed: true,
+      val
+    }
+  }
+
+  const ContextComponent = ({ val }, context) => {
+    t.deepEqual(
+      context.compose,
+      compose
+    )
+    return context.compose(<InnerComposed val={val} />, newContext)
+  }
+
+  const actual = await compose(<ContextComponent val={1} />)
+
+  t.deepEqual(
+    actual,
+    {
+      composed: true,
+      val: 1
+    }
+  )
+})
+
+test('compose should pass the existing context down to all child compositions by default', async t => {
+  t.plan(6)
+
+  const specificContext = { someVal: true }
+
+  let actualContextInRootComponent
+
+  const InnerComposed = ({ val }, context) => {
+    t.deepEqual(
+      context.compose,
+      compose
+    )
+    t.deepEqual(
+      specificContext.someVal,
+      context.someVal
+    )
+    t.deepEqual(
+      actualContextInRootComponent,
+      context
+    )
+    return {
+      composed: true,
+      val
+    }
+  }
+
+  const ContextComponent = ({ val }, context) => {
+    actualContextInRootComponent = context
+    t.deepEqual(
+      context.compose,
+      compose
+    )
+
+    t.deepEqual(
+      specificContext.someVal,
+      context.someVal
+    )
+    return <InnerComposed val={val} />
+  }
+
+  const actual = await compose(<ContextComponent val={1} />, specificContext)
+
+  t.deepEqual(
+    actual,
+    {
+      composed: true,
+      val: 1
+    }
+  )
+})

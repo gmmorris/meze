@@ -65,7 +65,7 @@ test('objectify creates an object with its props under a component name', async 
 
 test('Objectify creates an object with its props under a component name', async t => {
   const Person = createObjectify('Person')
-  const Offsprint = createObjectify('Offsprint')
+  const Offspring = createObjectify('Offspring')
   const James = createObjectify('James')
   const Lilly = createObjectify('Lilly')
   const Harry = createObjectify('Harry')
@@ -73,18 +73,18 @@ test('Objectify creates an object with its props under a component name', async 
   t.deepEqual(
     await compose(
       <Person name="Jack" age={55} occupation="Dancer">
-        <Offsprint>
+        <Offspring>
           <James age={15} occupation="Cook" />
           <Lilly age={12} occupation="Programmer" />
           <Harry age={25} occupation="Photographer" />
-        </Offsprint>
+        </Offspring>
       </Person>
     ),
     {
       name: 'Jack',
       age: 55,
       occupation: 'Dancer',
-      Offsprint: {
+      Offspring: {
         James: {
           age: 15,
           occupation: 'Cook'
@@ -96,6 +96,59 @@ test('Objectify creates an object with its props under a component name', async 
         Harry: {
           age: 25,
           occupation: 'Photographer'
+        }
+      }
+    }
+  )
+})
+
+test('Objectify passes the context down to child components', async t => {
+  const Person = createObjectify('Person')
+  const Offspring = createObjectify('Offspring')
+  const James = createObjectify('James')
+  const Lilly = createObjectify('Lilly')
+  const Harry = ({ age, occupation }, { flag }) => {
+    return {
+      Harry: {
+        age,
+        occupation,
+        flag
+      }
+    }
+  }
+
+  const actual = await compose(
+    <Person name="Jack" age={55} occupation="Dancer">
+      <Offspring>
+        <James age={15} occupation="Cook" />
+        <Lilly age={12} occupation="Programmer" />
+        <Harry age={25} occupation="Photographer" />
+      </Offspring>
+    </Person>,
+    {
+      flag: true
+    }
+  )
+
+  t.deepEqual(
+    actual,
+    {
+      name: 'Jack',
+      age: 55,
+      occupation: 'Dancer',
+      Offspring: {
+        James: {
+          age: 15,
+          occupation: 'Cook'
+        },
+        Lilly: {
+          age: 12,
+          occupation: 'Programmer'
+        },
+        Harry: {
+          age: 25,
+          occupation: 'Photographer',
+          flag: true
         }
       }
     }

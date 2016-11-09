@@ -1,10 +1,18 @@
 import compose from '../compose'
 import { Component } from '../Component'
 import isObjectLike from 'lodash.isobjectlike'
+import isPlainObject from 'lodash.isplainobject'
 import createComponent from '../createComponent'
 import { Assign } from './assign'
 import symbolPainter from '../internals/symbolPainter'
 import { isString } from './validations'
+
+import type { ComponentMountingContext } from '../ComponentInstance'
+
+function contextualCompose (component, context? : ComponentMountingContext) {
+  const compositionMethod = (context && context.compose ? context.compose : compose)
+  return compositionMethod(component, context)
+}
 
 const { paint, painted, paintedBy } = symbolPainter('objectify$key')
 
@@ -18,6 +26,8 @@ function namePlainObjectComponents (obj) {
   : Object.keys(obj).reduce((result, prop, index) => {
     if (isPlainObjectComponent(obj[prop])) {
       result[getPlainObjectComponentKey(obj[prop]) || prop] = obj[prop]
+    } else if (isPlainObject(obj[prop])) {
+      Object.assign(result, obj[prop])
     } else {
       result[prop] = obj[prop]
     }
@@ -25,9 +35,9 @@ function namePlainObjectComponents (obj) {
   }, {})
 }
 
-export const objectify = (name) => (props) => {
+export const objectify = (name) => (props, context) => {
   const { children = [], ...rest } = props
-  return compose(createComponent(Assign, {}, rest, ...children))
+  return contextualCompose(createComponent(Assign, {}, rest, ...children), context)
     .then(res => paint(namePlainObjectComponents(res), name))
 }
 

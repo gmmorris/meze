@@ -8,6 +8,7 @@ import isFunction from 'lodash.isfunction'
 import findIndex from 'lodash.findindex'
 
 import { isComponentInstance } from './ComponentInstance'
+import type { ComponentMountingContext } from './ComponentInstance'
 import flattenPromises from './internals/flattenPromises'
 import { isPromise } from './internals/isPromise'
 import symbolPainer from './internals/symbolPainter'
@@ -17,6 +18,7 @@ export type Composer = () => ComposedComponent
 type ComposableType = any
 
 const { paint, painted } = symbolPainer('composed')
+const { paint: paintContext, painted: isContext } = symbolPainer('compose$context')
 
 const isComplex = (obj : Object | Function) : boolean => isObjectLike(obj) || isFunction(obj)
 function hasComplexProperties (obj : Object) : boolean {
@@ -25,11 +27,11 @@ function hasComplexProperties (obj : Object) : boolean {
   }) >= 0
 }
 
-function composeObject (obj : Object) : Object {
+function composeObject (obj : Object, context : ComponentMountingContext) : Object {
   Object
     .keys(obj)
     .forEach(key => {
-      obj[key] = isComplex(obj[key]) ? flattenComposition(obj[key]) : obj[key]
+      obj[key] = isComplex(obj[key]) ? flattenComposition(obj[key], context) : obj[key]
     })
   return obj
 }
@@ -37,35 +39,50 @@ function composeObject (obj : Object) : Object {
 const hasAlreadyBeenComposed = (component : any) : boolean => painted(component)
 
 const composeComponentArray =
-  (component : Array<ComposableType>) : Array<ComposableType> =>
-    component.map(innerComponent => flattenComposition(innerComponent))
+  (component : Array<ComposableType>, context : ComponentMountingContext) : Array<ComposableType> =>
+    component.map(innerComponent => flattenComposition(innerComponent, context))
 
-const composePlainObject = (component : Object) : ComposableType => {
+const composePlainObject = (component : Object, context : ComponentMountingContext) : ComposableType => {
   return isEmpty(component) || !hasComplexProperties(component)
     ? component
-    : flattenPromises(composeObject(component))
+    : flattenPromises(composeObject(component, context))
 }
 
-function flattenComposition (component : any) : ComposableType | Array<ComposableType> {
+function flattenComposition (component : any, context: ComponentMountingContext) : ComposableType | Array<ComposableType> {
   if (hasAlreadyBeenComposed(component)) {
     return component
   } else if (isPlainObject(component)) {
-    return composePlainObject(component)
+    return composePlainObject(component, context)
   } else if (isArray(component)) {
-    return composeComponentArray(component)
+    return composeComponentArray(component, context)
+  } else if (isPromise(component)) {
+    return component
+      .then(res => flattenComposition(res, context))
+  } else if (isComponentInstance(component)) {
+    return mountComponent(component, context)
+      .then(res => flattenComposition(res, context))
   }
-  return isComponentInstance(component)
-    ? mountComponent(component).then(flattenComposition)
-    : (isPromise(component) ? component.then(flattenComposition) : component)
+  return component
 }
 
-function compose (component : any) : ComposedComponent {
-  return flattenPromises(flattenComposition(component))
+const DEFAULT_CONTEXT = paintContext({ compose })
+function ensureContext (context?: ComponentMountingContext | Object) : ComponentMountingContext {
+  return context && isContext(context)
+    ? context
+    : (
+      isPlainObject(context)
+      ? paintContext({ compose, ...context })
+      : DEFAULT_CONTEXT
+    )
+}
+
+function mountComponent (component, context) {
+  return component(context)
+}
+
+function compose (component : any, context?: ComponentMountingContext) : ComposedComponent {
+  return flattenPromises(flattenComposition(component, ensureContext(context)))
     .then(res => Promise.resolve(paint(res)))
-}
-
-function mountComponent (component) {
-  return component(compose)
 }
 
 export default compose

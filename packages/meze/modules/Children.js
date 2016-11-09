@@ -7,6 +7,13 @@ import { isComponentInstance } from './ComponentInstance'
 
 const { paint, painted } = symbolPainter('ChildrenArray')
 
+import type { ComponentMountingContext } from './ComponentInstance'
+
+function contextualCompose (components, context? : ComponentMountingContext) {
+  const compositionMethod = (context && context.compose ? context.compose : compose)
+  return compositionMethod(components, context)
+}
+
 // api
 
 export const map =
@@ -34,10 +41,12 @@ export const cloneWithProps =
     map(children, child =>
       isComponentInstance(child) ? child.clone(typeof props === 'function' ? props(child.props) : props) : child)
 
+type CompositionReducer = (result: ?mixed, item: any, index: number) => any
+const isReduceable = composition => composition && composition.reduce
 export const reduceComposed =
-  (children : any = [], reducer : (result: ?mixed, item: any, index: number) => any, initialValue : ?any) : any =>
-    compose(children)
-      .then(composedChildren => reducer && composedChildren && composedChildren.reduce
+  (children : any = [], reducer : CompositionReducer, initialValue? : any, context? : ComponentMountingContext) : any =>
+    contextualCompose(children, context)
+      .then(composedChildren => reducer && isReduceable(composedChildren)
         ? composedChildren.reduce(reducer, initialValue)
         : composedChildren)
 
@@ -52,8 +61,8 @@ export const only =
   }
 
 export const onlyComposed =
-  (children : any = []) : any =>
-    compose(children)
+  (children : any = [], context? : any) : any =>
+    contextualCompose(children, context)
       .then(composedChildren => {
         composedChildren = filterOutUndefined(composedChildren)
         if (isEmpty(composedChildren)) {

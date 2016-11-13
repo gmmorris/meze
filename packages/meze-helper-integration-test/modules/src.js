@@ -6,7 +6,7 @@ module.exports = function (Meze) {
 
   const functionToExecute = (props) => {
     const { children, A } = props
-    return { [A]: children[0] }
+    return { [A]: Meze.Children.only(children) }
   }
 
   const Comp = Meze.Component(functionToExecute)

@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "ava": "^0.16.0",
+    "flow-bin": "^0.34.0",
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
     "babel-plugin-transform-meze-jsx": "^1.0.2",

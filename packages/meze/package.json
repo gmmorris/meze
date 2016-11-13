@@ -34,7 +34,6 @@
   },
   "devDependencies": {
     "ava": "^0.15.2",
-    "flow": "^0.2.3",
     "flow-bin": "^0.34.0",
     "lodash.range": "^3.2.0",
     "sinon": "^1.17.6"

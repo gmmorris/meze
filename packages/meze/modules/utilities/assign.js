@@ -12,7 +12,7 @@ const toKeyedObject = (key, child) => key === false
   ? child
   : { [key]: child }
 
-export const assign = children =>
+export const assign = (children = []) =>
   children.reduce((result, child, index) =>
     Object.assign(
       result,
@@ -21,7 +21,7 @@ export const assign = children =>
   {})
 
 export const Assign = Component(({ children }) => {
-  return assign(children)
+  return assign(children.toArray())
 })
 
 export default {

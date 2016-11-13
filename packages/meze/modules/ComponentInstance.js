@@ -3,10 +3,12 @@ import isFunction from 'lodash.isfunction'
 import symbolPainter from './internals/symbolPainter'
 import { isNonEmptyArray } from './utilities/validations'
 import createComponent from './createComponent'
+import { isChildrenArray } from './Children'
 
 import type { ComponentConstructorType, ComponentPropType } from './Component'
 import type { componentCreatorType } from './createComponent'
 import type { Composer } from './compose'
+import type { ChildrenArray } from './Children'
 
 const { paint, painted } = symbolPainter('ComponentInstance')
 const { paint: paintConstruct, painted: paintedConstruct } = symbolPainter('ComponentInstance$constructed')
@@ -31,6 +33,17 @@ const promisedIdentity = i => Promise.resolve(i)
 const getComposerFromContext = context => context.compose ? context.compose : promisedIdentity
 const freezeIfPossible = object => Object.freeze ? Object.freeze(object) : object
 
+function childrenAsArray (children : ?any) : any[] {
+  return (children && isChildrenArray(children) ? children.toArray() : (Array.isArray(children) ? children : []))
+}
+
+const setContextOnChildrenProp = (props : ?Object, context : ?Object) => {
+  if (props && props.children && isChildrenArray(props.children)) {
+    return { ...props, children: props.children.withContext(context) }
+  }
+  return props
+}
+
 export default function (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType) : ComponentInstanceType {
   // console.log(`$$ComponentInstance`)
   // console.log(arguments)
@@ -41,7 +54,7 @@ export default function (constructor: ComponentConstructorType, displayName: str
       throw Error(`A ${displayName} Component Instance cannot be mounted twice`)
     }
     paintConstruct(this)
-    const mountResult = constructor(props, freezeIfPossible(context))
+    const mountResult = constructor(setContextOnChildrenProp(props, context), freezeIfPossible(context))
     callIfFunction(props.componentDidMount)
     let result = getComposerFromContext(context)(mountResult, context)
     return props.componentWillUnmount
@@ -58,7 +71,7 @@ export default function (constructor: ComponentConstructorType, displayName: str
     return createComponent(
       constructor,
       { ...originalProps, ...cloneProps },
-      ...(isNonEmptyArray(cloneChildren) ? cloneChildren : (children || []))
+      ...(isNonEmptyArray(cloneChildren) ? cloneChildren : childrenAsArray(children))
     )
   }
 

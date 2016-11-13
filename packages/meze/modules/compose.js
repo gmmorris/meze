@@ -8,6 +8,7 @@ import isFunction from 'lodash.isfunction'
 import findIndex from 'lodash.findindex'
 
 import { isComponentInstance } from './ComponentInstance'
+import { isChildrenArray } from './Children'
 import type { ComponentMountingContext } from './ComponentInstance'
 import flattenPromises from './internals/flattenPromises'
 import { isPromise } from './internals/isPromise'
@@ -55,6 +56,8 @@ function flattenComposition (component : any, context: ComponentMountingContext)
     return composePlainObject(component, context)
   } else if (isArray(component)) {
     return composeComponentArray(component, context)
+  } else if (isChildrenArray(component)) {
+    return composeComponentArray(component.toArray(), context)
   } else if (isPromise(component)) {
     return component
       .then(res => flattenComposition(res, context))
@@ -66,7 +69,7 @@ function flattenComposition (component : any, context: ComponentMountingContext)
 }
 
 const DEFAULT_CONTEXT = paintContext({ compose })
-function ensureContext (context?: ComponentMountingContext | Object) : ComponentMountingContext {
+function ensureContext (context: ?ComponentMountingContext | Object) : ComponentMountingContext {
   return context && isContext(context)
     ? context
     : (
@@ -80,7 +83,7 @@ function mountComponent (component, context) {
   return component(context)
 }
 
-function compose (component : any, context?: ComponentMountingContext) : ComposedComponent {
+function compose (component : any, context: ?ComponentMountingContext) : ComposedComponent {
   return flattenPromises(flattenComposition(component, ensureContext(context)))
     .then(res => Promise.resolve(paint(res)))
 }

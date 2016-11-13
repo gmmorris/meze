@@ -1,15 +1,18 @@
 /* @flow */
 
-type Paintable = Object | Function
+export type Paintable = Object | Function
 
 const isValidForPainting = (obj : Paintable) : boolean =>
   obj && (typeof obj === 'object' || typeof obj === 'function' || obj instanceof Array)
 
-const paint = symbol => (obj : Paintable, val : any = true) : Paintable => {
+const paint = symbol => (obj : Paintable, value : any = true) : Paintable => {
   // console.log(`paint:`)
   // console.log(symbol)
   if (isValidForPainting(obj)) {
-    obj[symbol] = val
+    Object.defineProperty(obj, symbol, {
+      configurable: true,
+      value
+    })
   }
   return obj
 }

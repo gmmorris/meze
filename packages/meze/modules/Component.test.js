@@ -9,7 +9,7 @@ import { Assign } from './utilities/assign'
 
 // Component tests
 test('takes a function and wraps it with an instanciator', async t => {
-  t.plan(3)
+  t.plan(5)
 
   const propsToPass = {
     A: 'prop',
@@ -17,17 +17,19 @@ test('takes a function and wraps it with an instanciator', async t => {
   }
   const childrenToPass = [true, { some: 'prop' }]
 
-  const functionToExecute = (props) => {
+  const FunctionToExecute = Component((props) => {
     const { children, ...rest } = props
     t.deepEqual(rest, propsToPass)
-    t.deepEqual(children, childrenToPass)
-    return { [props.A]: children[0] }
-  }
+    t.deepEqual(children.children.length, childrenToPass.length)
+    t.deepEqual(children.children[0], childrenToPass[0])
+    t.deepEqual(children.children[1], childrenToPass[1])
+    return { [props.A]: children.children[0] }
+  })
 
-  const Comp = Component(functionToExecute)
+  const actual = await compose(<FunctionToExecute {...propsToPass}>{childrenToPass}</FunctionToExecute>)
 
   t.deepEqual(
-    await compose(<Comp {...propsToPass}>{Children.spread(childrenToPass)}</Comp>),
+    actual,
     { 'prop': true }
   )
 })

@@ -28,12 +28,14 @@ test('isPlainObjectComponent should differenciate between plainObjectComponents 
 })
 
 test('Objectify is used to create a generic component when an unknow Component is composed', async t => {
+  const actual = await compose(
+    <topObject>
+      <person name="Jack" age={25} occupation="Dancer" />
+    </topObject>
+  )
+
   t.deepEqual(
-    await compose(
-      <topObject>
-        <person name="Jack" age={25} occupation="Dancer" />
-      </topObject>
-    ),
+    actual,
     {
       person: {
         name: 'Jack',

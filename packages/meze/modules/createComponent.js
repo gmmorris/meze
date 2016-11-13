@@ -5,6 +5,7 @@ import type { ComponentType } from './Component'
 import isPlainObject from 'lodash.isplainobject'
 import { isComponent } from './Component'
 import { spreadChildren } from './Children'
+import type { ChildrenArray } from './Children'
 import { isNonEmptyArray } from './utilities/validations'
 import { findTransformationWhere } from './utilities/helpers'
 
@@ -21,7 +22,7 @@ const ensureProps = (props : ?Object) : Object =>
   ? {}
   : spreadProps(props)
 
-const processPropsChildren = (props : Object, children : any[]) =>
+const processPropsChildren = (props : Object, children : any[]) : { children: ?ChildrenArray } =>
   isNonEmptyArray(children)
     ? Object.assign(props, { children: spreadChildren(children) })
     : props

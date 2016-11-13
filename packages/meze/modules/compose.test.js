@@ -2,7 +2,7 @@ import test from 'ava'
 
 import Meze from './index'
 
-import { Component } from './Component'
+import { asChildren, mapToArray } from './Children'
 import compose from './compose'
 import { Assign } from './utilities/assign'
 import range from 'lodash.range'
@@ -67,18 +67,21 @@ test('flattens child components into properties', async t => {
   const Summarize = function (props) {
     const { left, right } = props
     const rangeOfNumbers = range(left, right + 1)
+      .map(index => <PostponedSum left={left} right={index} />)
     return {
       sum: (
         <Assign>
-          {Meze.Children.map(rangeOfNumbers, index => <PostponedSum left={left} right={index} />)}
+          { rangeOfNumbers }
         </Assign>
       ),
       count: rangeOfNumbers.length
     }
   }
 
+  const actual = await compose(<Summarize left={40} right={42} />)
+
   t.deepEqual(
-    await compose(<Summarize left={40} right={42} />),
+    actual,
     {
       sum: {
         0: 80,

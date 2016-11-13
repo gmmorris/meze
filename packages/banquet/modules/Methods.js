@@ -11,7 +11,7 @@ function emptyHandler (req, res, next) {
 const createMethodComponent = method => Meze.Component(props => {
   const { server, children } = props
   const methodProps = pick(props, 'path', 'version')
-  const handlers = children && children.length
+  const handlers = children
     // create a handler for every child component
     ? Meze.Children.mapToArray(
         children,

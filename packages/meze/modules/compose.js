@@ -1,5 +1,4 @@
 /* @flow */
-
 import isPlainObject from 'lodash.isplainobject'
 import isArray from 'lodash.isarray'
 import isEmpty from 'lodash.isempty'

@@ -35,15 +35,18 @@
   "devDependencies": {
     "ava": "^0.15.2",
     "flow-bin": "^0.34.0",
+    "lodash.intersection": "^4.4.0",
     "lodash.range": "^3.2.0",
     "sinon": "^1.17.6"
   },
   "dependencies": {
+    "lodash.difference": "^4.5.0",
     "lodash.findindex": "^4.6.0",
     "lodash.isarray": "^4.0.0",
     "lodash.isempty": "^4.4.0",
     "lodash.isfunction": "^3.0.8",
     "lodash.isobjectlike": "^4.0.0",
-    "lodash.isplainobject": "^4.0.5"
+    "lodash.isplainobject": "^4.0.5",
+    "proptypes": "^0.14.3"
   }
 }

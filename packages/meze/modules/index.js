@@ -1,7 +1,7 @@
-
 import { Component, isComponent } from './Component'
 import createComponent from './createComponent'
 import Children from './Children'
+import PropTypes from './PropTypes'
 import { Assign } from './utilities/assign'
 import { componentise } from './utilities/componentise'
 import { Objectify, objectifyMiddleware } from './utilities/objectify'
@@ -17,6 +17,7 @@ const utilities = {
 }
 
 const Meze = {
+  PropTypes,
   Component,
   isComponent,
   createComponent,

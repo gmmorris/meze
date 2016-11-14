@@ -1,14 +1,17 @@
 /* @flow */
 import isFunction from 'lodash.isfunction'
+import isPlainObject from 'lodash.isplainobject'
+import isempty from 'lodash.isempty'
 import symbolPainter from './internals/symbolPainter'
 import { isNonEmptyArray } from './utilities/validations'
 import createComponent from './createComponent'
 import { isChildrenArray } from './Children'
+import warning from './internals/warning'
+import { validate, PropTypeLocationNames } from './PropTypes'
 
 import type { ComponentConstructorType, ComponentPropType } from './Component'
 import type { componentCreatorType } from './createComponent'
 import type { Composer } from './compose'
-import type { ChildrenArray } from './Children'
 
 const { paint, painted } = symbolPainter('ComponentInstance')
 const { paint: paintConstruct, painted: paintedConstruct } = symbolPainter('ComponentInstance$constructed')
@@ -44,11 +47,16 @@ const setContextOnChildrenProp = (props : ?Object, context : ?Object) => {
   return props
 }
 
+function validatePropTypes (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType) {
+  const propTypes = isPlainObject(constructor.PropTypes) ? constructor.PropTypes : false
+  if (!isempty(props) || propTypes) {
+    validate(props, propTypes || {}, displayName, PropTypeLocationNames.prop, warning)
+  }
+}
+
 export default function (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType) : ComponentInstanceType {
-  // console.log(`$$ComponentInstance`)
-  // console.log(arguments)
   const mount = (context : ComponentMountingContext = {}) => {
-    // console.log(`mounting: ${displayName}`)
+    validatePropTypes(constructor, displayName, props)
     callIfFunction(props.componentWillMount)
     if (paintedConstruct(this)) {
       throw Error(`A ${displayName} Component Instance cannot be mounted twice`)

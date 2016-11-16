@@ -61,18 +61,6 @@ test('PropTypes validates the types of a Components props', async t => {
   consoleWarn.restore()
 
   // second check in test as the mocking prevents concurrent test
-  var consoleWarnCalledForLackOfPropTypes = mock(console)
-  consoleWarnCalledForLackOfPropTypes.expects('warn').once()
-
-  const PartialWithoutPropTypesButWithProps = function (props) {
-    return { ...props }
-  }
-  await compose(<PartialWithoutPropTypesButWithProps someUnspecifiedProp={'OMG'} />)
-
-  consoleWarnCalledForLackOfPropTypes.verify()
-  consoleWarnCalledForLackOfPropTypes.restore()
-
-  // third check in test as the mocking prevents concurrent test
   var consoleWarnNeverCalled = mock(console)
   consoleWarnNeverCalled.expects('warn').never()
 

@@ -32,14 +32,6 @@ export default TYPES_TO_EXPOSE
     return propTypesToExpose
   }, {})
 
-function handleUnknownProps (unknownProps, componentName, location, handleError) {
-  unknownProps
-    .forEach(unknownProp => {
-      handleError(`Unknown prop ${unknownProp} on ${componentName}, please define all expected props in ${TypeLocation[location]}.`)
-    })
-  return unknownProps.length > 0
-}
-
 function validatePropTypes (props, propTypes, componentName, location, handleError) {
   return Object.keys(propTypes)
     .reduce((isValid, propName) => {
@@ -54,8 +46,7 @@ function validatePropTypes (props, propTypes, componentName, location, handleErr
 
 export const validate = (props, propTypes, componentName, location, handleError) => {
   if (process.env.NODE_ENV !== 'production') {
-    return validatePropTypes(props, propTypes, componentName, location, handleError) &&
-      handleUnknownProps(difference(Object.keys(props), Object.keys(propTypes)), componentName, location, handleError)
+    return validatePropTypes(props, propTypes, componentName, location, handleError)
   }
   return true
 }

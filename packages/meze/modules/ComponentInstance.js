@@ -5,6 +5,7 @@ import isempty from 'lodash.isempty'
 import symbolPainter from './internals/symbolPainter'
 import { isNonEmptyArray } from './utilities/validations'
 import createComponent from './createComponent'
+import { isComponent } from './Component'
 import { isChildrenArray } from './Children'
 import warning from './internals/warning'
 import { validate, PropTypeLocationNames } from './PropTypes'
@@ -73,6 +74,10 @@ export default function (constructor: ComponentConstructorType, displayName: str
         })
       : result
   }
+
+  mount.instanceOf = (component) => isFunction(component)
+    ? component === constructor
+    : (isComponent(component) ? component.constructor === constructor : false)
 
   mount.clone = function (cloneProps : ComponentPropType = {}, ...cloneChildren : any[]) : componentCreatorType {
     const { children, ...originalProps } = props

@@ -85,11 +85,42 @@ test(`shallowCompose.find supports searching for inner components`, async t => {
   )
 
   t.deepEqual(
-    res.find(DumbComponent).props(),
+    res.find(DumbComponent)[0].props(),
     { msg: 'there' }
   )
 
   t.truthy(
-    res.find(UnusedComponent).isEmpty()
+    res.find(UnusedComponent)[0].isEmpty()
+  )
+})
+
+test(`shallowCompose.find supports searching for inner components within composed objects`, async t => {
+  const ChildrenAsObjectOfComponents = ({ children }) => Object.assign(
+    {},
+    ...Meze.Children.mapToArray(children, (child, index) => ({ [`child_${index}`]: child }))
+  )
+  const DumbComponent = ({ msg = 'hi' }) => msg
+
+  const res = await shallowCompose(
+    <ChildrenAsObjectOfComponents>
+      <DumbComponent msg="hi" />
+      <DumbComponent msg="there" />
+    </ChildrenAsObjectOfComponents>
+  )
+
+  const query = res.find(DumbComponent)
+  t.deepEqual(
+    query.length,
+    2
+  )
+
+  t.deepEqual(
+    query[0].props('msg'),
+    'hi'
+  )
+
+  t.deepEqual(
+    query[1].props('msg'),
+    'there'
   )
 })

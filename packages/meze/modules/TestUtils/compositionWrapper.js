@@ -1,7 +1,5 @@
 import isPlainObject from 'lodash.isplainobject'
 import isArray from 'lodash.isarray'
-import isEmpty from 'lodash.isempty'
-import isObjectLike from 'lodash.isobjectlike'
 import { isComponentInstance } from '../ComponentInstance'
 import isFunction from 'lodash.isfunction'
 
@@ -11,7 +9,7 @@ function queryComponentInstance (selector, componentInstance, context) {
   if (isComponent(selector) || isFunction(selector)) {
     return componentInstance.instanceOf(selector)
       ? CompositionWrapper(componentInstance, context)
-      : CompositionWrapper()
+      : undefined
   }
 }
 
@@ -22,6 +20,21 @@ function queryObject (selector, object, context) {
         matches.push(CompositionWrapper(object[key], context))
       } else if (isPlainObject(object[key])) {
         return matches.concat(queryObject(selector, object[key], context))
+      }
+      return matches
+    }, [])
+  }
+}
+
+function queryArray (selector, array, context) {
+  if (isComponent(selector) || isFunction(selector)) {
+    return array.reduce((matches, item) => {
+      if (isComponentInstance(item) && item.instanceOf(selector)) {
+        matches.push(CompositionWrapper(item, context))
+      } else if (isPlainObject(item)) {
+        return matches.concat(queryObject(selector, item, context))
+      } else if (isArray(item)) {
+        return matches.concat(queryArray(selector, item, context))
       }
       return matches
     }, [])
@@ -39,6 +52,8 @@ function defineFind (composition, context) {
       queryResult = queryComponentInstance(selector, composition, context)
     } else if (isPlainObject(composition)) {
       queryResult = queryObject(selector, composition, context)
+    } else if (isArray(composition)) {
+      queryResult = queryArray(selector, composition, context)
     }
     return asArray(queryResult)
   }

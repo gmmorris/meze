@@ -92,6 +92,7 @@ export default function (constructor: ComponentConstructorType, displayName: str
   }
 
   mount.props = Object.freeze(props)
+  mount.constructor = constructor
 
   return paint(mount)
 }

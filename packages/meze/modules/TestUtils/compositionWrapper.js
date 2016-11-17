@@ -1,8 +1,9 @@
 import isPlainObject from 'lodash.isplainobject'
 import isArray from 'lodash.isarray'
-import { isComponentInstance } from '../ComponentInstance'
 import isFunction from 'lodash.isfunction'
 import valuesOf from 'lodash.values'
+import { isComponentInstance } from '../ComponentInstance'
+import { compareObjects, log } from '../utilities/helpers'
 
 import { isComponent } from '../Component'
 
@@ -53,25 +54,43 @@ function defineFind (composition, context) {
   }
 }
 
+function invalidType (method, type) {
+  return `CompositionWrapper.${method}() can only be used to compare to a Component, and doesn't support ${type} types`
+}
+
 export default function CompositionWrapper (composition, context) {
   const find = defineFind(composition, context)
+  const is = componentType => {
+    if (isComponentInstance(componentType)) {
+      return isComponentInstance(composition) && composition.instanceOf(componentType.constructor) &&
+        compareObjects(composition.props, componentType.props)
+    } else if (isComponent(componentType) || isFunction(componentType)) {
+      return isComponentInstance(composition) && composition.instanceOf(componentType)
+    }
+    throw Error(invalidType('is', typeof componentType))
+  }
+  const not = componentType => {
+    if (isFunction(componentType) || isComponentInstance(componentType) || isComponent(componentType)) {
+      return !is(componentType)
+    }
+    throw Error(invalidType('not', typeof componentType))
+  }
   return {
     composition,
     isEmpty: () => composition === undefined,
     props: propName => typeof propName === 'string' ? composition.props[propName] : composition.props,
     context: propName => typeof propName === 'string' ? context[propName] : context,
     find,
-    is: componentType => {
-      if (isComponent(componentType) || isFunction(componentType)) {
-        return isComponentInstance(composition) && composition.instanceOf(componentType)
-      }
-      throw Error(`CompositionWrapper.is() can only be used to compare to a Component, and doesn't support ${typeof componentType} types`)
-    },
+    is,
+    not,
     contains: componentType => {
-      if (isComponent(componentType) || isFunction(componentType)) {
+      if (isComponentInstance(componentType)) {
+        return find(componentType.constructor)
+          .find(child => compareObjects(child.props(), componentType.props)) !== undefined
+      } else if (isComponent(componentType) || isFunction(componentType)) {
         return find(componentType).length > 0
       }
-      throw Error(`CompositionWrapper.contains() can only be used to compare to a Component, and doesn't support ${typeof componentType} types`)
+      throw Error(invalidType('contains', typeof componentType))
     }
   }
 }

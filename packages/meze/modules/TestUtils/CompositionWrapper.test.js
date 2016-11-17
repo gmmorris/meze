@@ -117,6 +117,32 @@ test(`shallowCompose.is checks if the root of the wrapper is a specific compenen
   )
 })
 
+test(`shallowCompose.is checks if the root of the wrapper is a specific compenent instance`, async t => {
+  const ChildrenAsOnlyComponent = ({ children }) => Meze.Children.only(children)
+  const DumbComponent = ({ msg = 'hi' }) => msg
+
+  const res = await shallowCompose(
+    <ChildrenAsOnlyComponent>
+      <DumbComponent msg="haha" />
+    </ChildrenAsOnlyComponent>
+  )
+
+  const is = res.is(<DumbComponent msg="haha" />)
+
+  t.truthy(
+    is
+  )
+
+  const isnt = res.not(<DumbComponent msg="hi" />)
+  t.truthy(
+    isnt
+  )
+
+  t.falsy(
+    res.is(<DumbComponent msg="hi" />)
+  )
+})
+
 test(`shallowCompose.contains checks if the root of the wrapper contains a specific compenent type`, async t => {
   const ChildrenAsOnlyComponent = ({ children }) => ({
     a: {
@@ -143,5 +169,47 @@ test(`shallowCompose.contains checks if the root of the wrapper contains a speci
 
   t.falsy(
     res.contains(OtherDumbComponent)
+  )
+})
+
+test(`shallowCompose.contains checks if the root of the wrapper contains a specific compenent instancnes`, async t => {
+  const ChildrenAsOnlyComponent = ({ children }) => ({
+    a: {
+      b: [
+        1,
+        2,
+        3,
+        { asd: Meze.Children.mapToArray(children) }
+      ]
+    }
+  })
+  const DumbComponent = ({ msg }) => msg
+  const DumbWithDefaultComponent = ({ msg = 'hi' }) => msg
+
+  const res = await shallowCompose(
+    <ChildrenAsOnlyComponent>
+      <DumbComponent msg="hi" />
+      <DumbWithDefaultComponent />
+    </ChildrenAsOnlyComponent>
+  )
+
+  const contains = res.contains(<DumbComponent msg="hi" />)
+  t.truthy(
+    contains
+  )
+
+  const dosntContain = res.contains(<DumbComponent msg="haha" />)
+  t.falsy(
+    dosntContain
+  )
+
+  t.truthy(
+    res.contains(DumbWithDefaultComponent)
+  )
+  t.truthy(
+    res.contains(<DumbWithDefaultComponent />)
+  )
+  t.falsy(
+    res.contains(<DumbWithDefaultComponent msg="hi" />)
   )
 })

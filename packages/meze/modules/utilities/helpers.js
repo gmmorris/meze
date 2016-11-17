@@ -1,4 +1,5 @@
 import isFunction from 'lodash.isfunction'
+import difference from 'lodash.difference'
 
 export const log = i => {
   console.log(i)
@@ -19,6 +20,16 @@ export const findTransformationWhere = (collection, candidate, predicate) => {
       return product
     }
   }
+}
+
+export function compareObjects (left, right) {
+  const leftKeys = Object.keys(left)
+  const rightKeys = Object.keys(right)
+  return leftKeys.length === rightKeys.length &&
+    difference(leftKeys, rightKeys).length === 0 &&
+    leftKeys.reduce((areSame, key) => {
+      return areSame && left[key] === right[key]
+    }, true)
 }
 
 export function isEmpty (children) {

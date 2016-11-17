@@ -96,3 +96,52 @@ test(`shallowCompose.find supports searching for inner components within compose
     'there'
   )
 })
+
+test(`shallowCompose.is checks if the root of the wrapper is a specific compenent type`, async t => {
+  const ChildrenAsOnlyComponent = ({ children }) => Meze.Children.only(children)
+  const DumbComponent = ({ msg = 'hi' }) => msg
+  const OtherDumbComponent = ({ msg = 'hi' }) => msg
+
+  const res = await shallowCompose(
+    <ChildrenAsOnlyComponent>
+      <DumbComponent />
+    </ChildrenAsOnlyComponent>
+  )
+
+  t.truthy(
+    res.is(DumbComponent)
+  )
+
+  t.falsy(
+    res.is(OtherDumbComponent)
+  )
+})
+
+test(`shallowCompose.contains checks if the root of the wrapper contains a specific compenent type`, async t => {
+  const ChildrenAsOnlyComponent = ({ children }) => ({
+    a: {
+      b: [
+        1,
+        2,
+        3,
+        { asd: Meze.Children.only(children) }
+      ]
+    }
+  })
+  const DumbComponent = ({ msg = 'hi' }) => msg
+  const OtherDumbComponent = ({ msg = 'hi' }) => msg
+
+  const res = await shallowCompose(
+    <ChildrenAsOnlyComponent>
+      <DumbComponent />
+    </ChildrenAsOnlyComponent>
+  )
+
+  t.truthy(
+    res.contains(DumbComponent)
+  )
+
+  t.falsy(
+    res.contains(OtherDumbComponent)
+  )
+})

@@ -2,6 +2,7 @@ import isPlainObject from 'lodash.isplainobject'
 import isArray from 'lodash.isarray'
 import { isComponentInstance } from '../ComponentInstance'
 import isFunction from 'lodash.isfunction'
+import valuesOf from 'lodash.values'
 
 import { isComponent } from '../Component'
 
@@ -15,14 +16,7 @@ function queryComponentInstance (selector, componentInstance, context) {
 
 function queryObject (selector, object, context) {
   if (isComponent(selector) || isFunction(selector)) {
-    return Object.keys(object).reduce((matches, key) => {
-      if (isComponentInstance(object[key]) && object[key].instanceOf(selector)) {
-        matches.push(CompositionWrapper(object[key], context))
-      } else if (isPlainObject(object[key])) {
-        return matches.concat(queryObject(selector, object[key], context))
-      }
-      return matches
-    }, [])
+    return queryArray(selector, valuesOf(object), context)
   }
 }
 
@@ -60,11 +54,24 @@ function defineFind (composition, context) {
 }
 
 export default function CompositionWrapper (composition, context) {
+  const find = defineFind(composition, context)
   return {
     composition,
     isEmpty: () => composition === undefined,
     props: propName => typeof propName === 'string' ? composition.props[propName] : composition.props,
     context: propName => typeof propName === 'string' ? context[propName] : context,
-    find: defineFind(composition, context)
+    find,
+    is: componentType => {
+      if (isComponent(componentType) || isFunction(componentType)) {
+        return isComponentInstance(composition) && composition.instanceOf(componentType)
+      }
+      throw Error(`CompositionWrapper.is() can only be used to compare to a Component, and doesn't support ${typeof componentType} types`)
+    },
+    contains: componentType => {
+      if (isComponent(componentType) || isFunction(componentType)) {
+        return find(componentType).length > 0
+      }
+      throw Error(`CompositionWrapper.contains() can only be used to compare to a Component, and doesn't support ${typeof componentType} types`)
+    }
   }
 }

@@ -31,19 +31,23 @@ test('ComponentInstance triggers the componentWillMount from the props just befo
 })
 
 test('ComponentInstance triggers the componentDidMount from the props just after mounting a component', t => {
-  t.plan(2)
+  t.plan(3)
 
   const props = {
     componentDidMount: spy()
   }
 
+  const result = { a: 1 }
+
   const constructor = function () {
     t.truthy(props.componentDidMount.notCalled)
+    return result
   }
 
   const mount = new ComponentInstance(constructor, '', props)
   mount()
   t.truthy(props.componentDidMount.calledOnce)
+  t.truthy(props.componentDidMount.calledWith(result))
 })
 
 test(`ComponentInstance triggers props.componentWillUnmount after it's result has been fully composed passing the result as argument`, async t => {
@@ -64,7 +68,7 @@ test(`ComponentInstance triggers props.componentWillUnmount after it's result ha
 
   const mount = new ComponentInstance(constructor, '', props)
   await mount()
-// console.log(props.componentWillUnmount.firstCall)
+
   t.truthy(props.componentWillUnmount.calledOnce)
   t.truthy(props.componentWillUnmount.calledWith(result))
 })

@@ -64,7 +64,7 @@ export default function (constructor: ComponentConstructorType, displayName: str
     }
     paintConstruct(this)
     const mountResult = constructor(setContextOnChildrenProp(props, context), freezeIfPossible(context))
-    callIfFunction(props.componentDidMount)
+    callIfFunction(props.componentDidMount, mountResult)
     let result = getComposerFromContext(context)(mountResult, context)
     return props.componentWillUnmount
       ? result

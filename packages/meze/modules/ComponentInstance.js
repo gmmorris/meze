@@ -3,6 +3,7 @@ import isFunction from 'lodash.isfunction'
 import isPlainObject from 'lodash.isplainobject'
 import isempty from 'lodash.isempty'
 import symbolPainter from './internals/symbolPainter'
+import { callIfFunction, freezeIfPossible, identity, log } from './utilities/helpers'
 import { isNonEmptyArray } from './utilities/validations'
 import createComponent from './createComponent'
 import { isComponent } from './Component'
@@ -32,11 +33,6 @@ export type ComponentMountingContext =
 export const isComponentInstance =
   (instance : any) : boolean => instance && painted(instance)
 
-const callIfFunction = (fn, ...args) => fn && isFunction(fn) ? fn(...args) : false
-const promisedIdentity = i => Promise.resolve(i)
-const getComposerFromContext = context => context.compose ? context.compose : promisedIdentity
-const freezeIfPossible = object => Object.freeze ? Object.freeze(object) : object
-
 function childrenAsArray (children : ?any) : any[] {
   return (children && isChildrenArray(children) ? children.toArray() : (Array.isArray(children) ? children : []))
 }
@@ -55,6 +51,16 @@ function validatePropTypes (constructor: ComponentConstructorType, displayName: 
   }
 }
 
+function createOnComposed (componentWillUnmount) {
+  return isFunction(componentWillUnmount)
+    ? promisedComposition => promisedComposition
+      .then(composition => {
+        callIfFunction(componentWillUnmount, composition)
+        return composition
+      })
+    : identity
+}
+
 export default function (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType) : ComponentInstanceType {
   const mount = (context : ComponentMountingContext = {}) => {
     validatePropTypes(constructor, displayName, props)
@@ -63,16 +69,13 @@ export default function (constructor: ComponentConstructorType, displayName: str
       throw Error(`A ${displayName} Component Instance cannot be mounted twice`)
     }
     paintConstruct(this)
-    const mountResult = constructor(setContextOnChildrenProp(props, context), freezeIfPossible(context))
-    callIfFunction(props.componentDidMount, mountResult)
-    let result = getComposerFromContext(context)(mountResult, context)
-    return props.componentWillUnmount
-      ? result
-        .then(res => {
-          callIfFunction(props.componentWillUnmount, res)
-          return res
-        })
-      : result
+    const composition = constructor(setContextOnChildrenProp(props, context), freezeIfPossible(context))
+    callIfFunction(props.componentDidMount, composition)
+
+    return {
+      composition,
+      onComposed: createOnComposed(props.componentWillUnmount)
+    }
   }
 
   mount.instanceOf = (component) => isFunction(component)

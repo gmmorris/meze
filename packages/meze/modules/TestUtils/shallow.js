@@ -22,7 +22,7 @@ export default (component, context) => isComponentInstance(component)
 )
 
 function mountComponent (component, context) {
-  return component(context)
+  return component(context).composition
 }
 
 function defineFind (composition) {
@@ -41,20 +41,26 @@ function defineFind (composition) {
   }
 }
 
-function defineCompositionWrapper (composition) {
+function defineCompositionWrapper (composition, context) {
   return {
     composition,
     isEmpty: () => composition === undefined,
     props: () => composition.props,
+    context: () => context,
     find: defineFind(composition)
   }
 }
 
 function compose (component, context = {}) {
   return new Promise((resolve, reject) => {
-    mountComponent(component, {
-      compose: composition => resolve(defineCompositionWrapper(composition)),
-      ...context
-    })
+    resolve(
+      defineCompositionWrapper(
+        mountComponent(component, {
+          compose: (innerCompose, innerContext) => defineCompositionWrapper(innerCompose, innerContext),
+          ...context
+        }),
+        context
+      )
+    )
   })
 }

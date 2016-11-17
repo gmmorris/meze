@@ -12,6 +12,7 @@ import type { ComponentMountingContext } from './ComponentInstance'
 import flattenPromises from './internals/flattenPromises'
 import { isPromise } from './internals/isPromise'
 import symbolPainer from './internals/symbolPainter'
+import { promisedIdentity } from './utilities/helpers'
 
 export type ComposedComponent = Promise<*>
 export type Composer = () => ComposedComponent
@@ -35,6 +36,8 @@ function composeObject (obj : Object, context : ComponentMountingContext) : Obje
     })
   return obj
 }
+
+const getComposerFromContext = context => context.compose ? context.compose : promisedIdentity
 
 const hasAlreadyBeenComposed = (component : any) : boolean => painted(component)
 
@@ -79,7 +82,8 @@ function ensureContext (context: ?ComponentMountingContext | Object) : Component
 }
 
 function mountComponent (component, context) {
-  return component(context)
+  const { composition, onComposed } = component(context)
+  return onComposed(getComposerFromContext(context)(composition, context))
 }
 
 function compose (component : any, context: ?ComponentMountingContext) : ComposedComponent {

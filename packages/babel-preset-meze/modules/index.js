@@ -1,4 +1,4 @@
-import transformMeze from 'babel-plugin-transform-meze'
+import transformMeze from 'babel-plugin-transform-meze-jsx'
 
 export default {
   plugins: [

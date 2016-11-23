@@ -4,7 +4,7 @@ import { On } from './EventHandling'
 import Methods from './Methods'
 import Response from './Response'
 
-export default {
+const Banquet = {
   Server,
   Use,
   Plugins,
@@ -12,3 +12,13 @@ export default {
   Methods,
   Response
 }
+
+export {
+  Server,
+  Use,
+  Plugins,
+  On,
+  Methods,
+  Response
+}
+export default Banquet

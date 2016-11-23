@@ -6,7 +6,7 @@
 
 The above is as true for real life *Meze* as for it's Javascript counterpart.
 
-Born out of a thought experiment, *Meze* provides the Component Composition API popularized by the *React* library in order to declaratively compose a process. *Meze* is designed to make it painless to express complex operations while striving for the simplicity of functional composition.
+Born out of a thought experiment, *Meze* provides the Component Composition API popularized by the *React* library in order to declaratively compose data and process. *Meze* is designed to make it painless to express complex operations while striving for the simplicity of functional composition.
 
 ## Key Features
 * ***Stateless Components*** maintain the standard *React API*, with slight changes to better reflect their purpose as implementations of data & process ,rather than stateful UI

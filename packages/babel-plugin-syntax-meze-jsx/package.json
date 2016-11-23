@@ -18,6 +18,7 @@
   },
   "scripts": {
     "test": "ava ./modules/*.test.js --verbose --require babel-register",
-    "build": "babel modules --out-dir lib --ignore test.js"
+    "build": "babel modules --out-dir lib --ignore test.js",
+    "prepublish": "npm run build"
   }
 }

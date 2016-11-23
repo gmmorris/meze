@@ -15,7 +15,8 @@
     "to-fast-properties": "^1.0.1"
   },
   "scripts": {
-    "build": "babel modules --out-dir lib"
+    "build": "babel modules --out-dir lib",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",

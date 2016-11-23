@@ -30,6 +30,7 @@
   },
   "scripts": {
     "test": "tape ./test/index.js | tap-summary",
-    "build": "babel modules --out-dir lib"
+    "build": "babel modules --out-dir lib",
+    "prepublish": "npm run build"
   }
 }

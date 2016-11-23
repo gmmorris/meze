@@ -13,6 +13,7 @@
     "test": "npm run unitTest && npm run typecheck",
     "testWatch": "ava ./modules/*.test.js ./modules/**/*.test.js --verbose --watch --require babel-register",
     "build": "babel modules -d lib --ignore .test.js",
+    "prepublish": "npm run build",
     "devBuild": "babel modules -d lib --source-maps --ignore .test.js"
   },
   "ava": {

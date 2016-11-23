@@ -1,8 +1,6 @@
 # meze ![alt TravisCI Build](https://travis-ci.org/gmmorris/meze.svg?branch=master)
-=======
 
-# Documentation
-This is still VERY MUCH a Work In Progress
+***This is still VERY MUCH a Work In Progress***
 
 ***Meze***, a word with its roots in antiquity, describes a selection of small dishes served accompanying alcoholic drinks, whose purpose is three-fold: to complement and enhance the taste of the drink, to provide the backdrop for a social gathering and to decouple the implementation of the individual dishes so that they may be consumed by the hungry developer in whichever way suits them the best.
 

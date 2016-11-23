@@ -26,4 +26,13 @@ const Meze = {
   compose
 }
 
+export {
+  PropTypes,
+  Component,
+  isComponent,
+  createComponent,
+  Children,
+  utilities,
+  compose
+}
 export default Meze

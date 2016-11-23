@@ -1,6 +1,6 @@
 {
   "name": "banquet",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A meze based Restify wrapper for JSON HTTP endpoints",
   "main": "lib/index.js",
   "author": "Gidi Meir Morris <gidi@gidi.io> (http://www.gidi.io)",

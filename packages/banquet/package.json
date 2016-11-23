@@ -1,6 +1,6 @@
 {
   "name": "banquet",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A meze based Restify wrapper for JSON HTTP endpoints",
   "main": "lib/index.js",
   "author": "Gidi Meir Morris <gidi@gidi.io> (http://www.gidi.io)",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "lodash.pick": "^4.4.0",
-    "meze": "^1.0.4",
+    "meze": "^1.0.10",
     "restify": "^4.1.1"
   },
   "devDependencies": {
@@ -37,7 +37,7 @@
     "babel-cli": "^6.18.0",
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
-    "babel-plugin-transform-meze-jsx": "^1.0.2",
+    "babel-plugin-transform-meze-jsx": "^1.0.10",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "babel-plugin-transform-regenerator": "^6.14.0",
     "babel-preset-es2015": "^6.14.0",

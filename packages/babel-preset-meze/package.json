@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-meze",
-  "version": "1.0.7",
+  "version": "1.0.10",
   "description": "Babel preset for all Meze plugins.",
   "author": "Gidi Meir Morris <gidi@gidi.io>",
   "homepage": "https://github.com/gmmorris/meze#readme",
@@ -12,7 +12,7 @@
     "prepublish": "npm run build"
   },
   "dependencies": {
-    "babel-plugin-transform-meze-jsx": "^1.0.2"
+    "babel-plugin-transform-meze-jsx": "^1.0.10"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",

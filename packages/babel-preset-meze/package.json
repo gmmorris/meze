@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-meze",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Babel preset for all Meze plugins.",
   "author": "Gidi Meir Morris <gidi@gidi.io>",
   "homepage": "https://github.com/gmmorris/meze#readme",

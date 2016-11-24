@@ -45,7 +45,7 @@ const setContextOnChildrenProp = (props : ComponentPropType, context : ?Object) 
 }
 
 function validatePropTypes (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType) {
-  const propTypes = isPlainObject(constructor.PropTypes) ? constructor.PropTypes : false
+  const propTypes = isPlainObject(constructor.propTypes) ? constructor.propTypes : false
   if (!isempty(props) || propTypes) {
     validate(props, propTypes || {}, displayName, PropTypeLocationNames.prop, warning)
   }

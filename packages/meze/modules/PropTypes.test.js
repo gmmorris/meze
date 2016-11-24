@@ -40,7 +40,7 @@ test('PropTypes validates the types of a Components props', async t => {
     return { ...props }
   }
 
-  Partial.PropTypes = {
+  Partial.propTypes = {
     numProp: PropTypes.number,
     enumProp: PropTypes.oneOf(['News', 'Sports'])
   }

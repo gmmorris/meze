@@ -3,7 +3,7 @@ import test from 'ava'
 import Meze from './index'
 
 import compose from './compose'
-import { asChildren, isChildrenArray, reduceComposed, mapComposed, cloneWithProps, only, onlyComposed, map, mapToArray } from './Children'
+import { forEach, asChildren, isChildrenArray, reduceComposed, mapComposed, cloneWithProps, only, onlyComposed, map, mapToArray } from './Children'
 
 // Children tests
 test('map applies a function to an array and marks the array as a ChildArray', t => {
@@ -81,6 +81,30 @@ test('cloneWithProps clones a component instance and applies the additional prop
         { name: 'Doe', hey: 'ho' }
       ]
     }
+  )
+})
+
+test('forEach cycles through all elements in the children object', async t => {
+  const Echo = () => {}
+  const Validate = function ({ children }) {
+    let count = 0
+    forEach(children, child => {
+      t.truthy(child.props.isValid)
+      count++
+    })
+    return count === children.length
+  }
+
+  const actual = await compose(
+    <Validate>
+      <Echo isValid={true} />
+      <Echo isValid={true} />
+    </Validate>
+  )
+
+  t.deepEqual(
+    actual,
+    true
   )
 })
 

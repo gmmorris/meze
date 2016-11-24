@@ -29,6 +29,7 @@ export type ChildrenArray = {
 
 export function Children (children : any[]) : ChildrenArray {
   this.children = children
+  this.length = children.length
   return paint(this)
 }
 

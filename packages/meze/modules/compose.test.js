@@ -34,6 +34,23 @@ test('flattens a tree of components to get passed their internal promises', asyn
   )
 })
 
+test('a composition should reject if an internal composition throws an error', async t => {
+  const RejectIn = function (props) {
+    throw Error('Holy Molly')
+  }
+
+  const Summarize = function () {
+    return {
+      rejection: <RejectIn time={10} />
+    }
+  }
+
+  t.throws(
+    compose(<Summarize />),
+    /Holy Molly/
+  )
+})
+
 test('a composition should reject if an internal promises rejects unhandled', async t => {
   const RejectIn = function (props) {
     return new Promise((resolve, reject) => setTimeout(() => reject(new Error('Holy Molly')), props.time))

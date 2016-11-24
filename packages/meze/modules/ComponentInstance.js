@@ -61,6 +61,10 @@ function createOnComposed (componentWillUnmount) {
     : identity
 }
 
+function applyComposition (mountResolution, composition) {
+  return Object.defineProperty(mountResolution, 'composition', { value: composition })
+}
+
 export default function (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType) : ComponentInstanceType {
   const mount = (context : ComponentMountingContext = {}) => {
     validatePropTypes(constructor, displayName, props)
@@ -69,13 +73,19 @@ export default function (constructor: ComponentConstructorType, displayName: str
       throw Error(`A ${displayName} Component Instance cannot be mounted twice`)
     }
     paintConstruct(this)
-    const composition = constructor(setContextOnChildrenProp(props, context), freezeIfPossible(context))
-    callIfFunction(props.componentDidMount, composition)
 
-    return {
-      composition,
+    const mounted = {
+      composition: undefined,
       onComposed: createOnComposed(props.componentWillUnmount)
     }
+
+    try {
+      applyComposition(mounted, constructor(setContextOnChildrenProp(props, context), freezeIfPossible(context)))
+    } catch (ex) {
+      applyComposition(mounted, Promise.reject(ex))
+    }
+    callIfFunction(props.componentDidMount, mounted.composition)
+    return mounted
   }
 
   mount.instanceOf = (component) => isFunction(component)

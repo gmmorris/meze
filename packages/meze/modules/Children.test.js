@@ -153,20 +153,14 @@ test('only throws if there is something other than a single child', async t => {
     }
   }
 
-  t.throws(() => {
-    compose(
-      <TheOnlyChild />
-    ).then(res => console.log(res))
-  })
+  t.throws(compose(<TheOnlyChild />))
 
-  t.throws(() => {
-    compose(
-      <TheOnlyChild>
-        <Dumb />
-        <Dumb />
-      </TheOnlyChild>
-    ).then(res => console.log(res))
-  })
+  t.throws(compose(
+    <TheOnlyChild>
+      <Dumb />
+      <Dumb />
+    </TheOnlyChild>
+  ))
 })
 
 test('onlyComposed composes an array of components and returns the only one with a return value', async t => {

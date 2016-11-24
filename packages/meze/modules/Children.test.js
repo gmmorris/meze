@@ -3,7 +3,7 @@ import test from 'ava'
 import Meze from './index'
 
 import compose from './compose'
-import { asChildren, isChildrenArray, reduceComposed, cloneWithProps, only, onlyComposed, map, mapToArray } from './Children'
+import { asChildren, isChildrenArray, reduceComposed, mapComposed, cloneWithProps, only, onlyComposed, map, mapToArray } from './Children'
 
 // Children tests
 test('map applies a function to an array and marks the array as a ChildArray', t => {
@@ -419,5 +419,28 @@ test('reduceComposed passes the context down to the reduced children', async t =
   t.deepEqual(
     actual,
     { sum: 9 }
+  )
+})
+
+test('mapComposed passes the context down to the reduced children', async t => {
+  const EchoVal = ({ val }) => val
+  const Summarize = function ({ children }, { add }) {
+    return mapComposed(children, (val) => {
+      return val + add
+    })
+  }
+
+  const actual = await compose(
+    <Summarize>
+      <EchoVal val={1} />
+      <EchoVal val={2} />
+      <EchoVal val={3} />
+    </Summarize>,
+    { add: 1 }
+  )
+
+  t.deepEqual(
+    actual,
+    [2, 3, 4]
   )
 })

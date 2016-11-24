@@ -62,6 +62,14 @@ export const map =
       : copyPaintingFromOriginToTarget(children, mappedChildren)
   }
 
+const isMappable = composition => composition && isFunction(composition.map)
+export const mapComposed =
+  (children : ChildrenArray | any[], mapper : (item: any, index: number) => any = identity, context : ?ComponentMountingContext) : any =>
+    contextualCompose(asChildren(children), context)
+      .then(composedChildren => mapper && isMappable(composedChildren)
+        ? composedChildren.map(mapper)
+        : composedChildren)
+
 export const forEach =
   (children : ChildrenArray | any[], mapper : (item: any, index: number) => any = identity) : void =>
     asArray(children).forEach(mapper)
@@ -156,7 +164,6 @@ export function spreadChildren (children : ?any[]) : ?ChildrenArray {
 
 // public API
 export default {
-  asChildren,
   map,
   mapToArray,
   forEach,

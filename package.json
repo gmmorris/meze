@@ -27,6 +27,6 @@
   "scripts": {
     "test": "lerna run build && lerna run test",
     "updated": "lerna updated",
-    "publish": "lerna publish"
+    "publish": "lerna test && lerna publish"
   }
 }

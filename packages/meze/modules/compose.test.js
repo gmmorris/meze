@@ -2,7 +2,6 @@ import test from 'ava'
 
 import Meze from './index'
 
-import { asChildren, mapToArray } from './Children'
 import compose from './compose'
 import { Assign } from './utilities/assign'
 import range from 'lodash.range'

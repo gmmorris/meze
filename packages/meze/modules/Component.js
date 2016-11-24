@@ -10,6 +10,7 @@ export type ComponentPropType = {
   children?: ChildrenArray,
   componentWillMount?: () => any,
   componentDidMount?: () => any,
+  componentFailedMount?: () => any,
   componentWillUnmount?: () => any
 }
 export type ComponentConstructorType = (props: ?ComponentPropType) => any

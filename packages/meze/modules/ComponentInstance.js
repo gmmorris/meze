@@ -37,7 +37,7 @@ function childrenAsArray (children : ?any) : any[] {
   return (children && isChildrenArray(children) ? children.toArray() : (Array.isArray(children) ? children : []))
 }
 
-const setContextOnChildrenProp = (props : ?Object, context : ?Object) => {
+const setContextOnChildrenProp = (props : ComponentPropType, context : ?Object) : ComponentPropType => {
   if (props && props.children && isChildrenArray(props.children)) {
     return { ...props, children: props.children.withContext(context) }
   }
@@ -61,8 +61,16 @@ function createOnComposed (componentWillUnmount) {
     : identity
 }
 
-function applyComposition (mountResolution, composition) {
-  return Object.defineProperty(mountResolution, 'composition', { value: composition })
+function attemptToMount (constructor: ComponentConstructorType, props : ComponentPropType, context : ?Object) {
+  let composition
+  try {
+    composition = constructor(props, context)
+    callIfFunction(props.componentDidMount, composition)
+  } catch (ex) {
+    composition = Promise.reject(ex)
+    callIfFunction(props.componentFailedMount, ex)
+  }
+  return composition
 }
 
 export default function (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType) : ComponentInstanceType {
@@ -74,18 +82,14 @@ export default function (constructor: ComponentConstructorType, displayName: str
     }
     paintConstruct(this)
 
-    const mounted = {
-      composition: undefined,
+    return {
+      composition: attemptToMount(
+        constructor,
+        setContextOnChildrenProp(props, context),
+        freezeIfPossible(context)
+      ),
       onComposed: createOnComposed(props.componentWillUnmount)
     }
-
-    try {
-      applyComposition(mounted, constructor(setContextOnChildrenProp(props, context), freezeIfPossible(context)))
-    } catch (ex) {
-      applyComposition(mounted, Promise.reject(ex))
-    }
-    callIfFunction(props.componentDidMount, mounted.composition)
-    return mounted
   }
 
   mount.instanceOf = (component) => isFunction(component)

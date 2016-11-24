@@ -73,3 +73,22 @@ test(`ComponentInstance triggers props.componentWillUnmount after it's result ha
       t.truthy(props.componentWillUnmount.calledWith(result))
     })
 })
+
+test(`ComponentInstance triggers props.componentFailedMount after it's result has rejected`, async t => {
+  t.plan(3)
+
+  const props = {
+    componentFailedMount: spy()
+  }
+
+  const thrownError = Error('Holly Moly')
+
+  const constructor = function () {
+    throw thrownError
+  }
+
+  const mount = new ComponentInstance(constructor, '', props)
+  t.throws(mount().composition)
+  t.truthy(props.componentFailedMount.calledOnce)
+  t.truthy(props.componentFailedMount.calledWith(thrownError))
+})

@@ -31,7 +31,7 @@ All of the following manipulation functions are completely stand alone and recei
 
 Both of the following components will behave exactly the same.
 ```js
-import Meze from 'meze
+import Meze from 'meze'
 const { mapToArray } = Meze.Children
 
 const Summarize = function (props) {
@@ -85,9 +85,9 @@ Meze.compose(
 The above composition will log the following object to console:
 ```json
 { 
-  contents: [
-    '{"firstname":"John","order":0}',
-    '{"lastname":"Snow","order":1}'
+  "contents": [
+    "{firstname:'John',order:0}",
+    "{lastname:'Snow',order:1}"
    ]
 }
 ```
@@ -120,9 +120,9 @@ compose(
 The above composition will log the following object to console:
 ```json
 { 
-  contents: [
-    '{"firstname":"John","order":0}',
-    '{"lastname":"Snow","order":1}'
+  "contents": [
+    "{firstname:'John',order:0}",
+    "{lastname:'Snow',order:1}"
    ]
 }
 ```
@@ -156,8 +156,8 @@ compose(
 The above composition will log the following object to console:
 ```json
 [
-  { name: 'John', NAME: 'JOHN' },
-  { name: 'Doe' }
+  { "name": "John", "NAME": "JOHN" },
+  { "name": "Doe" }
 ]
 ```
 
@@ -205,7 +205,7 @@ compose(
 ```
 The above composition will log the following object to console:
 ```json
-{ sum: 75 }
+{ "sum": 75 }
 ```
 #### mapComposed(children : Children | [], mapper : (item, index) => [], context) => []
 The mapComposed() function returns an creates a new array with the results of calling a provided function on the return value of the composition of each child.
@@ -239,5 +239,5 @@ compose(
 
 The above composition will log the following object to console:
 ```json
-{ only: "Some Valid Component" }
+{ "only": "Some Valid Component" }
 ```

@@ -181,14 +181,22 @@ I tried asking a couple of members of the React core team what they would call t
 ### The rules of Componentisation
 Considering the componentisation API as a generic design pattern I defined a set of 7 rules which any library must follow in order to provide the composability I strive for:
 1. Every composed object must be either a Component or at most a built in type
-2. There is one parent object
-3. There can be multiple child objects
-4. A parent object can receive its own arguments (rather than being limitted to receiving the return value of child objects)
-5. child objects can receive their own arguments
-6. A parent object can interact with a single child independantly and with all children as a group
-7. A component doesn’t have to “know” its children in order to interact with them
+1. There is one parent object
+1. There can be multiple child objects
+1. A parent object can receive its own arguments (rather than being limitted to receiving the return value of child objects)
+1. child objects can receive their own arguments
+1. A parent object can interact with a single child independantly and with all children as a group
+1. A component doesn’t have to “know” its children in order to interact with them
 
 I believe that any library that follows these rules could, in theory, provide the high level of composability required to build complex systems without compromising on low cohesiveness and efferent coupling.
+
+## Bottom Line
+The point of this article isn't to claim that React or Componentisation isn't a magical solution to all your problems.
+Componentisation is about providing a framework (as in a basic structure, not as in a *Javascript Framework*) which can facilitate the authorship of loosely coupled code, with less code smell.
+
+But componentisation alone cannot promise you these traits. In order to achieve these, you must first understand *what it is* about componentisation that provides them and then you need to maintain the dicipline of constantly making sure the code you author sticks to the framework and only deviates when absolutly neccesery.
+
+In a future article I'll present you with various design patterns we can follow with componentisation which can help you take advantage of the componentisation paradigm. But for the time being, I hope this article gives you enough food for thought to satisfy. 
 
 ### Learning more
 Following the React core team on Twitter and Github provided true insight into how this API is transforming the way developers are writing code since the library was introduced.

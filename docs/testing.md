@@ -30,7 +30,54 @@ When calling methods of the CompositionWrapper, keep in mind that they refer to 
 #### methods for all return values
 1. *isEmpty() => boolean* Returns whether or not the composition results in an *undefined* value.
 1. *find(selector : Component)* (selector: A Component or Component Instance) Searched for matching Components/Instances in the returned value
+```js
+test(`ChildrenAsArrayComponents should return an array of its composed children`, async t => {
+  const ChildrenAsArrayComponents = ({ children }) => Meze.Children.only(children)
+  const DumbComponent = ({ msg = 'hi' }) => msg
+  const UnusedComponent = () => 0
+
+  const res = await shallowCompose(
+    <ChildrenAsArrayComponents>
+      <DumbComponent msg="there" />
+    </ChildrenAsArrayComponents>
+  )
+
+  t.deepEqual(
+    res.find(DumbComponent)[0].props(),
+    { msg: 'there' }
+  )
+
+  t.deepEqual(
+    res.find(UnusedComponent).length,
+    0
+  )
+})
+```
 1. *is(componentType : Component)* (componentType: A Component or Component Instance) returns **true** if the returned component matches the Component/Instance
+```js
+test(`ChildrenAsOnlyComponent should return the only child component it's composed with`, async t => {
+  const ChildrenAsOnlyComponent = ({ children }) => Meze.Children.only(children)
+  const DumbComponent = ({ msg }) => msg
+
+  const res = await shallowCompose(
+    <ChildrenAsOnlyComponent>
+      <DumbComponent msg="haha" />
+    </ChildrenAsOnlyComponent>
+  )
+
+  t.truthy(
+    res.is(DumbComponent)
+  )
+
+  t.truthy(
+    res.not(<DumbComponent msg="hi" />)
+  )
+
+  t.truthy(
+    res.is(<DumbComponent msg="haha" />)
+  )
+})
+```
 1. *not(componentType : Component)* (componentType: A Component or Component Instance) returns **false** if the returned component matches the Component/Instance
 1. *contains(componentType : Component)* (componentType: A Component or Component Instance) Searched for a matching Component/Instance in the returned value and returns whether it found any
 

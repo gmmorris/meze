@@ -33,6 +33,7 @@ As a codebase would grow, requirements would changed and assumptions turned out 
 What we would initially envision as a well thought out and layered Trifle, turned out to be more a mixed up recipe, where layers don't quite make sense anymore, they end up seeping into the layers above and bellow them and something just doesn't taste quite right anymore. This in turn makes it harder to reuse code, to test it and to maintain it.
 
 ![](https://media.giphy.com/media/4OW5VatORVtkI/giphy.gif)
+
 *Rachel's Trifle? Good. **Code Trifle**? Bad.*
 
 In other words, our code would develop a smell... the unmistakable smell of a Custard, Jam, Mashed Potatoes and Meat dessert.

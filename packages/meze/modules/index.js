@@ -4,6 +4,7 @@ import Children from './Children'
 import PropTypes from './PropTypes'
 import { Assign } from './utilities/assign'
 import { componentise } from './utilities/componentise'
+import TestUtils from './TestUtils'
 import { Objectify, objectifyMiddleware } from './utilities/objectify'
 import compose from './compose'
 
@@ -23,7 +24,8 @@ const Meze = {
   createComponent,
   Children,
   utilities,
-  compose
+  compose,
+  TestUtils
 }
 
 export {
@@ -33,6 +35,7 @@ export {
   createComponent,
   Children,
   utilities,
-  compose
+  compose,
+  TestUtils
 }
 export default Meze

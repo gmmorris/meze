@@ -64,12 +64,12 @@ const pluginsBundledInRestify = {
 export const Plugins = Object
   .keys(pluginsBundledInRestify)
   .reduce((plugins : Object, fnName : string) : Object => {
-    const propsKeys = Array.isArray(plugins[fnName]) ? plugins[fnName] : false
+    const propsKeys = Array.isArray(pluginsBundledInRestify[fnName]) ? pluginsBundledInRestify[fnName] : false
     const componentName = capitalizeFirstLetter(fnName)
     plugins[componentName] =
-      Meze.Component(({ restify = restifyLibrary, ...props }) => {
+      Meze.Component(({ restify = restifyLibrary, server, ...props }) => {
         const pluginProps = propsKeys ? pick(props, ...propsKeys) : undefined
-        return <Use server={props.server} handler={restify[fnName](pluginProps)} />
+        return <Use server={server} handler={restify[fnName](pluginProps)} />
       }, componentName)
     return plugins
   }, { AcceptParser })

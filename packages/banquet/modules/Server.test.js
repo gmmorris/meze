@@ -1,7 +1,7 @@
 import test from 'ava'
-import { spy } from 'sinon'
+import { spy, stub } from 'sinon'
 
-import Meze from 'meze'
+import Meze, { TestUtils } from 'meze'
 import Server, { Plugins, Use, AcceptParser } from './Server'
 import { capitalizeFirstLetter } from './utilities'
 
@@ -154,8 +154,40 @@ Object.keys(pluginsBundledInRestify)
       t.truthy(Meze.isComponent(Plugins[expectedComponentName]))
     })
 
-    // test(`The ${expectedComponentName} component should call the restify.${pluginName} method and tell the server to use it's handler`, t => {
-    //   t.truthy(Meze.isComponent(Plugins[expectedComponentName]))
-    // })
+    test(`The ${expectedComponentName} component should call the restify.${pluginName} method and tell the server to use it's handler`, async t => {
+      const server = {}
+
+      const pluginReturnValue = {}
+      const mockRestify = {
+        [pluginName]: stub()
+      }
+
+      mockRestify[pluginName].onFirstCall().returns(pluginReturnValue)
+
+      const NO_PROPS = {}
+      const MethodComponent = Plugins[expectedComponentName]
+      const props = pluginsBundledInRestify[pluginName]
+        ? pluginsBundledInRestify[pluginName]
+          .reduce((pluginProps, propName, index) => {
+            pluginProps[propName] = index
+            return pluginProps
+          }, {})
+        : NO_PROPS
+
+      const pluginComposition = await TestUtils.shallowCompose(
+        <MethodComponent restify={mockRestify} server={server} {...props} />
+      )
+
+      const is = pluginComposition.is(
+        <Use server={server} handler={pluginReturnValue} />
+      )
+
+      t.truthy(
+        is
+      )
+
+      t.truthy(mockRestify[pluginName].calledOnce)
+      t.deepEqual(mockRestify[pluginName].firstCall.args[0], props !== NO_PROPS ? props : undefined)
+    })
   })
 

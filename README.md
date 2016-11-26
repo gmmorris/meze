@@ -55,7 +55,6 @@ Once you have both of these modules installed and configured you can start defin
 * [Manipulating Children](docs/manipulating_children.md)
 * [Component Lifecycle](docs/component_lifecycle.md)
 * [Banquet](docs/banquet.md)
-* [Advanced Composition](docs/advanced_composition.md)
 * [Testing](docs/testing.md)
 * [TODO](docs/todo.md)
 

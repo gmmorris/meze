@@ -56,7 +56,7 @@ Meze.compose(
 The above composition will log the following object to console:
 ```json
 { 
-  compositionsByCompositionOrder: [ 3, 2, 4, 1 ],
-  compositionsByCompletionOrder: [ 1, 2, 3, 4 ] 
+  "compositionsByCompositionOrder": [ 3, 2, 4, 1 ],
+  "compositionsByCompletionOrder": [ 1, 2, 3, 4 ] 
 }
 ```

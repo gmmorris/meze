@@ -16,7 +16,8 @@ Born out of a thought experiment, *Meze* provides the Component Composition API 
 
 ## Why
 The most obvious question in regards to Meze is - why would we want to add it to our stack?
-Meze was born out of a thought experiment, which like all experiments, starts with a Research Question, which was:
+Meze was born out of [a thought experiment](docs/componentization.md), in which we contemplated what componentisation was and what benefits it gave us.
+Out of that experiment a Research Question was born, which was:
 
 > How could the Component Composition we've grown to appreciate in building our UIs be used to build more declarative, less cohesively coupled code in our server side code as well.
 

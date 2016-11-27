@@ -1,4 +1,5 @@
 import isFunction from 'lodash.isfunction'
+import isPlainObject from 'lodash.isplainobject'
 import difference from 'lodash.difference'
 
 export const log = i => {
@@ -23,6 +24,9 @@ export const findTransformationWhere = (collection, candidate, predicate) => {
 }
 
 export function compareObjects (left, right) {
+  if (!(isPlainObject(left) && isPlainObject(right))) {
+    return false
+  }
   const leftKeys = Object.keys(left)
   const rightKeys = Object.keys(right)
   return leftKeys.length === rightKeys.length &&

@@ -2,38 +2,39 @@ import isPlainObject from 'lodash.isplainobject'
 import isArray from 'lodash.isarray'
 import isFunction from 'lodash.isfunction'
 import valuesOf from 'lodash.values'
+
+import createCompositionSelector from './CompositionSelector'
 import { isComponentInstance } from '../ComponentInstance'
 import { compareObjects, log } from '../utilities/helpers'
-
 import { isComponent } from '../Component'
+import { mapToArray, isChildrenArray } from '../Children'
 
 function queryComponentInstance (selector, componentInstance, context) {
-  if (isComponent(selector) || isFunction(selector)) {
-    return componentInstance.instanceOf(selector)
-      ? CompositionWrapper(componentInstance, context)
-      : undefined
+  const matches = []
+  if (selector.matches(componentInstance)) {
+    matches.push(CompositionWrapper(componentInstance, context))
   }
+  if (componentInstance.props && isChildrenArray(componentInstance.props.children)) {
+    matches.splice(matches.length, 0, ...queryArray(selector, mapToArray(componentInstance.props.children), context))
+  }
+  return matches
 }
 
 function queryObject (selector, object, context) {
-  if (isComponent(selector) || isFunction(selector)) {
-    return queryArray(selector, valuesOf(object), context)
-  }
+  return queryArray(selector, valuesOf(object), context)
 }
 
 function queryArray (selector, array, context) {
-  if (isComponent(selector) || isFunction(selector)) {
-    return array.reduce((matches, item) => {
-      if (isComponentInstance(item) && item.instanceOf(selector)) {
-        matches.push(CompositionWrapper(item, context))
-      } else if (isPlainObject(item)) {
-        return matches.concat(queryObject(selector, item, context))
-      } else if (isArray(item)) {
-        return matches.concat(queryArray(selector, item, context))
-      }
-      return matches
-    }, [])
-  }
+  return array.reduce((matches, item) => {
+    if (isComponentInstance(item)) {
+      matches.splice(matches.length, 0, ...queryComponentInstance(selector, item, context))
+    } else if (isPlainObject(item)) {
+      return matches.concat(queryObject(selector, item, context))
+    } else if (isArray(item)) {
+      return matches.concat(queryArray(selector, item, context))
+    }
+    return matches
+  }, [])
 }
 
 function asArray (result = []) {
@@ -42,13 +43,14 @@ function asArray (result = []) {
 
 function defineFind (composition, context) {
   return (selector) => {
+    const compositionSelector = createCompositionSelector(selector)
     let queryResult
     if (isComponentInstance(composition)) {
-      queryResult = queryComponentInstance(selector, composition, context)
+      queryResult = queryComponentInstance(compositionSelector, composition, context)
     } else if (isPlainObject(composition)) {
-      queryResult = queryObject(selector, composition, context)
+      queryResult = queryObject(compositionSelector, composition, context)
     } else if (isArray(composition)) {
-      queryResult = queryArray(selector, composition, context)
+      queryResult = queryArray(compositionSelector, composition, context)
     }
     return asArray(queryResult)
   }
@@ -60,12 +62,9 @@ function invalidType (method, type) {
 
 export default function CompositionWrapper (composition, context) {
   const find = defineFind(composition, context)
-  const is = componentType => {
-    if (isComponentInstance(componentType)) {
-      return isComponentInstance(composition) && composition.instanceOf(componentType.constructor) &&
-        compareObjects(composition.props, componentType.props)
-    } else if (isComponent(componentType) || isFunction(componentType)) {
-      return isComponentInstance(composition) && composition.instanceOf(componentType)
+  const is = selector => {
+    if (isComponentInstance(selector) || isComponent(selector) || isFunction(selector)) {
+      return createCompositionSelector(selector).matches(composition)
     }
     throw Error(invalidType('is', typeof componentType))
   }
@@ -83,12 +82,9 @@ export default function CompositionWrapper (composition, context) {
     find,
     is,
     not,
-    contains: componentType => {
-      if (isComponentInstance(componentType)) {
-        return find(componentType.constructor)
-          .find(child => compareObjects(child.props(), componentType.props)) !== undefined
-      } else if (isComponent(componentType) || isFunction(componentType)) {
-        return find(componentType).length > 0
+    contains: selector => {
+      if (isComponentInstance(selector) || isComponent(selector) || isFunction(selector)) {
+        return find(selector).length > 0
       }
       throw Error(invalidType('contains', typeof componentType))
     }

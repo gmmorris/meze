@@ -25,11 +25,84 @@ test(`CompositionWrapper.find supports searching for inner components`, async t 
   )
 })
 
-test(`shallowCompose.find supports searching for inner components within composed objects`, async t => {
-  const ChildrenAsObjectOfComponents = ({ children }) => Object.assign(
-    {},
-    ...Meze.Children.mapToArray(children, (child, index) => ({ [`child_${index}`]: child }))
+test(`CompositionWrapper.find can search for component instances`, async t => {
+  const ChildrenAsArrayComponents = ({ children }) => [
+    ...Meze.Children.mapToArray(children)
+  ]
+  const DumbComponent = ({ msg }) => msg
+  DumbComponent.defaultProps = {
+    msg: 'hi'
+  }
+
+  const res = await shallowCompose(
+    <ChildrenAsArrayComponents>
+      <ChildrenAsArrayComponents>
+        <DumbComponent />
+        <DumbComponent msg="there" />
+      </ChildrenAsArrayComponents>
+    </ChildrenAsArrayComponents>
   )
+
+  const findComponents = res.find(DumbComponent)
+
+  t.deepEqual(
+    findComponents.length,
+    2
+  )
+
+  t.deepEqual(
+    findComponents[0].props(),
+    { msg: 'hi' }
+  )
+
+  t.deepEqual(
+    findComponents[1].props(),
+    { msg: 'there' }
+  )
+})
+
+test(`CompositionWrapper.find can search for components within components`, async t => {
+  const ChildrenAsArrayComponents = ({ children }) => [
+    ...Meze.Children.mapToArray(children)
+  ]
+  const DumbComponent = ({ msg }) => msg
+  DumbComponent.defaultProps = {
+    msg: 'hi'
+  }
+
+  const res = await shallowCompose(
+    <ChildrenAsArrayComponents>
+      <ChildrenAsArrayComponents>
+        <DumbComponent />
+        <DumbComponent msg="there" />
+      </ChildrenAsArrayComponents>
+    </ChildrenAsArrayComponents>
+  )
+
+  const findComponents = res.find(<DumbComponent msg="there" />)
+
+  t.deepEqual(
+    findComponents.length,
+    1
+  )
+
+  t.deepEqual(
+    findComponents[0].props(),
+    { msg: 'there' }
+  )
+})
+
+test(`shallowCompose.find supports searching for inner components within composed objects`, async t => {
+  const ChildrenAsObjectOfComponents = ({ children }) => ({
+    inner: {
+      obj: {
+        children: Object.assign(
+          {},
+          ...Meze.Children.mapToArray(children, (child, index) => ({ [`child_${index}`]: child }))
+        )
+      }
+    }
+  })
   const DumbComponent = ({ msg = 'hi' }) => msg
 
   const res = await shallowCompose(

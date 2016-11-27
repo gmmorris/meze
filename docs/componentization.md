@@ -34,7 +34,7 @@ What we would initially envision as a well thought out and layered Trifle, turne
 
 ![](https://media.giphy.com/media/4OW5VatORVtkI/giphy.gif)
 
-*Rachel's Trifle? Good. **Code Trifle**? Bad.*
+*Rachel's Trifle? Good.* ***Code Trifle****? Bad.*
 
 In other words, our code would develop a smell... the unmistakable smell of a Custard, Jam, Mashed Potatoes and Meat dessert.
 

@@ -198,7 +198,7 @@ Considering the componentisation API as a generic design pattern I defined a set
 I believe that any library that follows these rules could, in theory, provide the high level of composability required to build complex systems without compromising on low cohesiveness and efferent coupling.
 
 ## Bottom Line
-The point of this article isn't to claim that React or Componentisation isn't a magical solution to all your problems.
+The point of this article isn't to claim that React or Componentisation is a magical solution to all your problems.
 Componentisation is about providing a framework (as in a basic structure, not as in a *Javascript Framework*) which can facilitate the authorship of loosely coupled code, with less code smell.
 
 But componentisation alone cannot promise you these traits. In order to achieve these, you must first understand *what it is* about componentisation that provides them and then you need to maintain the dicipline of constantly making sure the code you author sticks to the framework and only deviates when absolutly neccesery.

@@ -1,9 +1,6 @@
 # The magical quest for Componentisation
 
-Several months ago I gave a talk at one of our fortnightly **Unruly Tech Talks** about a topic that I had been mulling around in my head for several months prior.
-Triggered by my adoption of the library, I found the topic of React as an abstraction of software architecture to be highly intriguing.
-
-But we'll get to *React* in a moment. First I'd like to ask you an existential question.
+I would like, if I may, to ask you an existential question.
 
 **What is the core of our job as developers today?**
 
@@ -14,12 +11,12 @@ But rather, what our job probably **is**, is to *take an existing abstraction an
 What we're still trying to figure out is how best to do that, right? For me, that quest began with modularisation. 
 
 ## Modularisation
-Until I began using *React* a couple of years ago, I spent several years evangelising *Backbone* as a solution to the problems my clients and employers had been facing when tackling their Front End architectures. As a relatively early adopter of Backbone, in early 2011, I found the move from a messy soup of global Javascript objects with complex prototypical hierarchies, to a structured MVC (or rather, MVP) pattern an extremely pleasing step forward.
+Having been focussed on the Front End over the past decade, I spent several years evangelising *Backbone* as a solution to tackling the challenge of Front End architecture. As a relatively early adopter of Backbone, in early 2011, I found the move from a messy soup of global Javascript objects with complex prototypical hierarchies, to a structured MVC (or rather, MVP) pattern an extremely pleasing step forward.
 
 Backbone allowed us to focus less one how the pieces of our code fit together, and more on what they actually did. This was made possible by abstracting away a lot of the boilerplate and defining a clear API for each piece of our system.
 This might seem obvious in hindsight, but at the time this felt groundbreaking, mostly because we were so used to our Javascript existing as *a pile of code held together by duct tape* that we accepted our fate and found it hard to see the potential for a better option.
 
-But the key *unique selling point* of Backbone, beyond removing boilerplate and an enforced API, was the fact that it lay the groundwork for proper **modularisation** of our Javascript codebases.
+But the key *unique selling point* of Backbone, beyond removing boilerplate and an enforced API, was laying the groundwork for proper **modularisation** of our Javascript codebases.
 
 Modules are a corner stone of good code structuring, as they encourage us to break our code down into individual logical pieces. This makes it easier for us to write maintainable code that's easier to reason about, to test and to reuse.
 
@@ -50,7 +47,8 @@ We often try to manage state in many different places and try to reconcile this 
 Instructions may be easy to follow, but not always easy to understand. They usually describe *what* is done, rather than *why* and *how*. This means that the developers are left to figure out the *why* themselves. We've all found ourselves doing this, often referring to it as *reverse engineering our own code* and we often end up misinterpreting the *why*.
 
 **Complex dependency chains reducing our ability to make atomic pieces of code**
-We often find it hard to make truly atomic pieces of code as they have an inherent *need* for a piece of data or operation that is the concern of another piece of the code. This dependency will always exist in a complex system, but in the absence of a clear API for bridging these dependencies without creating a cohesive coupling between the two pieces, this can lead to dependency chains which are hard to reconcile.
+We often find it hard to make truly atomic pieces of code as they have an inherent *need* for a piece of data or operation that is the concern of another piece of the code.
+Dependency will always exist in a complex systems, but in lieu of unified way of decoupling the dependency from its definition, you end up with strong cohesion between multiple components. This makes it extremly hard to test one component without having to build complex mocking mechanisms which are often coupled to the dependency's implementation, leading to frequent breakage and difficult maintainance as dependencies change over time.
 
 **Trying to predict the future**
 By far the biggest culprit for the dank code smell is a habit developers have of trying to predict how their code will be used instead of focusing on what is needed. This can lead to many problematic implementations, but most of all it leads to over engineering of solutions, which often leads to code that is very hard to *delete* later.
@@ -58,7 +56,7 @@ I'm a firm believer that good code should be easy to delete and over engineering
 
 ### Searching for answers
 Having boiled down my problem to its root causes, the next step would be to figure out what I could do to reduce their impact on how I write my code.
-When looking at the aforementioned points, I believed they could be reduced to one core issue, which is that my code would often end up with **High Efferent Coupling & Fragmented State**.
+I believed these causes could be reduced to one core issue, which is that my code would often end up with **High Efferent Coupling & Fragmented State**.
 
 Which begged the question:
 ***How on earth do we reduce our efferent coupling & fragmented State?***
@@ -118,7 +116,8 @@ React is often toted around as highly declarative, composable and encapsulated. 
 I guess the rest of the Javascript community is much more practical than I am, because I found myself much more concerned with *why* it worked than anyone else I talked to.
 
 ### From Function to Component
-Analysing React, what I realised was that a direct parallel can be made between the API of Functional Composition and the React API. 
+It wasn't until I started analysing the React API that I got my "AHA!" moment.
+What I realised was that a direct parallel can be made between the API of Functional Composition and the React API. 
 
 Lets break down the API of Functional Composition and label the different building blocks:
 ```javascript
@@ -199,13 +198,21 @@ I believe that any library that follows these rules could, in theory, provide th
 
 ## Bottom Line
 The point of this article isn't to claim that React or Componentisation is a magical solution to all your problems.
-Componentisation is about providing a framework (as in a basic structure, not as in a *Javascript Framework*) which can facilitate the authorship of loosely coupled code, with less code smell.
+Rather, that Componentisation is about providing a framework (as in a basic structure, not as in a *Javascript Framework*) which can facilitate the authorship of loosely coupled code, with less code smell.
 
-But componentisation alone cannot promise you these traits. In order to achieve these, you must first understand *what it is* about componentisation that provides them and then you need to maintain the dicipline of constantly making sure the code you author sticks to the framework and only deviates when absolutly neccesery.
+But it is also important to keep in mind that componentisation alone cannot promise you these traits. In order to achieve these, you must first understand *what it is* about componentisation that provides them and then you need to maintain the dicipline of constantly making sure the code you author sticks to the framework and only deviates when absolutly neccesery.
 
-In a future article I'll present you with various design patterns we can follow with componentisation which can help you take advantage of the componentisation paradigm. But for the time being, I hope this article gives you enough food for thought to satisfy. 
+I don't know about you, but I find the fact that the Componentisation API is becoming so ubiquitous thanks to React, a really exciting point. It means we can start using this approach in our code, not as an *"awesome in-house library that new developers need to learn"* but rather a well accepted approach to modeling code, that developers coming from the React ecosystem already know how to reason about. It means we can start **thinking in components** throughout our codebase, not just the UI. 
+
+And so this has been my quest for the secret of componentisation. When I set out I had no idea what I might find, if at all, and there were points where I almost gave up on the search.
+And like all good quests, this one leads to another one, a sequal if you will, to find a way to start using componentisation in more aspects of my work, not just building UIs, to which we'll come in a future article I'm working on.
+
+In addition I'm putting together an article in which I will present you with various design patterns we can follow with componentisation which can help you take advantage of the componentisation paradigm.
+
+So there's plenty to look forward to! 
 
 ### Learning more
+
 Following the React core team on Twitter and Github provided true insight into how this API is transforming the way developers are writing code since the library was introduced.
 
 For example, the following thread by Sebastian Markbåge caused my brain to turn inside out at one point.

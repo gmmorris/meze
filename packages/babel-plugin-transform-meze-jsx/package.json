@@ -24,12 +24,13 @@
     "babel-preset-es2016": "^6.11.3",
     "babel-preset-stage-0": "^6.5.0",
     "fs-promise": "^0.5.0",
+    "jest": "^17.0.3",
     "path": "^0.12.7",
     "tap-summary": "^3.0.1",
     "tape": "^4.6.0"
   },
   "scripts": {
-    "test": "tape ./test/index.js | tap-summary",
+    "test": "tape ./modules/__tests__/index.js | tap-summary",
     "build": "babel modules --out-dir lib",
     "prepublish": "npm run build"
   }

@@ -1,7 +1,7 @@
 var fs = require('fs-promise')
 
 var babel = require('babel-core')
-var transform = require('../lib/transform').default
+var transform = require('../../lib/transform').default
 
 var test = require('tape')
 

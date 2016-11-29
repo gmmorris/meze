@@ -1,6 +1,8 @@
 import test from 'ava'
 import { spy } from 'sinon'
 import ComponentInstance from './ComponentInstance'
+import PropTypes from './PropTypes'
+import warning from './internals/warning'
 
 // ComponentInstance tests
 test('Component Instances cant be constructed twice', t => {
@@ -91,4 +93,29 @@ test(`ComponentInstance triggers props.componentFailedMount after it's result ha
   t.throws(mount().composition)
   t.truthy(props.componentFailedMount.calledOnce)
   t.truthy(props.componentFailedMount.calledWith(thrownError))
+})
+
+test(`ComponentInstance validates props of a component on mounting`, async t => {
+  const spiedValidate = spy()
+
+  const Partial = function () {}
+  Partial.propTypes = {
+    numProp: PropTypes.number,
+    enumProp: PropTypes.oneOf(['News', 'Sports'])
+  }
+
+  const props = {
+    numProp: 42,
+    enumProp: 'News'
+  }
+
+  const mount = new ComponentInstance(Partial, 'PartialName', props, spiedValidate)
+
+  mount()
+
+  t.truthy(spiedValidate.calledOnce)
+  t.deepEqual(spiedValidate.args[0][0], props)
+  t.deepEqual(spiedValidate.args[0][1], Partial.propTypes)
+  t.deepEqual(spiedValidate.args[0][2], 'PartialName')
+  t.deepEqual(spiedValidate.args[0][3], 'prop')
 })

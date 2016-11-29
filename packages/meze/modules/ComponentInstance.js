@@ -44,8 +44,11 @@ const setContextOnChildrenProp = (props : ComponentPropType, context : ?Object) 
   return props
 }
 
-function validatePropTypes (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType) {
-  const propTypes = isPlainObject(constructor.propTypes) ? constructor.propTypes : false
+function getPropTypes (constructor: ComponentConstructorType) : ?Object {
+  return isPlainObject(constructor.propTypes) ? constructor.propTypes : null
+}
+
+function validatePropTypes (props: ComponentPropType, propTypes: ?Object, displayName: string, validate : Function) {
   if (!isempty(props) || propTypes) {
     validate(props, propTypes || {}, displayName, PropTypeLocationNames.prop, warning)
   }
@@ -73,9 +76,10 @@ function attemptToMount (constructor: ComponentConstructorType, props : Componen
   return composition
 }
 
-export default function (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType) : ComponentInstanceType {
+function instanciate (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType, validateTypes : Function = validate)
+ : ComponentInstanceType {
   const mount = (context : ComponentMountingContext = {}) => {
-    validatePropTypes(constructor, displayName, props)
+    validatePropTypes(props, getPropTypes(constructor), displayName, validateTypes)
     callIfFunction(props.componentWillMount)
     if (paintedConstruct(this)) {
       throw Error(`A ${displayName} Component Instance cannot be mounted twice`)
@@ -110,3 +114,5 @@ export default function (constructor: ComponentConstructorType, displayName: str
 
   return paint(mount)
 }
+
+export default instanciate 

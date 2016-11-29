@@ -11,12 +11,12 @@ But rather, what our job probably **is**, is to *take an existing abstraction an
 What we're still trying to figure out is how best to do that, right? For me, that quest began with modularisation. 
 
 ## Modularisation
-Having been focussed on the Front End over the past decade, I spent several years evangelising *Backbone* as a solution to tackling the challenge of Front End architecture. As a relatively early adopter of Backbone, in early 2011, I found the move from a messy soup of global Javascript objects with complex prototypical hierarchies, to a structured MVC (or rather, MVP) pattern an extremely pleasing step forward.
+Predominantly focussed on the Front End over the past decade, I spent several years evangelising *Backbone* as a solution to tackling the challenge of Front End architecture. As a relatively early adopter of Backbone, in early 2011, I found the move from a messy soup of global Javascript objects with complex prototypical hierarchies, to a structured MVC (or rather, MVP) pattern an extremely pleasing step forward.
 
-Backbone allowed us to focus less one how the pieces of our code fit together, and more on what they actually did. This was made possible by abstracting away a lot of the boilerplate and defining a clear API for each piece of our system.
+Backbone allowed us to focus less on how the pieces of our code fit together, and more on what they actually did. This was made possible by abstracting away a lot of the boilerplate and defining a clear API for each piece of our system.
 This might seem obvious in hindsight, but at the time this felt groundbreaking, mostly because we were so used to our Javascript existing as *a pile of code held together by duct tape* that we accepted our fate and found it hard to see the potential for a better option.
 
-But the key *unique selling point* of Backbone, beyond removing boilerplate and an enforced API, was laying the groundwork for proper **modularisation** of our Javascript codebases.
+But the key *unique selling point* of Backbone, beyond removing boilerplate and providing an enforced API, was laying the groundwork for proper **modularisation** of our Javascript codebases.
 
 Modules are a corner stone of good code structuring, as they encourage us to break our code down into individual logical pieces. This makes it easier for us to write maintainable code that's easier to reason about, to test and to reuse.
 
@@ -25,7 +25,7 @@ Backbone, though, as it turned out, was not the be-all and end-all solution to o
 
 We could definitely leverage the benefits of MVC to achieve several things, such as breaking down our architecture into multitiered Object Oriented designs, to strive for separation of concerns by layering our modules and to design inheritance chains meant to improve code reuse and reduce complexity. But it seemed we would always end up hitting the same inevitable wall.
 
-As a codebase would grow, requirements would changed and assumptions turned out to be incorrect, we often found that our abstractions began to fail us.
+As a codebase would grow, requirements would change and assumptions would turn out to be incorrect, we often found that our abstractions began to fail us.
 
 What we would initially envision as a well thought out and layered Trifle, turned out to be more a mixed up recipe, where layers don't quite make sense anymore, they end up seeping into the layers above and bellow them and something just doesn't taste quite right anymore. This in turn makes it harder to reuse code, to test it and to maintain it.
 
@@ -48,7 +48,7 @@ Instructions may be easy to follow, but not always easy to understand. They usua
 
 **Complex dependency chains reducing our ability to make atomic pieces of code**
 We often find it hard to make truly atomic pieces of code as they have an inherent *need* for a piece of data or operation that is the concern of another piece of the code.
-Dependency will always exist in a complex systems, but in lieu of unified way of decoupling the dependency from its definition, you end up with strong cohesion between multiple components. This makes it extremly hard to test one component without having to build complex mocking mechanisms which are often coupled to the dependency's implementation, leading to frequent breakage and difficult maintainance as dependencies change over time.
+Dependency will always exist in a complex systems, but in lieu of a unified way of decoupling the dependency from its definition, you end up with strong cohesion between multiple components. This makes it extremely hard to test one component without having to build complex mocking mechanisms. These mechanism will often end up coupled to the dependency’s implementation, leading to frequent breakage and difficult maintenance as dependencies change over time.
 
 **Trying to predict the future**
 By far the biggest culprit for the dank code smell is a habit developers have of trying to predict how their code will be used instead of focusing on what is needed. This can lead to many problematic implementations, but most of all it leads to over engineering of solutions, which often leads to code that is very hard to *delete* later.
@@ -61,7 +61,7 @@ I believed these causes could be reduced to one core issue, which is that my cod
 Which begged the question:
 ***How on earth do we reduce our efferent coupling & fragmented State?***
 
-Searching high and low for an answer I hit the internet, the books, the tech talks, my dad (I didn't literally hit my dad, I just asked his opinion, as he's been writing code since the 70s, presumably with hippie hair and a spliff) and found that there are infact many possible answers to this question.
+Searching high and low for an answer I hit the internet, the books, the tech talks, my dad (I didn’t literally hit my dad, I just asked his opinion, as he’s been writing code since the 70s, presumably sporting glorious hippie hair and a spliff) and found that there are in fact many possible answers to this question.
 
 I won't enumerate all of them, but one answer would show up repeatedly, and that was a quote which I'd heard many times before:
 
@@ -71,13 +71,13 @@ I won't enumerate all of them, but one answer would show up repeatedly, and that
 
 In fact, this quote has been repeated so many times by so many people, I've began to find it *eye-roll inducing*.
 
-The reason I found this quote slightly annoying was that the more I discussed this topic with experienced developers, the more it would reminde me of another quote.
+The reason I found this quote slightly annoying was that the more I discussed this topic with experienced developers, the more it would remind me of another quote.
 
 ![](Screen Shot 2016-11-25 at 15.50.26.png)
 
 While it seemed many developers appreciated the wisdom in this advice, reflected in the fact that it has been featured in innumerable talks and blog posts, very few could actually show me *how to achieve this*.
 
-*Composability* is not an inherently clear idea, and while many developers seems perfectly capable of coding up an example in an IDE, they never seemed to actually follow through when it came to their codebase. And most annoying, they knew it, but couldn't quite translate this theory into practicality once they had real problems they needed to solve.
+*Composability* is not an inherently clear idea, and while many developers seems perfectly capable of coding up an example in an IDE, they never seemed to actually follow through when it came to their codebase. And most annoying was the fact that they were aware of this discrepency, but simply couldn’t quite translate the theory into practice once they had real problems they needed to solve.
 
 ### What is Composition?
 So to figure out how to achieve *composability*, we first need to understand what *composition* actually means.
@@ -190,7 +190,7 @@ Considering the componentisation API as a generic design pattern I defined a set
 
 1. child objects can receive their own arguments
 
-1. A parent object can interact with a single child independantly and with all children as a group
+1. A parent object can interact with a single child independently and with all children as a group
 
 1. A component doesn’t have to “know” its children in order to interact with them
 

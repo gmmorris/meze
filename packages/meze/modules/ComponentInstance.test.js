@@ -113,9 +113,42 @@ test(`ComponentInstance validates props of a component on mounting`, async t => 
 
   mount()
 
-  t.truthy(spiedValidate.calledOnce)
-  t.deepEqual(spiedValidate.args[0][0], props)
-  t.deepEqual(spiedValidate.args[0][1], Partial.propTypes)
-  t.deepEqual(spiedValidate.args[0][2], 'PartialName')
-  t.deepEqual(spiedValidate.args[0][3], 'prop')
+  const propValidationCall =
+    spiedValidate.args
+      .filter(args => args[3] === 'prop')
+
+  t.deepEqual(propValidationCall.length, 1)
+  t.deepEqual(propValidationCall[0][0], props)
+  t.deepEqual(propValidationCall[0][1], Partial.propTypes)
+  t.deepEqual(propValidationCall[0][2], 'PartialName')
+  t.deepEqual(propValidationCall[0][3], 'prop')
+})
+
+test(`ComponentInstance validates context of a component on mounting`, async t => {
+  const spiedValidate = spy()
+
+  const Partial = function () {}
+  Partial.contextTypes = {
+    numProp: PropTypes.number,
+    enumProp: PropTypes.oneOf(['News', 'Sports'])
+  }
+
+  const context = {
+    numProp: 42,
+    enumProp: 'News'
+  }
+
+  const mount = new ComponentInstance(Partial, 'PartialName', {}, spiedValidate)
+
+  mount(context)
+
+  const contextValidationCall =
+    spiedValidate.args
+      .filter(args => args[3] === 'context')
+
+  t.deepEqual(contextValidationCall.length, 1)
+  t.deepEqual(contextValidationCall[0][0], context)
+  t.deepEqual(contextValidationCall[0][1], Partial.contextTypes)
+  t.deepEqual(contextValidationCall[0][2], 'PartialName')
+  t.deepEqual(contextValidationCall[0][3], 'context')
 })

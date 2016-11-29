@@ -9,7 +9,7 @@ import createComponent from './createComponent'
 import { isComponent } from './Component'
 import { isChildrenArray } from './Children'
 import warning from './internals/warning'
-import { validate, PropTypeLocationNames } from './PropTypes'
+import { validate, PropTypeLocationNames, TypeLocation } from './PropTypes'
 
 import type { ComponentConstructorType, ComponentPropType } from './Component'
 import type { componentCreatorType } from './createComponent'
@@ -44,13 +44,20 @@ const setContextOnChildrenProp = (props : ComponentPropType, context : ?Object) 
   return props
 }
 
-function getPropTypes (constructor: ComponentConstructorType) : ?Object {
-  return isPlainObject(constructor.propTypes) ? constructor.propTypes : null
+
+function getTypesFromProperty (constructor: ComponentConstructorType, typeLocation) : ?Object {
+  return isPlainObject(constructor[typeLocation]) ? constructor[typeLocation] : null
 }
 
 function validatePropTypes (props: ComponentPropType, propTypes: ?Object, displayName: string, validate : Function) {
   if (!isempty(props) || propTypes) {
     validate(props, propTypes || {}, displayName, PropTypeLocationNames.prop, warning)
+  }
+}
+
+function validateContextTypes (context: ComponentMountingContext, contextTypes: ?Object, displayName: string, validate : Function) {
+  if (!isempty(context) || contextTypes) {
+    validate(context, contextTypes || {}, displayName, PropTypeLocationNames.context, warning)
   }
 }
 
@@ -79,7 +86,9 @@ function attemptToMount (constructor: ComponentConstructorType, props : Componen
 function instanciate (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType, validateTypes : Function = validate)
  : ComponentInstanceType {
   const mount = (context : ComponentMountingContext = {}) => {
-    validatePropTypes(props, getPropTypes(constructor), displayName, validateTypes)
+    validatePropTypes(props, getTypesFromProperty(constructor, TypeLocation.prop), displayName, validateTypes)
+    validateContextTypes(context, getTypesFromProperty(constructor, TypeLocation.context), displayName, validateTypes)
+
     callIfFunction(props.componentWillMount)
     if (paintedConstruct(this)) {
       throw Error(`A ${displayName} Component Instance cannot be mounted twice`)
@@ -115,4 +124,4 @@ function instanciate (constructor: ComponentConstructorType, displayName: string
   return paint(mount)
 }
 
-export default instanciate 
+export default instanciate

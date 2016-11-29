@@ -31,7 +31,7 @@
   },
   "scripts": {
     "test": "tape ./modules/__tests__/index.js | tap-summary",
-    "build": "babel ./modules/transform.js --out-dir lib",
+    "build": "babel ./modules/transform.js --out-file ./lib/transform.js",
     "prepublish": "npm run build"
   }
 }

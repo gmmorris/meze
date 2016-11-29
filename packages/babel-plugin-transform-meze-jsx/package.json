@@ -31,7 +31,7 @@
   },
   "scripts": {
     "test": "tape ./modules/__tests__/index.js | tap-summary",
-    "build": "abel modules --out-dir lib --ignore __tests__",
+    "build": "babel modules --out-dir lib --ignore __tests__",
     "prepublish": "npm run build"
   }
 }

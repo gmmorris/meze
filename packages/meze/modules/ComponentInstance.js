@@ -9,7 +9,7 @@ import createComponent from './createComponent'
 import { isComponent } from './Component'
 import { isChildrenArray } from './Children'
 import warning from './internals/warning'
-import { validate, PropTypeLocationNames, TypeLocation } from './PropTypes'
+import { validate, shouldValdiate, PropTypeLocationNames, TypeLocation } from './types/PropTypes'
 
 import type { ComponentConstructorType, ComponentPropType } from './Component'
 import type { componentCreatorType } from './createComponent'
@@ -49,23 +49,36 @@ function getTypesFromProperty (constructor: ComponentConstructorType, typeLocati
   return isPlainObject(constructor[typeLocation]) ? constructor[typeLocation] : null
 }
 
-function validatePropTypes (props: ComponentPropType, propTypes: ?Object, displayName: string, validate : Function) {
+function getConstructorCompositionTypes (constructor: ComponentConstructorType) : ?Function {
+  return isFunction(constructor[TypeLocation.composition])
+    ? constructor[TypeLocation.composition]
+    : null
+}
+
+function createCompositionTypeValidator (
+  compositionType : ?Function, propTypeLocation : string, displayName : string, validate : Function) : ?Function {
+  if (compositionType) {
+    return composition => {
+      return validate({ composition }, { composition: compositionType }, displayName, propTypeLocation, warning)
+    }
+  }
+  return null
+}
+
+type PropTypeValidatableObject = ComponentPropType | ComponentMountingContext
+function validatePropTypes (
+  props : PropTypeValidatableObject, propTypes : ?Object, propTypeLocation : string, displayName : string, validate : Function) {
   if (!isempty(props) || propTypes) {
-    validate(props, propTypes || {}, displayName, PropTypeLocationNames.prop, warning)
+    validate(props, propTypes || {}, displayName, propTypeLocation, warning)
   }
 }
 
-function validateContextTypes (context: ComponentMountingContext, contextTypes: ?Object, displayName: string, validate : Function) {
-  if (!isempty(context) || contextTypes) {
-    validate(context, contextTypes || {}, displayName, PropTypeLocationNames.context, warning)
-  }
-}
-
-function createOnComposed (componentWillUnmount) {
-  return isFunction(componentWillUnmount)
+function createOnComposed (componentWillUnmount : ?Function, compositionType : ?Function) {
+  return (isFunction(componentWillUnmount) || isFunction(compositionType))
     ? promisedComposition => promisedComposition
       .then(composition => {
         callIfFunction(componentWillUnmount, composition)
+        callIfFunction(compositionType, composition)
         return composition
       })
     : identity
@@ -86,8 +99,10 @@ function attemptToMount (constructor: ComponentConstructorType, props : Componen
 function instanciate (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType, validateTypes : Function = validate)
  : ComponentInstanceType {
   const mount = (context : ComponentMountingContext = {}) => {
-    validatePropTypes(props, getTypesFromProperty(constructor, TypeLocation.prop), displayName, validateTypes)
-    validateContextTypes(context, getTypesFromProperty(constructor, TypeLocation.context), displayName, validateTypes)
+    if (shouldValdiate()) {
+      validatePropTypes(props, getTypesFromProperty(constructor, TypeLocation.prop), PropTypeLocationNames.prop, displayName, validateTypes)
+      validatePropTypes(context, getTypesFromProperty(constructor, TypeLocation.context), PropTypeLocationNames.context, displayName, validateTypes)
+    }
 
     callIfFunction(props.componentWillMount)
     if (paintedConstruct(this)) {
@@ -101,7 +116,14 @@ function instanciate (constructor: ComponentConstructorType, displayName: string
         setContextOnChildrenProp(props, context),
         freezeIfPossible(context)
       ),
-      onComposed: createOnComposed(props.componentWillUnmount)
+      onComposed: createOnComposed(
+        props.componentWillUnmount,
+        shouldValdiate()
+          ? createCompositionTypeValidator(
+              getConstructorCompositionTypes(constructor),
+              PropTypeLocationNames.prop, displayName, validateTypes)
+          : null
+      )
     }
   }
 

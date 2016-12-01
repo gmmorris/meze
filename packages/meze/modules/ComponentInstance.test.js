@@ -1,7 +1,10 @@
 import test from 'ava'
-import { spy } from 'sinon'
+import { spy, mock } from 'sinon'
+
+import Meze from './index'
+
 import ComponentInstance from './ComponentInstance'
-import PropTypes from './PropTypes'
+import PropTypes from './types/PropTypes'
 import warning from './internals/warning'
 
 // ComponentInstance tests
@@ -152,3 +155,47 @@ test(`ComponentInstance validates context of a component on mounting`, async t =
   t.deepEqual(contextValidationCall[0][2], 'PartialName')
   t.deepEqual(contextValidationCall[0][3], 'context')
 })
+
+test(`ComponentInstance validates composition of a component after mounting`, async t => {
+  const spiedValidate = spy()
+
+  const Partial = function () {
+    return 1
+  }
+  Partial.compositionTypes = PropTypes.number
+
+  const mount = new ComponentInstance(Partial, 'PartialName', {}, spiedValidate)
+
+  const { onComposed, composition } = mount()
+
+  await onComposed(Promise.resolve(composition))
+    .then(composition => {
+      const contextValidationCall =
+        spiedValidate.args
+          .filter(args => args[3] === 'prop')
+
+      t.deepEqual(contextValidationCall.length, 1)
+      t.deepEqual(contextValidationCall[0][0], { composition })
+      t.deepEqual(contextValidationCall[0][1], { composition: PropTypes.number })
+      t.deepEqual(contextValidationCall[0][2], 'PartialName')
+      t.deepEqual(contextValidationCall[0][3], 'prop')
+    })
+})
+
+
+test('ComponentInstance composition validations support a single primitive result', async t => {
+  var consoleWarn = mock(console)
+  consoleWarn.expects('warn').once()
+
+  const Partial = function (props) {
+    return ''
+  }
+
+  Partial.compositionTypes = PropTypes.number
+
+  await Meze.compose(<Partial />)
+
+  consoleWarn.verify()
+  consoleWarn.restore()
+})
+

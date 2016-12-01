@@ -2,8 +2,8 @@ import test from 'ava'
 import { mock } from 'sinon'
 import intersection from 'lodash.intersection'
 
-import Meze from './index'
-import compose from './compose'
+import Meze from '../index'
+import compose from '../compose'
 import PropTypes from './PropTypes'
 
 test('PropTypes exposes only types which are relevant to data', t => {

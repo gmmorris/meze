@@ -2,6 +2,7 @@
 import isFunction from 'lodash.isfunction'
 import isPlainObject from 'lodash.isplainobject'
 import isempty from 'lodash.isempty'
+import composeFunctions from 'lodash.flow'
 import symbolPainter from './internals/symbolPainter'
 import { callIfFunction, freezeIfPossible, identity, log } from './utilities/helpers'
 import { isNonEmptyArray } from './utilities/validations'
@@ -9,7 +10,7 @@ import createComponent from './createComponent'
 import { isComponent } from './Component'
 import { isChildrenArray } from './Children'
 import warning from './internals/warning'
-import { validate, shouldValdiate, PropTypeLocationNames, TypeLocation } from './types/PropTypes'
+import { validate, removeUndefinedPropTypeLocationMessage, shouldValdiate, PropTypeLocationNames, TypeLocation } from './types/PropTypes'
 
 import type { ComponentConstructorType, ComponentPropType } from './Component'
 import type { componentCreatorType } from './createComponent'
@@ -56,10 +57,14 @@ function getConstructorCompositionTypes (constructor: ComponentConstructorType) 
 }
 
 function createCompositionTypeValidator (
-  compositionType : ?Function, propTypeLocation : string, displayName : string, validate : Function) : ?Function {
+  compositionType : ?Function, propTypeLocation : string, displayName : string,
+  validate : Function, warn : Function) : ?Function {
   if (compositionType) {
     return composition => {
-      return validate({ composition }, { composition: compositionType }, displayName, propTypeLocation, warning)
+      return validate(
+        { composition },
+        { composition: compositionType },
+        displayName, propTypeLocation, composeFunctions(removeUndefinedPropTypeLocationMessage, warn))
     }
   }
   return null
@@ -73,12 +78,12 @@ function validatePropTypes (
   }
 }
 
-function createOnComposed (componentWillUnmount : ?Function, compositionType : ?Function) {
-  return (isFunction(componentWillUnmount) || isFunction(compositionType))
+function createOnComposed (componentWillUnmount : ?Function, validateCompositionType : ?Function) {
+  return (isFunction(componentWillUnmount) || isFunction(validateCompositionType))
     ? promisedComposition => promisedComposition
       .then(composition => {
         callIfFunction(componentWillUnmount, composition)
-        callIfFunction(compositionType, composition)
+        callIfFunction(validateCompositionType, composition)
         return composition
       })
     : identity
@@ -96,7 +101,8 @@ function attemptToMount (constructor: ComponentConstructorType, props : Componen
   return composition
 }
 
-function instanciate (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType, validateTypes : Function = validate)
+function instanciate (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType,
+  validateTypes : Function = validate, warn : Function = warning)
  : ComponentInstanceType {
   const mount = (context : ComponentMountingContext = {}) => {
     if (shouldValdiate()) {
@@ -121,7 +127,7 @@ function instanciate (constructor: ComponentConstructorType, displayName: string
         shouldValdiate()
           ? createCompositionTypeValidator(
               getConstructorCompositionTypes(constructor),
-              PropTypeLocationNames.prop, displayName, validateTypes)
+              PropTypeLocationNames.composition, displayName, validateTypes, warn)
           : null
       )
     }

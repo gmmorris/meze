@@ -1,11 +1,11 @@
 import test from 'ava'
-import { spy, mock } from 'sinon'
+import { spy, stub, mock } from 'sinon'
 
 import Meze from './index'
 
 import ComponentInstance from './ComponentInstance'
 import PropTypes from './types/PropTypes'
-import warning from './internals/warning'
+import { validate } from './types/PropTypes'
 
 // ComponentInstance tests
 test('Component Instances cant be constructed twice', t => {
@@ -172,20 +172,19 @@ test(`ComponentInstance validates composition of a component after mounting`, as
     .then(composition => {
       const contextValidationCall =
         spiedValidate.args
-          .filter(args => args[3] === 'prop')
+          .filter(args => args[3] === 'composition')
 
       t.deepEqual(contextValidationCall.length, 1)
       t.deepEqual(contextValidationCall[0][0], { composition })
       t.deepEqual(contextValidationCall[0][1], { composition: PropTypes.number })
       t.deepEqual(contextValidationCall[0][2], 'PartialName')
-      t.deepEqual(contextValidationCall[0][3], 'prop')
+      t.deepEqual(contextValidationCall[0][3], 'composition')
     })
 })
 
 
 test('ComponentInstance composition validations support a single primitive result', async t => {
-  var consoleWarn = mock(console)
-  consoleWarn.expects('warn').once()
+  const warnSpy = spy()
 
   const Partial = function (props) {
     return ''
@@ -193,9 +192,12 @@ test('ComponentInstance composition validations support a single primitive resul
 
   Partial.compositionTypes = PropTypes.number
 
-  await Meze.compose(<Partial />)
+  await Meze.compose(new ComponentInstance(Partial, 'Partial', {}, validate, warnSpy))
 
-  consoleWarn.verify()
-  consoleWarn.restore()
+  t.truthy(warnSpy.calledOnce)
+  t.deepEqual(
+    warnSpy.args[0][0].message,
+    'Invalid composition of type `string` supplied to `Partial`, expected `number`.'
+  )
 })
 

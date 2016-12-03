@@ -53,6 +53,12 @@ function validateType (value, type, propName, componentName, location, handleErr
   return true
 }
 
+const rePropTypeError = /^([^\s]+) undefined `([^`]*)`/
+export function removeUndefinedPropTypeLocationMessage (ex) {
+  ex.message = ex.message.replace(rePropTypeError, '$1 $2')
+  return ex
+}
+
 export const validate = (props, propTypes, componentName, location, handleError) => {
   if (shouldValdiate()) {
     return validatePropTypes(props, propTypes, componentName, location, handleError)

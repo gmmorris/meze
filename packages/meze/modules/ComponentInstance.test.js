@@ -196,7 +196,7 @@ test('ComponentInstance composition validations support a single primitive resul
   t.truthy(warnSpy.calledOnce)
   t.deepEqual(
     warnSpy.args[0][0].message,
-    'Invalid `composition` of type `string` supplied to `Partial`, expected `number`.'
+    '`Composition` of `Partial` resulted in invalid type `string`, expected `number`.'
   )
 })
 

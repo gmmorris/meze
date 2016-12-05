@@ -54,8 +54,11 @@ function validateType (value, type, propName, componentName, location, handleErr
 }
 
 const rePropTypeError = /^([^\s]+) undefined `([^`]*)`/
+const reComposiitonDirectionError = /^Invalid `composition` supplied to `([^`]*)`/
 export function removeUndefinedPropTypeLocationMessage (ex) {
-  ex.message = ex.message.replace(rePropTypeError, '$1 $2')
+  ex.message = ex.message
+    .replace(rePropTypeError, '$1 `$2`')
+    .replace(reComposiitonDirectionError, '`Composition` of `$1` resulted in invalid type')
   return ex
 }
 

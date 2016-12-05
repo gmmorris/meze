@@ -182,7 +182,6 @@ test(`ComponentInstance validates composition of a component after mounting`, as
     })
 })
 
-
 test('ComponentInstance composition validations support a single primitive result', async t => {
   const warnSpy = spy()
 
@@ -197,7 +196,90 @@ test('ComponentInstance composition validations support a single primitive resul
   t.truthy(warnSpy.calledOnce)
   t.deepEqual(
     warnSpy.args[0][0].message,
-    'Invalid composition of type `string` supplied to `Partial`, expected `number`.'
+    'Invalid `composition` of type `string` supplied to `Partial`, expected `number`.'
+  )
+})
+
+test('ComponentInstance composition validations support a single complex result', async t => {
+  const warnSpy = spy()
+
+  const Partial = function (props) {
+    return props.res ? {
+      color: 'green',
+      fontSize: 0
+    } : {
+      fontSize: 0
+    }
+  }
+
+  Partial.compositionTypes = PropTypes.shape({
+    color: PropTypes.string.isRequired,
+    fontSize: PropTypes.number
+  })
+
+  await Meze.compose(new ComponentInstance(Partial, 'Partial', { res: 1 }, validate, warnSpy))
+  await Meze.compose(new ComponentInstance(Partial, 'Partial', {}, validate, warnSpy))
+
+  t.truthy(warnSpy.calledOnce)
+  t.deepEqual(
+    warnSpy.args[0][0].message,
+    'Required `composition.color` was not specified in `Partial`.'
+  )
+})
+
+test('ComponentInstance composition validations support multiple complex results', async t => {
+  const warnSpy = spy()
+
+  const Partial = function (props) {
+    switch (props.res) {
+      case 1:
+        return {
+          color: 'green',
+          fontSize: 0
+        }
+      case 2:
+        return 1
+      case 3:
+        return 'green'
+    }
+    return []
+  }
+
+  Partial.compositionTypes = PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.shape({
+      color: PropTypes.string.isRequired,
+      fontSize: PropTypes.number
+    })
+  ])
+
+  await Meze.compose(new ComponentInstance(Partial, 'Partial', { res: 1 }, validate, warnSpy))
+  await Meze.compose(new ComponentInstance(Partial, 'Partial', { res: 2 }, validate, warnSpy))
+  await Meze.compose(new ComponentInstance(Partial, 'Partial', { res: 3 }, validate, warnSpy))
+  await Meze.compose(new ComponentInstance(Partial, 'Partial', { res: 4 }, validate, warnSpy))
+
+  t.truthy(warnSpy.calledOnce)
+  t.deepEqual(
+    warnSpy.args[0][0].message,
+    '`Composition` of `Partial` resulted in invalid type.'
+  )
+})
+
+test('ComponentInstance composition validations support single complex results of Array type', async t => {
+  const warnSpy = spy()
+
+  const Partial = function (props) {
+    return ''
+  }
+  Partial.compositionTypes = PropTypes.objectOf(PropTypes.number)
+
+  await Meze.compose(new ComponentInstance(Partial, 'Partial', {}, validate, warnSpy))
+
+  t.truthy(warnSpy.calledOnce)
+  t.deepEqual(
+    warnSpy.args[0][0].message,
+    'Invalid `composition` of type `string` supplied to `Partial`, expected an object.'
   )
 })
 

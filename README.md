@@ -53,6 +53,7 @@ Once you have both of these modules installed and configured you can start defin
 * [Basic Usage](docs/usage.md)
 * [Thinking in Components](docs/thinking_in_components.md)
 * [Composing](docs/composing.md)
+* [Type Checking](type_checking.md)
 * [Manipulating Children](docs/manipulating_children.md)
 * [Component Lifecycle](docs/component_lifecycle.md)
 * [Banquet](docs/banquet.md)

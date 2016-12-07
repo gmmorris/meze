@@ -34,6 +34,7 @@ So what we've built is a library using the familiar Component Composition API wi
 * [Basic Usage](usage.md)
 * [Thinking in Components](thinking_in_components.md)
 * [Composing](composing.md)
+* [Type Checking](type_checking.md)
 * [Manipulating Children](manipulating_children.md)
 * [Component Lifecycle](component_lifecycle.md)
 * [Banquet](banquet.md)

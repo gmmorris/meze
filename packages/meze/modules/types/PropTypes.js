@@ -1,7 +1,4 @@
 import PropTypes from 'proptypes'
-import difference from 'lodash.difference'
-import isFunction from 'lodash.isfunction'
-import isPlainObject from 'lodash.isplainobject'
 
 export const PropTypeLocationNames = {
   prop: 'prop',

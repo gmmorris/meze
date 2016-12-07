@@ -146,3 +146,137 @@ Partial.compositionTypes = PropTypes.oneOfType([
 
 await Meze.compose(<Partial />)
 ```
+
+## Differences between React.PropTypes and Meze.PropTypes
+
+The following are the different PropTypes available to you in order to specify the types you would like to validate against.
+
+Note that some key React PropTypes are not available for Meze, such as **PropTypes.node** and **PropTypes.element**, as they are not relevant to the Meze use case. 
+
+| PropType name | What is this valdiator checking for? |
+| ---------- | -------------- |
+| `Meze.PropTypes.array` | An optional Array |
+| `Meze.PropTypes.bool` | An optional Boolean |
+| `Meze.PropTypes.func` | An optional Function |
+| `Meze.PropTypes.number` | An optional Number |
+| `Meze.PropTypes.object` | An optional Object (any value where `typeof value === 'object'`) |
+| `Meze.PropTypes.string` | An optional String (any value where `typeof value === 'string'`) |
+| `Meze.PropTypes.symbol` | An optional Symbol (any value where `typeof value === 'symbol'`) |
+| `Meze.PropTypes.any` | An optional property which can hold any value. Coupled with the `isRequired` property can be very useful. |
+| `Meze.PropTypes.instanceOf(InstanceType)` | An optional object of a particular type (any value where `value instanceof InstanceType` is truthy) |
+| `Meze.PropTypes.oneOf([0, 1])` | A value in an Enum of values |
+| `Meze.PropTypes.oneOfType([Meze.PropTypes.string, Meze.PropTypes.number])` | A value of one of the types in a list |
+| `Meze.PropTypes.arrayOf(Type)` | An array of a certain type |
+| `Meze.PropTypes.iterableOf(Type)` | An array of a certain type |
+| `Meze.PropTypes.objectOf(Type)` | A dictionary (Javascript Object) whose properties are all of a specific type |
+| `Meze.PropTypes.shape({ ... })` | A dictionary with a particular shape |
+| `Meze.PropTypes.intersection(...)` | An intersection of types, using validators (see example under CompositionType validation) |
+| `Meze.PropTypes.union(...)` | A union of types, using validators (see example under CompositionType validation) |
+| `Meze.PropTypes.prop((props, propName, componentName) => {})` | Custom validator for propTypes & contextTypes |
+| `Meze.PropTypes.composit((composition, componentName) => {})` | Custom validator for compositionTypes |
+
+On every type you may use the `.isRequired` property to signify that the value is required and hence not optional.
+
+```javascript
+MyComponent.propTypes = {
+  
+  optionalArray: Meze.PropTypes.array,
+
+  // An object that could be one of many types
+  optionalUnion: Meze.PropTypes.oneOfType([
+    Meze.PropTypes.string,
+    Meze.PropTypes.number,
+    Meze.PropTypes.instanceOf(MyProto)
+  ]),
+
+  // A required array of numbers
+  requiredArrayOfNums: Meze.PropTypes.arrayOf(Meze.PropTypes.number).isRequired,
+
+  // An optional object with numeric properties
+  optionalObjectOfNums: Meze.PropTypes.objectOf(Meze.PropTypes.number),
+
+  // An object taking on a particular shape
+  optionalObjectWithShape: Meze.PropTypes.shape({
+    name: Meze.PropTypes.string,
+    age: Meze.PropTypes.number
+  }),
+
+  // you can specify a custom validator to be called whenever a particalu
+  // prop appears on a component instance
+  customProp: Meze.PropTypes.prop(function(props, propName, componentName) {
+    if (props[propName][myPrivateSymbol] !== true) {
+      return new Error(
+        `Invalid prop ${propName} supplied to ${componentName}. Only ${myPrivateSymbol} should be supplied as customProp.`
+      );
+    }
+  })
+}
+
+MyComponent.compositionTypes = Meze.PropTypes.union(
+  Meze.PropTypes.number,
+  Meze.PropTypes.composit(function(composition, componentName) {
+    if (typeof composition.asNumber() !== 'number') {
+      return new Error(
+        `Invalid composition of ${componentName}, it should only return a number or an object convertable to a number.`
+      );
+    }
+  })
+)
+```
+
+### Validating Children
+
+The **PropTypes.element** used in React to denote a React Element is not relevant to Meze, but instead the **PropTypes.component** can be used to validate a Meze component.
+
+Using the **PropTypes.component** you can specify how many children you are willing to have your component compose with.
+
+For example, the following **propTypes** will validate that **children** be a single non optional child component, and not several.
+
+```javascript
+const MyComponent = ({ children }) => {
+  return (
+    <SomeWrapperComponent>
+      {children}
+    </SomeWrapperComponent>
+  )
+}
+
+MyComponent.propTypes = {
+  children: Meze.PropTypes.component.isRequired
+}
+```
+
+In the following snippet the component will validate to make sure that it is only composed around an object who'se keys are components.
+
+```javascript
+const MyComponent = ({ val }) => val
+
+const AssignChildren = ({ children }) => {
+  return Meze.Children.reduce(children, (allChildrenAsObject, currentObject) => {
+    return Object.assign(allChildrenAsObject, currentObject)
+  }, {})
+}
+
+AssignChildren.propTypes = {
+  children: Meze.PropTypes.iterableOf(
+    Meze.PropTypes.objectOf(Meze.PropTypes.component)
+  )
+}
+
+Meze
+  .compose(
+    <AssignChildren>
+      {{ asd: <MyComponent val={1} />}}
+      {{ dfs: <MyComponent val={2} />}}
+    </AssignChildren>
+  )
+  .then(composition => {
+    assertEqual(
+      composition,
+      {
+        asd: 1,
+        dfs: 2
+      }
+    )
+  })
+```

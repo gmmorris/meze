@@ -279,7 +279,7 @@ test('ComponentInstance composition validations support single complex results o
   t.truthy(warnSpy.calledOnce)
   t.deepEqual(
     warnSpy.args[0][0].message,
-    'Invalid `composition` of type `string` supplied to `Partial`, expected an object.'
+    '`Composition` of `Partial` resulted in invalid type `string`, expected an object.'
   )
 })
 

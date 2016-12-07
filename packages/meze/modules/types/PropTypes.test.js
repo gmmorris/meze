@@ -1,6 +1,7 @@
 import test from 'ava'
 import { mock } from 'sinon'
 import intersection from 'lodash.intersection'
+import difference from 'lodash.difference'
 
 import Meze from '../index'
 import compose from '../compose'
@@ -20,7 +21,8 @@ test('PropTypes exposes only types which are relevant to data', t => {
     'objectOf',
     'oneOf',
     'oneOfType',
-    'shape'
+    'shape',
+    'iterableOf'
   ]
 
   t.deepEqual(
@@ -29,6 +31,14 @@ test('PropTypes exposes only types which are relevant to data', t => {
       expectedTypes
     ).length,
     expectedTypes.length
+  )
+
+  t.deepEqual(
+    difference(
+      Object.keys(PropTypes),
+      expectedTypes
+    ).length,
+    0
   )
 })
 

@@ -1,4 +1,5 @@
 import PropTypes from 'proptypes'
+import iterableOf from './iterableOf'
 
 export const PropTypeLocationNames = {
   prop: 'prop',
@@ -31,7 +32,9 @@ export default TYPES_TO_EXPOSE
   .reduce((propTypesToExpose, propTypeKey) => {
     propTypesToExpose[propTypeKey] = PropTypes[propTypeKey]
     return propTypesToExpose
-  }, {})
+  }, {
+    iterableOf
+  })
 
 function validatePropTypes (props, propTypes, componentName, location, handleError) {
   return Object.keys(propTypes)

@@ -1,5 +1,9 @@
 import PropTypes from 'proptypes'
 import iterableOf from './iterableOf'
+import union from './union'
+import intersection from './intersection'
+import prop from './prop'
+import composit from './composit'
 
 export const PropTypeLocationNames = {
   prop: 'prop',
@@ -33,7 +37,11 @@ export default TYPES_TO_EXPOSE
     propTypesToExpose[propTypeKey] = PropTypes[propTypeKey]
     return propTypesToExpose
   }, {
-    iterableOf
+    iterableOf,
+    union,
+    intersection,
+    prop,
+    composit
   })
 
 function validatePropTypes (props, propTypes, componentName, location, handleError) {

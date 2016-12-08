@@ -22,7 +22,11 @@ test('PropTypes exposes only types which are relevant to data', t => {
     'oneOf',
     'oneOfType',
     'shape',
-    'iterableOf'
+    'iterableOf',
+    'union',
+    'intersection',
+    'prop',
+    'composit'
   ]
 
   t.deepEqual(

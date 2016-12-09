@@ -1,6 +1,5 @@
 /* @flow */
-
-import isPlainObject from 'lodash.isplainobject'
+import isObjectLike from 'lodash.isobjectlike'
 
 export function isPromsieLike (obj : any) : boolean {
   return obj &&
@@ -9,9 +8,5 @@ export function isPromsieLike (obj : any) : boolean {
 }
 
 export function isPromise (obj : any) : boolean {
-  return obj && !isPlainObject(obj) && (
-    obj instanceof Promise ||
-    Object.getPrototypeOf(obj) === Promise ||
-    isPromsieLike(obj)
-  )
+  return isObjectLike(obj) && Promise.resolve(obj) === obj
 }

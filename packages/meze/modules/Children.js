@@ -42,6 +42,9 @@ Children.prototype = {
   },
   toArray () : any[] {
     return this.children
+  },
+  [Symbol.iterator] () : any {
+    return this.children[Symbol.iterator]()
   }
 }
 

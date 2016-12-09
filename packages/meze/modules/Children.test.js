@@ -3,9 +3,37 @@ import test from 'ava'
 import Meze from './index'
 
 import compose from './compose'
-import { forEach, asChildren, isChildrenArray, reduceComposed, mapComposed, cloneWithProps, only, onlyComposed, map, mapToArray } from './Children'
+import {
+  Children,
+  forEach, asChildren, isChildrenArray, reduceComposed, mapComposed, cloneWithProps, only, onlyComposed, map, mapToArray } from './Children'
 
 // Children tests
+test('The Children data structure should wrap an array', t => {
+  const children = new Children([
+    1, 2, 3
+  ])
+  t.deepEqual(
+    children.children,
+    [1, 2, 3]
+  )
+  t.deepEqual(
+    children.length,
+    3
+  )
+})
+
+test('The Children data structure should be iterable', t => {
+  const children = new Children([
+    1, 2, 3
+  ])
+
+  const iter = children[Symbol.iterator]()
+  t.deepEqual(iter.next().value, 1)
+  t.deepEqual(iter.next().value, 2)
+  t.deepEqual(iter.next().value, 3)
+  t.truthy(iter.next().done)
+})
+
 test('map applies a function to an array and marks the array as a ChildArray', t => {
   const maped = map([
     1, 2, 3

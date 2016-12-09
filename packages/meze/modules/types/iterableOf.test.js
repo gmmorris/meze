@@ -4,7 +4,7 @@ import iterableOf from './iterableOf'
 
 test('iterableOf validates that a prop on a props object is an object that implements the iterable interface', t => {
   const location = 'composition'
-  const props = { a: { [Symbol.iterator]: true } }
+  const props = { a: { [Symbol.iterator]: () => {} } }
   const prop = 'a'
   const component = 'MyComponent'
 
@@ -16,7 +16,7 @@ test('iterableOf validates that a prop on a props object is an object that imple
 
 test('iterableOf exposes an isRequired method which returns an error if the prop is missing', t => {
   const location = 'prop'
-  const props = { a: { [Symbol.iterator]: true } }
+  const props = { a: { [Symbol.iterator]: () => {} } }
   const prop = 'b'
   const component = 'MyComponent'
 

@@ -1,6 +1,6 @@
 /* @flow */
 
-import symbolPainter from './internals/symbolPainter'
+import symbolPainter from './utilities/symbolPainter'
 import ComponentInstance from './ComponentInstance'
 import isPlainObject from 'lodash.isplainobject'
 

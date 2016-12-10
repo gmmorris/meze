@@ -10,8 +10,8 @@ import { isComponentInstance } from './ComponentInstance'
 import { isChildrenArray } from './Children'
 import type { ComponentMountingContext } from './ComponentInstance'
 import flattenPromises from './internals/flattenPromises'
-import { isPromise } from './internals/isPromise'
-import symbolPainer from './internals/symbolPainter'
+import { isPromise } from './utilities/isPromise'
+import symbolPainer from './utilities/symbolPainter'
 import { promisedIdentity } from './utilities/helpers'
 
 export type ComposedComponent = Promise<*>

@@ -5,7 +5,7 @@ import isObjectLike from 'lodash.isobjectlike'
 import isPlainObject from 'lodash.isplainobject'
 import createComponent from '../createComponent'
 import { Assign } from './assign'
-import symbolPainter from '../internals/symbolPainter'
+import symbolPainter from '../utilities/symbolPainter'
 import { isString } from './validations'
 
 import type { ComponentMountingContext } from '../ComponentInstance'

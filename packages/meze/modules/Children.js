@@ -3,8 +3,8 @@ import isFunction from 'lodash.isfunction'
 import isObjectLike from 'lodash.isobjectlike'
 import isArray from 'lodash.isarray'
 
-import symbolPainter from './internals/symbolPainter'
-import type { Paintable } from './internals/symbolPainter'
+import symbolPainter from './utilities/symbolPainter'
+import type { Paintable } from './utilities/symbolPainter'
 import { identity, isEmpty, hasMultiple, filterOutUndefined } from './utilities/helpers'
 
 import compose from './compose'

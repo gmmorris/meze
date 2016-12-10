@@ -1,10 +1,10 @@
 /* @flow */
 import isPlainObject from 'lodash.isplainobject'
-import symbolPainer from './symbolPainter'
 import isObjectLike from 'lodash.isobjectlike'
 import isArray from 'lodash.isarray'
 
-import { isPromise } from './isPromise'
+import symbolPainer from '../utilities/symbolPainter'
+import { isPromise } from '../utilities/isPromise'
 
 const { paint, painted, clean } = symbolPainer('safe')
 

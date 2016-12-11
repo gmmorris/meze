@@ -7,7 +7,7 @@ import isFunction from 'lodash.isfunction'
 import findIndex from 'lodash.findindex'
 
 import { isComponentInstance } from './ComponentInstance'
-import { isChildrenArray } from './Children'
+import { isChildren } from './children/Children'
 import type { ComponentMountingContext } from './ComponentInstance'
 import flattenPromises from './internals/flattenPromises'
 import { isPromise } from './utilities/isPromise'
@@ -58,7 +58,7 @@ function flattenComposition (component : any, context: ComponentMountingContext)
     return composePlainObject(component, context)
   } else if (isArray(component)) {
     return composeComponentArray(component, context)
-  } else if (isChildrenArray(component)) {
+  } else if (isChildren(component)) {
     return composeComponentArray(component.toArray(), context)
   } else if (isPromise(component)) {
     return component

@@ -1,11 +1,12 @@
 import test from 'ava'
 
-import Meze from './index'
+import Meze from '../index'
 
-import compose from './compose'
-import {
-  Children,
-  forEach, asChildren, isChildrenArray, reduceComposed, mapComposed, cloneWithProps, only, onlyComposed, map, mapToArray } from './Children'
+import compose from '../compose'
+import Children, { asChildren, isChildren } from './Children'
+import { forEach, mapComposed, cloneWithProps, map, mapToArray } from './mapping'
+import { reduceComposed } from './reduction'
+import { only, onlyComposed } from './only'
 
 // Children tests
 test('The Children data structure should wrap an array', t => {
@@ -38,14 +39,14 @@ test('map applies a function to an array and marks the array as a ChildArray', t
   const maped = map([
     1, 2, 3
   ], i => i)
-  t.true(isChildrenArray(maped))
+  t.true(isChildren(maped))
 })
 
 test('map applies the identity when no mapper function is provided', t => {
   const maped = map([
     1, 2, 3
   ])
-  t.true(isChildrenArray(maped))
+  t.true(isChildren(maped))
 })
 
 test('map passes context into newly mapped components', async t => {

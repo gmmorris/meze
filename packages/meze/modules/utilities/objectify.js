@@ -1,6 +1,6 @@
 import compose from '../compose'
 import { Component } from '../Component'
-import { isChildrenArray } from '../Children'
+import { isChildren } from '../children/Children'
 import isObjectLike from 'lodash.isobjectlike'
 import isPlainObject from 'lodash.isplainobject'
 import createComponent from '../createComponent'
@@ -38,7 +38,7 @@ function namePlainObjectComponents (obj) {
 
 export const objectify = (name) => (props, context) => {
   const { children = [], ...rest } = props
-  return contextualCompose(createComponent(Assign, {}, rest, ...(isChildrenArray(children) ? children.toArray() : children)), context)
+  return contextualCompose(createComponent(Assign, {}, rest, ...(isChildren(children) ? children.toArray() : children)), context)
     .then(res => paint(namePlainObjectComponents(res), name))
 }
 

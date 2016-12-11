@@ -1,6 +1,6 @@
 import { Component, isComponent } from './Component'
 import createComponent from './createComponent'
-import Children from './Children'
+import Children from './children'
 import PropTypes from './types/PropTypes'
 import { Assign } from './utilities/assign'
 import { componentise } from './utilities/componentise'

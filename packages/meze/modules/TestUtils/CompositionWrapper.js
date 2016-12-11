@@ -5,16 +5,16 @@ import valuesOf from 'lodash.values'
 
 import createCompositionSelector from './CompositionSelector'
 import { isComponentInstance } from '../ComponentInstance'
-import { compareObjects, log } from '../utilities/helpers'
 import { isComponent } from '../Component'
-import { mapToArray, isChildrenArray } from '../Children'
+import { isChildren } from '../children/Children'
+import { mapToArray } from '../children/mapping'
 
 function queryComponentInstance (selector, componentInstance, context) {
   const matches = []
   if (selector.matches(componentInstance)) {
     matches.push(CompositionWrapper(componentInstance, context))
   }
-  if (componentInstance.props && isChildrenArray(componentInstance.props.children)) {
+  if (componentInstance.props && isChildren(componentInstance.props.children)) {
     matches.splice(matches.length, 0, ...queryArray(selector, mapToArray(componentInstance.props.children), context))
   }
   return matches

@@ -8,7 +8,7 @@ import { callIfFunction, freezeIfPossible, identity, log } from './utilities/hel
 import { isNonEmptyArray } from './utilities/validations'
 import createComponent from './createComponent'
 import { isComponent } from './Component'
-import { isChildrenArray } from './Children'
+import { isChildren } from './children/Children'
 import warning from './utilities/warning'
 import { validate, removeUndefinedPropTypeLocationMessage, shouldValdiate, PropTypeLocationNames, TypeLocation } from './types/PropTypes'
 
@@ -35,11 +35,11 @@ export const isComponentInstance =
   (instance : any) : boolean => instance && painted(instance)
 
 function childrenAsArray (children : ?any) : any[] {
-  return (children && isChildrenArray(children) ? children.toArray() : (Array.isArray(children) ? children : []))
+  return (children && isChildren(children) ? children.toArray() : (Array.isArray(children) ? children : []))
 }
 
 const setContextOnChildrenProp = (props : ComponentPropType, context : ?Object) : ComponentPropType => {
-  if (props && props.children && isChildrenArray(props.children)) {
+  if (props && props.children && isChildren(props.children)) {
     return { ...props, children: props.children.withContext(context) }
   }
   return props

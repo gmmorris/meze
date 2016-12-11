@@ -4,7 +4,7 @@ import symbolPainter from './utilities/symbolPainter'
 import ComponentInstance from './ComponentInstance'
 import isPlainObject from 'lodash.isplainobject'
 
-import type { ChildrenArray } from './Children'
+import type { ChildrenArray } from './children/Children'
 
 export type ComponentPropType = {
   children?: ChildrenArray,

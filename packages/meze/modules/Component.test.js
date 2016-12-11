@@ -4,7 +4,7 @@ import Meze from './index'
 
 import { Component, isComponent } from './Component'
 import compose from './compose'
-import Children from './Children'
+import Children from './children'
 import { Assign } from './utilities/assign'
 
 // Component tests

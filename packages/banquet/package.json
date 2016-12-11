@@ -6,6 +6,7 @@
   "author": "Gidi Meir Morris <gidi@gidi.io> (http://www.gidi.io)",
   "license": "MIT",
   "scripts": {
+    "clean": "rimraf ./node_modules ./lib/* && npm i",
     "typecheck": "flow check modules",
     "unitTest": "ava ./modules/*.test.js ./modules/**/*.test.js --verbose --require babel-register",
     "test": "npm run unitTest && npm run typecheck",

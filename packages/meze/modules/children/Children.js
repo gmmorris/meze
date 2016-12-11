@@ -21,20 +21,7 @@ export function contextualCompose (children : Children, context : ?ComponentMoun
   return compositionMethod(children.children, context)
 }
 
-type ChildrenType = {
-  children: any[],
-  length: number
-} & Paintable
-
-export type ChildrenArray =
-  ChildrenType &
-  {
-    withContext: Function,
-    getContext: Function,
-    toArray: Function
-  }
-
-export default function Children (children : any[]) : ChildrenType {
+export default function Children (children : any[]) {
   this.children = children
   this.length = children.length
   return this
@@ -89,7 +76,7 @@ function flattenNestedChildArrays (children : any[]) : any[] {
   return children
 }
 
-export function spreadChildren (children : ?any[]) : ?ChildrenArray {
+export function spreadChildren (children : ?any[]) : ?Children {
   if (children) {
     return new Children(flattenNestedChildArrays(children))
   }

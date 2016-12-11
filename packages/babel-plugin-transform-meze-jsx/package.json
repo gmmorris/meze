@@ -30,6 +30,7 @@
     "tape": "^4.6.0"
   },
   "scripts": {
+    "clean": "rimraf ./node_modules ./lib/* && npm i",
     "test": "tape ./modules/__tests__/index.js | tap-summary",
     "build": "babel modules --out-dir lib --ignore __tests__",
     "prepublish": "npm run build"

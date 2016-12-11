@@ -14,6 +14,7 @@
     "lodash": "^4.2.0"
   },
   "scripts": {
+    "clean": "rimraf ./node_modules ./lib/* && npm i",
     "build": "babel modules --out-dir lib",
     "prepublish": "npm run build"
   },

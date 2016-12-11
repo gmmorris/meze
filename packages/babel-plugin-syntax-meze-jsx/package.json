@@ -17,6 +17,7 @@
     "babel-preset-es2016": "^6.11.3"
   },
   "scripts": {
+    "clean": "rimraf ./node_modules ./lib/* && npm i",
     "test": "ava ./modules/*.test.js --verbose --require babel-register",
     "build": "babel modules --out-dir lib --ignore test.js",
     "prepublish": "npm run build"

@@ -21,8 +21,7 @@ const createMethodComponent = method => Meze.Component(props => {
               .compose(child.clone({ req, res, next }))
               .then(next)
           }
-
-          if (child.props.handlerName) {
+          if (child.props && child.props.handlerName) {
             handler.handlerName = child.props.handlerName
           }
 

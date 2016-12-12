@@ -1,6 +1,4 @@
 /* @flow */
-import isArray from 'lodash.isarray'
-
 import type { ComponentMountingContext } from '../ComponentInstance'
 
 import symbolPainter from '../utilities/symbolPainter'
@@ -58,27 +56,3 @@ export const setContext =
   (children? : Paintable, context? : any) : ?Paintable => children && isChildren(children)
     ? withContext(children, context)
     : children
-
-function flattenNestedChildArrays (children : any[]) : any[] {
-  let index = -1
-  let length = children.length
-
-  while (++index < length) {
-    let child = children[index]
-    if (isChildren(child)) {
-      children.splice(index, 1, ...child.toArray())
-      length += (child.length - 1)
-    } else if (isArray(child)) {
-      children.splice(index, 1, ...child)
-      length += (child.length - 1)
-    }
-  }
-  return children
-}
-
-export function spreadChildren (children : ?any[]) : ?Children {
-  if (children) {
-    return new Children(flattenNestedChildArrays(children))
-  }
-  return children
-}

@@ -43,11 +43,9 @@ Children.prototype = {
 export const asArray = (children : Children | any[] = []) : any[] =>
   Array.isArray(children) ? children : (isChildren(children) ? children.toArray() : [])
 
-// api
 export const asChildren = (children : Children | any[] = []) : Children =>
   Array.isArray(children) ? new Children(children) : children
 
-// internal
 export const isChildren =
   (children : ?any) : boolean =>
     children instanceof Children

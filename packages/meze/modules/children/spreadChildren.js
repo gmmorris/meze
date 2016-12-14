@@ -1,6 +1,7 @@
 import isArray from 'lodash.isarray'
 
-import Children, { isChildren } from './Children'
+import { isChildren, asChildren } from './Children'
+import type { Children } from './Children'
 
 function flattenNestedChildArrays (children : any[]) : any[] {
   let index = -1
@@ -21,7 +22,7 @@ function flattenNestedChildArrays (children : any[]) : any[] {
 
 export default function (children : ?any[]) : ?Children {
   if (children) {
-    return new Children(flattenNestedChildArrays(children))
+    return asChildren(flattenNestedChildArrays(children))
   }
   return children
 }

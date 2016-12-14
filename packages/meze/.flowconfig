@@ -3,5 +3,6 @@
 [include]
 
 [libs]
+modules/children/Children.js.flow
 
 [options]

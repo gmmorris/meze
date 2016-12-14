@@ -3,12 +3,12 @@ import { isEmpty, hasMultiple, filterOutUndefined } from '../utilities/helpers'
 
 import type { ComponentMountingContext } from '../ComponentInstance'
 
-import Children, { asChildren } from './Children'
+import { asChildren } from './Children'
 import { contextualCompose } from './childContext'
 import asArray from '../utilities/asArray'
 
 export const only =
-  (children : Children | any[]) : any => {
+  (children : Iterable<*> | any[]) : any => {
     const childrenAsArray = asArray(children)
     if (isEmpty(childrenAsArray)) {
       throw new Error(`No Children present in Component`)
@@ -19,7 +19,7 @@ export const only =
   }
 
 export const onlyComposed =
-  (children : Children, context : ?ComponentMountingContext) : any =>
+  (children : Iterable<*>, context : ?ComponentMountingContext) : any =>
     contextualCompose(asChildren(children), context)
       .then(composedChildren => {
         composedChildren = filterOutUndefined(composedChildren)

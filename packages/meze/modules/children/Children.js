@@ -11,6 +11,9 @@ export default function Children (children : Iterable<*> = []) {
   return this
 }
 
+const childrenIterator = function () : Iterator<any> {
+  return this.children[Symbol.iterator]()
+}
 Children.prototype = {
   withContext (context) : Children {
     return withContext(new Children(this.children), context)
@@ -21,15 +24,11 @@ Children.prototype = {
   toArray () : any[] {
     return this.children
   },
-  [Symbol.iterator] () : Iterator<any> {
-    return this.children[Symbol.iterator]()
-  },
+  [Symbol.iterator]: childrenIterator,
   // OMG, double iterator! Why? Because Flow is slightly broken :(
   // and doesn't know about Symbols yet... but it's ok Flow, we <3 you anyway
   // https://github.com/facebook/flow/issues/1059
-  ['@@iterator'] () : Iterator<any> {
-    return this.children[Symbol.iterator]()
-  }
+  '@@iterator': childrenIterator
 }
 
 export const asChildren = (children : Iterable<*>) : Children =>

@@ -26,7 +26,8 @@
     "quotes": [2, "single", { "allowTemplateLiterals": true }],
     "react/react-in-jsx-scope": [0],
     "no-duplicate-imports" : [0],
-    "import/no-duplicates" : [2]
+    "import/no-duplicates" : [2],
+    "flowtype/define-flow-type": 1
   },
   "parserOptions": {
       "ecmaVersion": 6,

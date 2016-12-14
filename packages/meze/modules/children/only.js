@@ -3,7 +3,9 @@ import { isEmpty, hasMultiple, filterOutUndefined } from '../utilities/helpers'
 
 import type { ComponentMountingContext } from '../ComponentInstance'
 
-import Children, { asArray, asChildren, contextualCompose } from './Children'
+import Children, { asChildren } from './Children'
+import { contextualCompose } from './childContext'
+import asArray from '../utilities/asArray'
 
 export const only =
   (children : Children | any[]) : any => {

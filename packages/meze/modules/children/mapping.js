@@ -5,7 +5,9 @@ import { identity } from '../utilities/helpers'
 import type { ComponentMountingContext } from '../ComponentInstance'
 
 import { isComponentInstance } from '../ComponentInstance'
-import Children, { asArray, asChildren, contextualCompose, copyPaintingFromOriginToTarget } from './Children'
+import Children, { asChildren } from './Children'
+import { contextualCompose, copyPaintingFromOriginToTarget } from './childContext'
+import asArray from '../utilities/asArray'
 
 // api
 export const mapToArray =

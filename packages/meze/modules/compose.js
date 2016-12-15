@@ -16,7 +16,7 @@ export type ComposedComponent = Promise<*>
 export type Composer = () => ComposedComponent
 type ComposableType = any
 
-const { paint, painted : hasAlreadyBeenComposed } = symbolPainer('composed')
+const { paint, painted: hasAlreadyBeenComposed } = symbolPainer('composed')
 const { paint: paintContext, painted: isContext } = symbolPainer('compose$context')
 
 const isComplex = (obj : Object | Function) : boolean => isObjectLike(obj) || isFunction(obj)

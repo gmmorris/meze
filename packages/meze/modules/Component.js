@@ -32,7 +32,6 @@ const valdiateProps = (props : ComponentPropType, componentName : string) : Comp
   return props
 }
 
-
 function getDisplayName (constructor : ComponentConstructorType) {
   return constructor.displayName || constructor.name || '<Anonymous>'
 }

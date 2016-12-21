@@ -86,5 +86,3 @@ test('PropTypes validates the types of a Components props', async t => {
   consoleWarnNeverCalled.verify()
   consoleWarnNeverCalled.restore()
 })
-
-

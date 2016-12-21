@@ -1,10 +1,7 @@
-import isPlainObject from 'lodash.isplainobject'
-import isArray from 'lodash.isarray'
 import isFunction from 'lodash.isfunction'
-import valuesOf from 'lodash.values'
 import { isComponentInstance } from '../ComponentInstance'
 import { isComponent } from '../Component'
-import { compareObjects, log } from '../utilities/helpers'
+import { compareObjects } from '../utilities/helpers'
 
 function CompositionSelector (component = null, props = null) {
   this.constructor = component

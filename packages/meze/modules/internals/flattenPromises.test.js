@@ -57,7 +57,7 @@ test('takes an array and flattens the promises inside it', async t => {
 
   t.deepEqual(
     await flattenPromises(result),
-    [1, 2, { d: 3, e: 4, f: { h: 3 } } ]
+    [ 1, 2, { d: 3, e: 4, f: { h: 3 } } ]
   )
 })
 

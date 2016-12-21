@@ -4,7 +4,7 @@ import isPlainObject from 'lodash.isplainobject'
 import isempty from 'lodash.isempty'
 import composeFunctions from 'lodash.flow'
 import symbolPainter from './utilities/symbolPainter'
-import { callIfFunction, freezeIfPossible, identity, log } from './utilities/helpers'
+import { callIfFunction, freezeIfPossible, identity } from './utilities/helpers'
 import { isNonEmptyArray } from './utilities/validations'
 import createComponent from './createComponent'
 import { isComponent } from './Component'
@@ -44,7 +44,6 @@ const setContextOnChildrenProp = (props : ComponentPropType, context : ?Object) 
   }
   return props
 }
-
 
 function getTypesFromProperty (constructor: ComponentConstructorType, typeLocation) : ?Object {
   return isPlainObject(constructor[typeLocation]) ? constructor[typeLocation] : null

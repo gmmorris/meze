@@ -1,11 +1,10 @@
 import test from 'ava'
-import { spy, stub, mock } from 'sinon'
+import { spy } from 'sinon'
 
 import Meze from './index'
 
 import ComponentInstance from './ComponentInstance'
-import PropTypes from './types/PropTypes'
-import { validate } from './types/PropTypes'
+import PropTypes, { validate } from './types/PropTypes'
 
 // ComponentInstance tests
 test('Component Instances cant be constructed twice', t => {

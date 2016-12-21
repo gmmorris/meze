@@ -24,6 +24,7 @@
     "rimraf": "^2.5.4"
   },
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "build": "lerna run clean && lerna run build && lerna bootstrap",
     "test": "npm run build && lerna run test",
     "clean": "rimraf ./node_modules && npm i && lerna run clean",

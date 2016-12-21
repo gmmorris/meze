@@ -2,12 +2,13 @@
   "parser"  : "babel-eslint",
   "extends" : [
     "standard",
-    "standard-react"
+    "meze"
   ],
   "plugins": [
       "flowtype",
       "flow-vars",
-      "import"
+      "import",
+      "promise"
   ],
   "env"     : {
     "browser" : true
@@ -24,7 +25,6 @@
     "semi" : [2, "never"],
     "max-len": [2, 150, 2],
     "quotes": [2, "single", { "allowTemplateLiterals": true }],
-    "react/react-in-jsx-scope": [0],
     "no-duplicate-imports" : [0],
     "import/no-duplicates" : [2],
     "flowtype/define-flow-type": 1

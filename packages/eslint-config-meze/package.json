@@ -1,0 +1,26 @@
+{
+  "name": "eslint-config-meze",
+  "version": "1.0.0",
+  "description": "ESLint Shareable Config for Meze",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava ./*.test.js"
+  },
+  "keywords": [
+    "eslint",
+    "meze"
+  ],
+  "author": "Gidi Meir Morris <gidi@gidi.io> (http://www.gidi.io)",
+  "license": "MIT",
+  "dependencies": {
+    "eslint": "^3.12.2",
+    "eslint-plugin-react": "^6.8.0"
+  },
+  "peerDependencies": {
+    "eslint": ">=3.8.1",
+    "eslint-plugin-react": "^6.8.0"
+  },
+  "devDependencies": {
+    "ava": "^0.17.0"
+  }
+}

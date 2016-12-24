@@ -17,7 +17,7 @@ export const isChildrenOf = (validators : Array<Function>) : Function =>
           : isFunction(validators[index])
             ? validators[index]({ [prop]: child }, prop, component, location)
             : new Error(`${PropTypeLocationNames[location]} Child at index \`${index}\` was not a valid type.`)
-        , true)
+        , null)
       : new Error(`${PropTypeLocationNames[location]} Children contains an incorrect number of children.`)
     : new Error(`${PropTypeLocationNames[location]} \`${prop}\` is not a Children type.`)
 

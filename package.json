@@ -26,6 +26,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "build": "lerna run clean && lerna run build && lerna bootstrap",
+    "lint": "lerna run lint",
     "test": "npm run build && lerna run test",
     "clean": "rimraf ./node_modules && npm i && lerna run clean",
     "updated": "lerna updated",

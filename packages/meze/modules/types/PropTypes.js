@@ -1,9 +1,13 @@
 import PropTypes from 'proptypes'
-import iterableOf from './iterableOf'
+import iterable from './iterable'
 import union from './union'
 import intersection from './intersection'
 import prop from './prop'
 import composit from './composit'
+import component from './component'
+import childOf from './childOf'
+import childrenOf from './childrenOf'
+import childrenOfType from './childrenOfType'
 
 export const PropTypeLocationNames = {
   prop: 'prop',
@@ -29,7 +33,11 @@ const TYPES_TO_EXPOSE = [
   'objectOf',
   'oneOf',
   'oneOfType',
-  'shape'
+  'shape',
+  'component',
+  'childOf',
+  'childrenOf',
+  'childrenOfType'
 ]
 
 export default TYPES_TO_EXPOSE
@@ -37,11 +45,15 @@ export default TYPES_TO_EXPOSE
     propTypesToExpose[propTypeKey] = PropTypes[propTypeKey]
     return propTypesToExpose
   }, {
-    iterableOf,
+    iterable,
     union,
     intersection,
     prop,
-    composit
+    composit,
+    component,
+    childOf,
+    childrenOf,
+    childrenOfType
   })
 
 function validatePropTypes (props, propTypes, componentName, location, handleError) {

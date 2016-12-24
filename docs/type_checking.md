@@ -223,7 +223,7 @@ MyComponent.propTypes = {
   // children prop receives children of a function, object and two numbers
   children: Meze.PropTypes.childrenOf(
     Meze.PropTypes.func,
-    Meze.PropTypes.obj,
+    Meze.PropTypes.object,
     Meze.PropTypes.number,
     Meze.PropTypes.number
   )

@@ -28,6 +28,7 @@ test('PropTypes exposes only types which are relevant to data', t => {
     'prop',
     'composit',
     'component',
+    'componentOf',
     'childOf',
     'childrenOf',
     'childrenOfType'

@@ -5,6 +5,7 @@ import intersection from './intersection'
 import prop from './prop'
 import composit from './composit'
 import component from './component'
+import componentOf from './componentOf'
 import childOf from './childOf'
 import childrenOf from './childrenOf'
 import childrenOfType from './childrenOfType'
@@ -35,6 +36,7 @@ const TYPES_TO_EXPOSE = [
   'oneOfType',
   'shape',
   'component',
+  'componentOf',
   'childOf',
   'childrenOf',
   'childrenOfType'
@@ -51,6 +53,7 @@ export default TYPES_TO_EXPOSE
     prop,
     composit,
     component,
+    componentOf,
     childOf,
     childrenOf,
     childrenOfType

@@ -34,12 +34,7 @@ const TYPES_TO_EXPOSE = [
   'objectOf',
   'oneOf',
   'oneOfType',
-  'shape',
-  'component',
-  'componentOf',
-  'childOf',
-  'childrenOf',
-  'childrenOfType'
+  'shape'
 ]
 
 export default TYPES_TO_EXPOSE

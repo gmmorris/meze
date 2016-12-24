@@ -1,5 +1,6 @@
 import test from 'ava'
 import { mock } from 'sinon'
+import isFunction from 'lodash.isfunction'
 import intersection from 'lodash.intersection'
 import difference from 'lodash.difference'
 
@@ -33,6 +34,15 @@ test('PropTypes exposes only types which are relevant to data', t => {
     'childrenOf',
     'childrenOfType'
   ]
+
+  t.deepEqual(
+    expectedTypes
+      .filter((prop) => {
+        return !isFunction(PropTypes[prop])
+      })
+      .length,
+    0
+  )
 
   t.deepEqual(
     intersection(

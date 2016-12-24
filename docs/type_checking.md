@@ -167,7 +167,10 @@ Note that some key React PropTypes are not available for Meze, such as **PropTyp
 | `Meze.PropTypes.oneOf([0, 1])` | A value in an Enum of values |
 | `Meze.PropTypes.oneOfType([Meze.PropTypes.string, Meze.PropTypes.number])` | A value of one of the types in a list |
 | `Meze.PropTypes.arrayOf(Type)` | An array of a certain type |
-| `Meze.PropTypes.iterableOf(Type)` | An array of a certain type |
+| `Meze.PropTypes.iterable` | An iterable object |
+| `Meze.PropTypes.childOf(Type)` | A Children object with one single child in it of a specific type |
+| `Meze.PropTypes.childrenOf(Type, ...)` | A Children object of a specific number of typed children |
+| `Meze.PropTypes.childrenOfType(Type)` | A Children object of at lest one child of a specific typed |
 | `Meze.PropTypes.objectOf(Type)` | A dictionary (Javascript Object) whose properties are all of a specific type |
 | `Meze.PropTypes.shape({ ... })` | A dictionary with a particular shape |
 | `Meze.PropTypes.intersection(...)` | An intersection of types, using validators (see example under CompositionType validation) |
@@ -209,7 +212,21 @@ MyComponent.propTypes = {
         `Invalid prop ${propName} supplied to ${componentName}. Only ${myPrivateSymbol} should be supplied as customProp.`
       );
     }
-  })
+  }),
+
+  // children prop receives one child of any type
+  children: Meze.PropTypes.childOf(Meze.PropTypes.any),
+  
+  // children prop receives functions
+  children: Meze.PropTypes.childrenOfType(Meze.PropTypes.func),
+
+  // children prop receives children of a function, object and two numbers
+  children: Meze.PropTypes.childrenOf(
+    Meze.PropTypes.func,
+    Meze.PropTypes.obj,
+    Meze.PropTypes.number,
+    Meze.PropTypes.number
+  )
 }
 
 MyComponent.compositionTypes = Meze.PropTypes.union(

@@ -3,6 +3,7 @@ import test from 'ava'
 import Meze from '../index'
 
 import compose from '../compose'
+import { isInstanceOf } from '../Component'
 import Children, { asChildren, isChildren } from './Children'
 import { forEach, mapComposed, cloneWithProps, map, mapToArray } from './mapping'
 import { reduceComposed } from './reduction'
@@ -206,10 +207,7 @@ test('filter returns a Children object where all children are truthy for the fil
   }
 
   const TheDumbChildren = function (props) {
-    return filter(props.children, comp => {
-      return comp.instanceOf &&
-        comp.instanceOf(Dumb)
-    })
+    return filter(props.children, isInstanceOf(Dumb))
   }
 
   t.deepEqual(

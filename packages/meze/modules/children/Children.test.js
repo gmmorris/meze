@@ -7,6 +7,7 @@ import Children, { asChildren, isChildren } from './Children'
 import { forEach, mapComposed, cloneWithProps, map, mapToArray } from './mapping'
 import { reduceComposed } from './reduction'
 import { only, onlyComposed } from './only'
+import { filter } from './filter'
 
 // Children tests
 test('The Children data structure should wrap an array', t => {
@@ -192,6 +193,39 @@ test('only returns the only child in the children property', async t => {
     {
       only: { areYouADumbComponent: true }
     }
+  )
+})
+
+test('filter returns a Children object where all children are truthy for the filter function', async t => {
+  const Dumb = function ({ id }) {
+    return { id, areYouADumbComponent: true }
+  }
+
+  const NotDumb = function (props) {
+    return { areYouADumbComponent: false }
+  }
+
+  const TheDumbChildren = function (props) {
+    return filter(props.children, comp => {
+      return comp.instanceOf &&
+        comp.instanceOf(Dumb)
+    })
+  }
+
+  t.deepEqual(
+    await compose(
+      <TheDumbChildren>
+        <Dumb id={1} />
+        <NotDumb id={1} />
+        <Dumb id={2} />
+        <Dumb id={3} />
+      </TheDumbChildren>
+    ),
+    [
+      { id: 1, areYouADumbComponent: true },
+      { id: 2, areYouADumbComponent: true },
+      { id: 3, areYouADumbComponent: true }
+    ]
   )
 })
 

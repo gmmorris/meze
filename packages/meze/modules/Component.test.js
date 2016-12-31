@@ -2,7 +2,7 @@ import test from 'ava'
 
 import Meze from './index'
 
-import { Component, isComponent } from './Component'
+import { Component, isComponent, isInstanceOf } from './Component'
 import compose from './compose'
 import Children from './children'
 import { Assign } from './utilities/assign'
@@ -64,6 +64,35 @@ test('can be composed with other components', async t => {
     await compose(<Root {...{left, right}} />),
     { right, left, comparison }
   )
+})
+
+// isInstanceOf
+test('isInstanceOf takes a component and an object and identifies an instance of the component', t => {
+  const Comp = function () {
+    return true
+  }
+  const instance = <Comp />
+  t.true(isInstanceOf(Comp, instance))
+  t.falsy(isInstanceOf(Comp, {}))
+  t.falsy(isInstanceOf(Comp, function () {}))
+  t.falsy(isInstanceOf(Comp, {
+    instanceOf: function () {}
+  }))
+})
+
+test('isInstanceOf is a curried function', t => {
+  const Comp = function () {
+    return true
+  }
+  const OtherComp = function () {
+    return true
+  }
+  const typedInstanceOf = isInstanceOf(Comp)
+
+  const instance = <Comp />
+  t.true(typedInstanceOf(instance))
+  const nonInstance = <OtherComp />
+  t.falsy(typedInstanceOf(nonInstance))
 })
 
 // isComponent

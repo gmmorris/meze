@@ -3,27 +3,23 @@
 import symbolPainter from './utilities/symbolPainter'
 import ComponentInstance from './ComponentInstance'
 import isPlainObject from 'lodash.isplainobject'
+import isFunction from 'lodash.isfunction'
+import curry from 'lodash.curry'
 
 import Children from './children/Children'
 
-export type ComponentPropType = {
-  children?: Children,
-  componentWillMount?: () => any,
-  componentDidMount?: () => any,
-  componentFailedMount?: () => any,
-  componentWillUnmount?: () => any
-}
-export type ComponentConstructorType = (props: ?ComponentPropType) => any
-export type ComponentType =
-  () => any &
-  {
-    constructor: ComponentConstructorType
-  }
-
-const { paint, painted } = symbolPainter('Component')
-
 export const isComponent =
   (component : any) : boolean => component && painted(component)
+
+export const isInstanceOf =
+  curry(
+    (component : ComponentConstructorType | ComponentType, instance : any) : boolean =>
+      isFunction(instance.instanceOf)
+      ? instance.instanceOf(component)
+      : false
+  )
+
+const { paint, painted } = symbolPainter('Component')
 
 const valdiateProps = (props : ComponentPropType, componentName : string) : ComponentPropType => {
   if (!isPlainObject(props)) {
@@ -60,3 +56,17 @@ export default {
   Component,
   isComponent
 }
+
+export type ComponentPropType = {
+  children?: Children,
+  componentWillMount?: () => any,
+  componentDidMount?: () => any,
+  componentFailedMount?: () => any,
+  componentWillUnmount?: () => any
+}
+export type ComponentConstructorType = (props: ?ComponentPropType) => any
+export type ComponentType =
+  () => any &
+  {
+    constructor: ComponentConstructorType
+  }

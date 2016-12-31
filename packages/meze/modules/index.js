@@ -1,4 +1,4 @@
-import { Component, isComponent } from './Component'
+import { Component, isComponent, isInstanceOf } from './Component'
 import createComponent from './createComponent'
 import Children from './children'
 import PropTypes from './types/PropTypes'
@@ -13,6 +13,7 @@ createComponent
   .addComponentisationMiddleware(objectifyMiddleware)
 
 const utilities = {
+  isInstanceOf,
   Assign,
   Objectify
 }

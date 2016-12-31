@@ -130,6 +130,9 @@ The above composition will log the following object to console:
 #### forEach(children : Children | [], mapper(item, index) => any)
 The forEach() function executes a provided function once per element in the Children data structure.
 
+#### filter(children : Children | [], predicate(item, index, children) => boolean)
+The filter() method creates a new Children data structure with all elements that pass the test implemented by the provided predicate
+
 #### cloneWithProps(children : Children | [], props : Object | () => Object) => Children
 The cloneWithProps() function creates a new Children data structure with the results of cloning each component instance it contains, skipping any non component child. Each clone will have its own props extended with the *props* argument.
 
@@ -240,4 +243,43 @@ compose(
 The above composition will log the following object to console:
 ```json
 { "only": "Some Valid Component" }
+```
+
+### Utilitites
+When manipulating Children there are several patterns that come up time and time again.
+To make life easier we have prepared several utility functions which save you the time of implementing these patterns yourself.
+
+#### isInstanceOf(component : Function | ComponentType, instance : any) : boolean
+A curried function which checks wether the second argument is a Meze Component Instance of the first argument.
+The first argument may be any function or Meze Component.
+```js
+import { utilities : { isInstanceOf } } from 'meze'
+
+const EchoID = function ({ id }) {
+  return { id }
+}
+
+const FilteredArrayOfChildren = function (props) {
+  // isInstanceOf(EchoID) create a function which returns true for every instance
+  // of the EchoID component
+  return filter(props.children, isInstanceOf(EchoID))
+}
+
+compose(
+  <FilteredArrayOfChildren>
+    <EchoID id={1} />
+    <NotDumb id={1} />
+    <EchoID id={2} />
+    <EchoID id={3} />
+  </FilteredArrayOfChildren>
+).then(res => {
+  deepEqual(
+    res,
+    [
+      { id: 1 },
+      { id: 2 },
+      { id: 3 }
+    ]
+  )
+})
 ```

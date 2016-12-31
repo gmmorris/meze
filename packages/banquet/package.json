@@ -1,6 +1,6 @@
 {
   "name": "banquet",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "A meze based Restify wrapper for JSON HTTP endpoints",
   "main": "lib/index.js",
   "author": "Gidi Meir Morris <gidi@gidi.io> (http://www.gidi.io)",
@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "lodash.pick": "^4.4.0",
-    "meze": "^1.0.17",
+    "meze": "^1.0.18",
     "restify": "^4.1.1"
   },
   "devDependencies": {

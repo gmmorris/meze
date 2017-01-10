@@ -49,18 +49,18 @@ Once you have both of these modules installed and configured you can start defin
 
 # Full Documentation
 
-* [Introduction](docs/installation.md)
-* [Basic Usage](docs/usage.md)
-* [Thinking in Components](docs/thinking_in_components.md)
-* [Composing](docs/composing.md)
-* [Type Checking](docs/type_checking.md)
-* [Manipulating Children](docs/manipulating_children.md)
-* [Component Lifecycle](docs/component_lifecycle.md)
-* [Banquet](docs/banquet.md)
-* [Testing](docs/testing.md)
-* [TODO](docs/todo.md)
+* [Introduction](packages/meze/docs/installation.md)
+* [Basic Usage](packages/meze/docs/usage.md)
+* [Thinking in Components](packages/meze/docs/thinking_in_components.md)
+* [Composing](packages/meze/docs/composing.md)
+* [Type Checking](packages/meze/docs/type_checking.md)
+* [Manipulating Children](packages/meze/docs/manipulating_children.md)
+* [Component Lifecycle](packages/meze/docs/component_lifecycle.md)
+* [Banquet](packages/meze/docs/banquet.md)
+* [Testing](packages/meze/docs/testing.md)
+* [TODO](packages/meze/docs/todo.md)
 
 # Articles
-* [Componentization](docs/componentization.md)
+* [Componentization](packages/meze/docs/componentization.md)
 
 

@@ -38,6 +38,40 @@ test('shallowCompose accepts and composes an instanciated Component', async t =>
   )
 })
 
+test('shallowCompose awaits the resolution of promises', async t => {
+  const DumbComponent = props => Promise.resolve(props.result)
+
+  let res = await shallowCompose(<DumbComponent result={'yo'} />)
+  t.deepEqual(
+    res.composition,
+    'yo'
+  )
+
+  res = await shallowCompose(<DumbComponent result />)
+  t.deepEqual(
+    res.composition,
+    true
+  )
+
+  res = await shallowCompose(<DumbComponent result={{ a: 1, b: 2 }} />)
+  t.deepEqual(
+    res.composition,
+    { a: 1, b: 2 }
+  )
+
+  res = await shallowCompose(<DumbComponent result={[1, 2, 3]} />)
+  t.deepEqual(
+    res.composition,
+    [1, 2, 3]
+  )
+
+  res = await shallowCompose(<DumbComponent result={123} />)
+  t.deepEqual(
+    res.composition,
+    123
+  )
+})
+
 test('shallowCompose doesnt accept actual Components', t => {
   const DumbComponent = () => 'yo'
 

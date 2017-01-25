@@ -17,19 +17,24 @@ export default (component, context) => isComponentInstance(component)
 )
 
 function mountComponent (component, context) {
-  return component(context).composition
+  return Promise
+    .resolve(component(context))
+    .then(res => res.composition)
 }
 
 function compose (component, context = {}) {
   return new Promise((resolve, reject) => {
-    resolve(
-      CompositionWrapper(
-        mountComponent(component, {
-          compose: (innerCompose, innerContext) => CompositionWrapper(innerCompose, innerContext),
-          ...context
-        }),
-        context
+    mountComponent(component, {
+      compose: (innerCompose, innerContext) => CompositionWrapper(innerCompose, innerContext),
+      ...context
+    })
+    .then(mountedComponent => {
+      resolve(
+        CompositionWrapper(
+          mountedComponent,
+          context
+        )
       )
-    )
+    })
   })
 }

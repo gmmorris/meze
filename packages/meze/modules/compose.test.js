@@ -133,6 +133,37 @@ test('composition flattens deep promises', async t => {
   )
 })
 
+test('composition can compose a component which uses an async function', async t => {
+  const Deep = ({ val }) => {
+    return { deep: true, val }
+  }
+
+  const asyncMultipleyByTen = (val) => {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(val * 10)
+      }, 10)
+    })
+  }
+
+  const Shallow = async ({ val }) => {
+    let multiValue = await asyncMultipleyByTen(val)
+    multiValue = await asyncMultipleyByTen(multiValue)
+    multiValue = await asyncMultipleyByTen(multiValue)
+    return <Deep val={multiValue} />
+  }
+
+  const actual = await compose(<Shallow val={1} />)
+
+  t.deepEqual(
+    actual,
+    {
+      deep: true,
+      val: 1000
+    }
+  )
+})
+
 test('compose should pass the composition method down through the context of all components it composes', async t => {
   t.plan(2)
 

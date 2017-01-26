@@ -62,6 +62,6 @@ Once you have both of these modules installed and configured you can start defin
 
 # Articles & Talks
 * [Componentization](packages/meze/docs/componentization.md)
-* [A Tech Talk I gave about Meze at Unruly HQ](https://www.youtube.com/watch?v=VkhiXWq-VVQ)
+* [![A Tech Talk I gave about Meze at Unruly HQ](http://img.youtube.com/vi/VkhiXWq-VVQ/0.jpg)](http://www.youtube.com/watch?v=VkhiXWq-VVQ "Meze: A Preface")
 
 

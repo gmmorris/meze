@@ -60,7 +60,8 @@ Once you have both of these modules installed and configured you can start defin
 * [Testing](packages/meze/docs/testing.md)
 * [TODO](packages/meze/docs/todo.md)
 
-# Articles
+# Articles & Talks
 * [Componentization](packages/meze/docs/componentization.md)
+* [A Tech Talk I gave about Meze at Unruly HQ](https://www.youtube.com/watch?v=VkhiXWq-VVQ)
 
 

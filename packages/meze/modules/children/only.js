@@ -11,9 +11,9 @@ export const only =
   (children : Iterable<*> | any[]) : any => {
     const childrenAsArray = asArray(children)
     if (isEmpty(childrenAsArray)) {
-      throw new Error(`No Children present in Component`)
+      throw new Error(`Children.only: No Children present in Component`)
     } else if (hasMultiple(childrenAsArray)) {
-      throw new Error('Multiple Children present in Component')
+      throw new Error('Children.only: Multiple Children present in Component')
     }
     return childrenAsArray.shift()
   }
@@ -24,9 +24,9 @@ export const onlyComposed =
       .then(composedChildren => {
         composedChildren = filterOutUndefined(composedChildren)
         if (isEmpty(composedChildren)) {
-          return Promise.reject(new Error('No Children present in Component after composition'))
+          return Promise.reject(new Error('Children.onlyComposed: No Children present in Component after composition'))
         } else if (hasMultiple(composedChildren)) {
-          return Promise.reject(new Error('Multiple Children present in Component after composition'))
+          return Promise.reject(new Error('Children.onlyComposed: Multiple Children present in Component after composition'))
         }
         return composedChildren.shift()
       })

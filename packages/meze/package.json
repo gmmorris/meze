@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "rimraf ./node_modules ./lib/* && npm i",
     "typecheck": "flow check modules",
-    "lint": "eslint ./modules/*.js ./modules/**/*.js",
+    "lint": "eslint ./modules/*.js ./modules/**/*.js --quiet",
     "unitTest": "ava ./modules/*.test.js ./modules/**/*.test.js --verbose --require babel-register",
     "test": "npm run unitTest && npm run typecheck && npm run lint",
     "testWatch": "ava ./modules/*.test.js ./modules/**/*.test.js --verbose --watch --require babel-register",

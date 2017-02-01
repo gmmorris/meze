@@ -5,7 +5,7 @@ import chainableTypeChecker from './chainableTypeChecker'
 import { PropTypeLocationNames } from './PropTypes'
 import isIterable from '../utilities/isIterable'
 
-const isIterableValidator = (props : Object, prop : string, component : string, location : string) =>
+const isIterableValidator = (props : Object, prop : string) =>
   isobjectlike(props[prop]) && isIterable(props[prop])
 
 const onRequirementFailed = (props : Object, prop : string, component : string, location : string, propFullName : string) : Error =>

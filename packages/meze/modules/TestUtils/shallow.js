@@ -23,7 +23,7 @@ function mountComponent (component, context) {
 }
 
 function compose (component, context = {}) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     mountComponent(component, {
       compose: (innerCompose, innerContext) => CompositionWrapper(innerCompose, innerContext),
       ...context

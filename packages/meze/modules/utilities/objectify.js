@@ -24,7 +24,7 @@ export const getPlainObjectComponentKey = component => paintedBy(component)
 function namePlainObjectComponents (obj) {
   return !isObjectLike(obj)
   ? obj
-  : Object.keys(obj).reduce((result, prop, index) => {
+  : Object.keys(obj).reduce((result, prop) => {
     if (isPlainObjectComponent(obj[prop])) {
       result[getPlainObjectComponentKey(obj[prop]) || prop] = obj[prop]
     } else if (isPlainObject(obj[prop])) {

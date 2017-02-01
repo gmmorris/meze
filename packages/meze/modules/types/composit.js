@@ -1,7 +1,7 @@
 import chainableCompositTypeChecker from './chainableCompositTypeChecker'
 import { PropTypeLocationNames } from './PropTypes'
 
-const onRequirementFailed = (composition, componentName, location, propFullName) =>
+const onRequirementFailed = (composition, componentName, location) =>
   new Error(
     `Required \`${PropTypeLocationNames[location]}\` of \`${componentName}\` failed to resulted in the custom type`
   )

@@ -71,6 +71,33 @@ methods.forEach(({name, niceName, Method}) => {
     t.true(next.calledWith(COMPOSITION_RESULT))
   })
 
+  test(`${niceName} Method should pass its context to child components`, async t => {
+    const logger = spy()
+
+    let handler
+    const mockServer = {
+      [name]: function (methodPropParam, handlerParam) {
+        handler = handlerParam
+      }
+    }
+
+    const TestComponent = ({ name }, { log }) => {
+      log(`${name} has been mounted`)
+      return {}
+    }
+
+    await Meze.compose((
+      <Method server={mockServer}>
+        <TestComponent name="Horse" />
+      </Method>
+    ), {
+      log: logger
+    })
+
+    await handler({}, {}, ()=>{})
+    t.true(logger.calledWith('Horse has been mounted'))
+  })
+
   test(`${niceName} Method creates a handler for each child component`, async t => {
     t.plan(3)
 

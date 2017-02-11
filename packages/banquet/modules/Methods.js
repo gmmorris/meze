@@ -8,7 +8,7 @@ function emptyHandler (req, res, next) {
   next()
 }
 
-const createMethodComponent = method => Meze.Component(props => {
+const createMethodComponent = method => Meze.Component((props, context) => {
   const { server, children } = props
   const methodProps = pick(props, 'path', 'version')
   const handlers = children
@@ -17,8 +17,8 @@ const createMethodComponent = method => Meze.Component(props => {
         children,
         child => {
           function handler (req, res, next) {
-            return Meze
-              .compose(child.clone({ req, res, next }))
+            return context
+              .compose(child.clone({ req, res, next }), context)
               .then(next)
           }
           if (child.props && child.props.handlerName) {

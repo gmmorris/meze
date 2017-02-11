@@ -41,7 +41,7 @@ Meze
 ```
 
 ## Composition Context and testability
-In the [Thinking in Components](thinking_in_components.md) documentation we discussed context and how it is passed into the component onstructor.
+In the [Thinking in Components](thinking_in_components.md) documentation we discussed context and how it is passed into the component constructor.
 
 One thing we didn't mention was that, by default *context* has one single property: the *compose* function which can be used by Component authors to compose internal component trees.
 

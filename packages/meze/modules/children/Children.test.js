@@ -52,12 +52,12 @@ test('map applies the identity when no mapper function is provided', t => {
 })
 
 test('map passes context into newly mapped components', async t => {
-  const Echo = function (props, { ctx }) {
-    return Object.assign({ ctx }, props)
+  const Echo = function (props, context) {
+    return { ctx: context.ctx , ...props }
   }
 
   const Origin = function (props) {
-    return Object.assign({}, props)
+    return { ...props }
   }
 
   const Summarize = function (props) {
@@ -78,6 +78,78 @@ test('map passes context into newly mapped components', async t => {
       { name: 'John', ctx: true },
       { name: 'Doe', ctx: true }
     ]
+  )
+})
+
+test('map returns a new children object with context on it', async t => {
+  const EchoWithContext = function (props, context) {
+    return { ctx: context.ctx , ...props }
+  }
+
+  const Origin = function (props) {
+    return { ...props }
+  }
+
+  const Summarize = function (props) {
+    return mapComposed(
+      map(props.children, child => <EchoWithContext {...child.props} />),
+      child => {
+        child.composed = true
+        return child
+      })
+  }
+
+  const actual = await compose(
+    <Summarize>
+      <Origin name="John" />
+      <Origin name="Doe" />
+    </Summarize>,
+    { ctx: true }
+  )
+
+  t.deepEqual(
+    actual,
+    [
+      { name: 'John', ctx: true, composed: true },
+      { name: 'Doe', ctx: true, composed: true }
+    ]
+  )
+})
+
+test('cloneWithProps passes context into newly cloned Children object', async t => {
+  const Echo = function (props, context) {
+    return { ...props, name: context.capitalise(props.name)}
+  }
+
+  const Summarize = function (props) {
+    return {
+      contents: mapToArray(props.children),
+      extendedContents: cloneWithProps(props.children, { hey: 'ho' })
+    }
+  }
+
+  const actual = await compose(
+    <Summarize>
+      <Echo name="John" />
+      <Echo name="Doe" />
+    </Summarize>,
+    {
+      capitalise: name => (name === 'John' ? name.toUpperCase() : name)
+    }
+  )
+
+  t.deepEqual(
+    actual,
+    {
+      contents: [
+        { name: 'JOHN' },
+        { name: 'Doe' }
+      ],
+      extendedContents: [
+        { name: 'JOHN', hey: 'ho' },
+        { name: 'Doe', hey: 'ho' }
+      ]
+    }
   )
 })
 
@@ -508,10 +580,10 @@ test('reduceComposed passes the context down to the reduced children', async t =
 })
 
 test('mapComposed passes the context down to the reduced children', async t => {
-  const EchoVal = ({ val }) => val
-  const Summarize = function ({ children }, { add }) {
+  const EchoVal = ({ val }, { add }) => val + add
+  const Summarize = function ({ children }) {
     return mapComposed(children, (val) => {
-      return val + add
+      return val
     })
   }
 

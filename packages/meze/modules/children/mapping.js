@@ -21,8 +21,8 @@ export const map =
   (children : Iterable<any>, mapper : (item: any, index: number) => any = identity) : Children => {
     const mappedChildren : Children = asChildren(mapToArray(children, mapper))
     return hasContext(children)
-      ? mappedChildren
-      : withContext(mappedChildren, getContext(children))
+      ? withContext(mappedChildren, getContext(children))
+      : mappedChildren
   }
 
 const isMappable = composition => composition && isFunction(composition.map)

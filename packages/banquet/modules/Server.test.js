@@ -130,6 +130,47 @@ test(`Server compose all it's child component before resolving with the server`,
   )
 })
 
+test(`Server passes context to its the child components`, async t => {
+  const server = {}
+  const mockRestify = {
+    createServer: () => server
+  }
+
+  const compositionMarker = (function(){
+    const nameComposed = {
+      first: false,
+      second: false
+    }
+    return {
+      mark: name => nameComposed[name] = true,
+      isMarked: name => nameComposed[name] === true
+    }
+  })()
+
+  const DumbComponent = (props, context) => {
+    console.log({ props, context })
+    context.markComposed(props.name)
+  }
+
+  const composedServer = await Meze.compose(
+    <Server restify={mockRestify}>
+      <DumbComponent name="first" />
+      <DumbComponent name="second" />
+    </Server>,
+    {
+      markComposed: compositionMarker.mark
+    }
+  )
+
+  t.truthy(compositionMarker.isMarked('first'))
+  t.truthy(compositionMarker.isMarked('second'))
+
+  t.is(
+    composedServer,
+    server
+  )
+})
+
 const pluginsBundledInRestify = {
   throttle: ['burst', 'rate', 'ip', 'overrides'],
   CORS: ['origins', 'credentials', 'headers'],

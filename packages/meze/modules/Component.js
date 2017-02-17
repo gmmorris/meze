@@ -38,8 +38,6 @@ function applyDefaultProps (defaultProps : ?Object, props : ComponentPropType) {
 
 export function Component (constructor : ComponentConstructorType, displayName : string = getDisplayName(constructor)) : ComponentType {
   function instanciate (props : ComponentPropType = {}) {
-    // console.log(`instanciate`)
-    // console.log(props)
     return new ComponentInstance(
       constructor,
       displayName,

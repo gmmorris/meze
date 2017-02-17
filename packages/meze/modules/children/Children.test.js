@@ -314,8 +314,12 @@ test('only throws if there is something other than a single child', async t => {
 
   t.throws(compose(
     <TheOnlyChild>
-      <Dumb />
-      <Dumb />
+      <Dumb someProp="123" someOtherProp={{ asd: 1}} />
+      <Dumb>
+        <Dumb>
+          <Dumb />
+        </Dumb>
+      </Dumb>
     </TheOnlyChild>
   ))
 })

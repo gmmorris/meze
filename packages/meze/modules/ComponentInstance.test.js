@@ -87,11 +87,11 @@ test(`ComponentInstance triggers props.componentFailedMount after it's result ha
 
   const thrownError = Error('Holly Moly')
 
-  const constructor = function () {
+  const constructor = function Thrower () {
     throw thrownError
   }
 
-  const mount = new ComponentInstance(constructor, '', props)
+  const mount = new ComponentInstance(constructor, constructor.name, props, undefined, undefined)
   t.throws(mount().composition)
   t.truthy(props.componentFailedMount.calledOnce)
   t.truthy(props.componentFailedMount.calledWith(thrownError))
@@ -282,3 +282,28 @@ test('ComponentInstance composition validations support single complex results o
   )
 })
 
+test(`ComponentInstance warns developers when a component mount rejects in development mode`, async t => {
+  const thrownError = Error('Holly Moly')
+
+  const constructor = function () {
+    throw thrownError
+  }
+
+  const logger = spy()
+
+  const mount = new ComponentInstance(constructor, 'MyComponent', {
+    a: 1,
+    b: 2
+  }, undefined, logger, true)
+
+  t.throws(mount().composition)
+
+  const expected = `When mounting the following composition:
+  | <MyComponent a={1} b={2} />
+
+The composition threw the following error:
+  Error: Holly Moly`
+
+  t.truthy(logger.calledOnce)
+  t.is(logger.firstCall.args[0], expected)
+})

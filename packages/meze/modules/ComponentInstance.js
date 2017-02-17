@@ -10,7 +10,9 @@ import createComponent from './createComponent'
 import { isComponent } from './Component'
 import { isChildren } from './children/Children'
 import warning from './utilities/warning'
-import { validate, removeUndefinedPropTypeLocationMessage, shouldValdiate, PropTypeLocationNames, TypeLocation } from './types/PropTypes'
+import createInstanceSerialiser, { serialize } from './utilities/createInstanceSerialiser'
+import { isProductionMode } from './env'
+import { validate, removeUndefinedPropTypeLocationMessage, PropTypeLocationNames, TypeLocation } from './types/PropTypes'
 
 import type { ComponentConstructorType, ComponentPropType } from './Component'
 import type { componentCreatorType } from './createComponent'
@@ -88,7 +90,7 @@ function createOnComposed (componentWillUnmount : ?Function, validateComposition
     : identity
 }
 
-function attemptToMount (constructor: ComponentConstructorType, props : ComponentPropType, context : ?Object) {
+function attemptToMount (constructor: ComponentConstructorType, props : ComponentPropType, context : ?Object, warn : Function) {
   let composition
   try {
     composition = constructor(props, context)
@@ -96,15 +98,25 @@ function attemptToMount (constructor: ComponentConstructorType, props : Componen
   } catch (ex) {
     composition = Promise.reject(ex)
     callIfFunction(props.componentFailedMount, ex)
+    warn(ex)
   }
   return composition
 }
 
+const warnOfMountingError = (warnningMethod, instance, error) => {
+  warnningMethod(`When mounting the following composition:
+  ${serialize(instance)}
+
+The composition threw the following error:
+  ${error}`)
+}
+
+const isDevelopmentMode = () => !isProductionMode()
 function instanciate (constructor: ComponentConstructorType, displayName: string, props: ComponentPropType,
-  validateTypes : Function = validate, warn : Function = warning)
+  validateTypes : Function = validate, warn : Function = warning, shouldValidate : boolean = isDevelopmentMode())
  : ComponentInstanceType {
   const mount = (context : ComponentMountingContext = {}) => {
-    if (shouldValdiate()) {
+    if (shouldValidate) {
       validatePropTypes(props, getTypesFromProperty(constructor, TypeLocation.prop), PropTypeLocationNames.prop, displayName, validateTypes)
       validatePropTypes(context, getTypesFromProperty(constructor, TypeLocation.context), PropTypeLocationNames.context, displayName, validateTypes)
     }
@@ -115,19 +127,22 @@ function instanciate (constructor: ComponentConstructorType, displayName: string
     }
     paintConstruct(this)
 
+    const onComposed = createOnComposed(
+      props.componentWillUnmount,
+      shouldValidate
+        ? createCompositionTypeValidator(
+            getConstructorCompositionTypes(constructor), PropTypeLocationNames.composition, displayName, validateTypes, warn, isDevelopmentMode
+          )
+        : null
+    )
+
     return {
+      onComposed,
       composition: attemptToMount(
         constructor,
         setContextOnChildrenProp(props, context),
-        freezeIfPossible(context)
-      ),
-      onComposed: createOnComposed(
-        props.componentWillUnmount,
-        shouldValdiate()
-          ? createCompositionTypeValidator(
-              getConstructorCompositionTypes(constructor),
-              PropTypeLocationNames.composition, displayName, validateTypes, warn)
-          : null
+        freezeIfPossible(context),
+        shouldValidate ? ex => warnOfMountingError(warn, mount, ex) : identity
       )
     }
   }
@@ -147,6 +162,10 @@ function instanciate (constructor: ComponentConstructorType, displayName: string
 
   mount.props = Object.freeze(props)
   mount.constructor = constructor
+
+  if (shouldValidate) {
+    createInstanceSerialiser(mount, displayName, props)
+  }
 
   return paint(mount)
 }

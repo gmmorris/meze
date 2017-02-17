@@ -1,4 +1,5 @@
 import PropTypes from 'proptypes'
+
 import iterable from './iterable'
 import union from './union'
 import intersection from './intersection'
@@ -83,10 +84,5 @@ export function removeUndefinedPropTypeLocationMessage (ex) {
 }
 
 export const validate = (props, propTypes, componentName, location, handleError) => {
-  if (shouldValdiate()) {
-    return validatePropTypes(props, propTypes, componentName, location, handleError)
-  }
-  return true
+  return validatePropTypes(props, propTypes, componentName, location, handleError)
 }
-
-export const shouldValdiate = () => process.env.NODE_ENV !== 'production'
